@@ -1,0 +1,24 @@
+# Normalize repository text files to LF, including Windows checkouts.
+* text=auto eol=lf
+
+# Keep Windows command scripts in their native line ending format.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets and archives must never be line-ending converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.jar binary
+*.zip binary
+*.pdf binary
+*.ttf binary
+*.otf binary
+*.keystore binary
+*.jks binary
+*.p12 binary
+*.mobileprovision binary

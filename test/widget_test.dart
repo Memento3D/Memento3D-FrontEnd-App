@@ -1,30 +1,82 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:memento3d_frontend_app/main.dart';
+import 'package:memento3d_frontend_app/l10n/app_localizations.dart';
+import 'package:memento3d_frontend_app/screens/camera_view.dart';
+import 'package:memento3d_frontend_app/screens/capture_wizard.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('camera layout fits a Pixel 6a viewport', (tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.625;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('vi'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        home: CameraView(
+          controller: null,
+          capturedPhotos: const [],
+          wizardState: CaptureWizardState.ready,
+          capturing: false,
+          cameraFailed: true,
+          onCapture: () {},
+          onRetry: () {},
+        ),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(find.text('Ch\u1ee5p'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
-    // Verify that our counter has incremented.
+  testWidgets('thumbnail badge follows the captured photo collection', (
+    tester,
+  ) async {
+    Future<void> showPhotos(int count) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('vi'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          home: CameraView(
+            controller: null,
+            capturedPhotos: List.generate(
+              count,
+              (index) => XFile('missing_photo_$index.jpg'),
+            ),
+            wizardState: CaptureWizardState.ready,
+            capturing: false,
+            cameraFailed: true,
+            onCapture: () {},
+            onRetry: () {},
+          ),
+        ),
+      );
+    }
+
+    await showPhotos(0);
     expect(find.text('0'), findsNothing);
+    await showPhotos(1);
     expect(find.text('1'), findsOneWidget);
+    await showPhotos(5);
+    expect(find.text('5'), findsOneWidget);
+    final thumbnail = tester.widget<Image>(find.byType(Image));
+    expect((thumbnail.image as FileImage).file.path, 'missing_photo_4.jpg');
+    expect(tester.takeException(), isNull);
   });
 }
