@@ -301,6 +301,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue moving around the object.'**
   String get wizardCapturedBody;
+
+  /// No description provided for @reviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get reviewTitle;
+
+  /// No description provided for @captureSessionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Object capture session'**
+  String get captureSessionTitle;
+
+  /// No description provided for @sessionPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get sessionPhotoCount;
+
+  /// No description provided for @sessionFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'File size'**
+  String get sessionFileSize;
+
+  /// No description provided for @sessionQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'3D quality'**
+  String get sessionQuality;
+
+  /// No description provided for @metricUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get metricUnavailable;
+
+  /// No description provided for @sizeCalculating.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating'**
+  String get sizeCalculating;
+
+  /// No description provided for @sizeIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Some files unavailable'**
+  String get sizeIncomplete;
+
+  /// No description provided for @fileSizeKb.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} KB'**
+  String fileSizeKb(String value);
+
+  /// No description provided for @fileSizeMb.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} MB'**
+  String fileSizeMb(String value);
+
+  /// No description provided for @capturedPhotoSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured photos'**
+  String get capturedPhotoSection;
+
+  /// No description provided for @addAngle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add angle'**
+  String get addAngle;
+
+  /// No description provided for @addAngleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture another view'**
+  String get addAngleHint;
+
+  /// No description provided for @photoNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {number}'**
+  String photoNumber(int number);
+
+  /// No description provided for @imageUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Image unavailable'**
+  String get imageUnavailable;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get deletePhoto;
+
+  /// No description provided for @retakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get retakePhoto;
+
+  /// No description provided for @closePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Close preview'**
+  String get closePreview;
+
+  /// No description provided for @detailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail level'**
+  String get detailTitle;
+
+  /// No description provided for @detailSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For future 3D reconstruction'**
+  String get detailSubtitle;
+
+  /// No description provided for @detailStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get detailStandard;
+
+  /// No description provided for @detailStandardDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable for quick web and mobile previews.'**
+  String get detailStandardDescription;
+
+  /// No description provided for @detailHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High detail'**
+  String get detailHigh;
+
+  /// No description provided for @detailHighDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Preserve more surface detail for a future 3D model.'**
+  String get detailHighDescription;
+
+  /// No description provided for @detailSelectionOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Selection only — reconstruction is not available yet.'**
+  String get detailSelectionOnly;
+
+  /// No description provided for @modelPreviewUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'3D preview unavailable'**
+  String get modelPreviewUnavailable;
 }
 
 class _AppLocalizationsDelegate

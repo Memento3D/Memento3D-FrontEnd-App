@@ -24,6 +24,7 @@ class CameraView extends StatelessWidget {
     required this.cameraFailed,
     required this.onCapture,
     required this.onRetry,
+    required this.onDone,
   });
 
   final CameraController? controller;
@@ -33,6 +34,7 @@ class CameraView extends StatelessWidget {
   final bool cameraFailed;
   final VoidCallback onCapture;
   final VoidCallback onRetry;
+  final VoidCallback? onDone;
 
   @override
   Widget build(BuildContext context) {
@@ -276,25 +278,37 @@ class CameraView extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _lavender,
-                            border: Border.all(color: const Color(0xFFD7CAFF)),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.check, color: _purple, size: 17),
-                              const SizedBox(width: 4),
-                              Text(
-                                strings.done,
-                                style: const TextStyle(color: _purple),
+                        GestureDetector(
+                          onTap: onDone,
+                          child: Opacity(
+                            opacity: onDone == null ? 0.55 : 1,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
                               ),
-                            ],
+                              decoration: BoxDecoration(
+                                color: _lavender,
+                                border: Border.all(
+                                  color: const Color(0xFFD7CAFF),
+                                ),
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.check,
+                                    color: _purple,
+                                    size: 17,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    strings.done,
+                                    style: const TextStyle(color: _purple),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 5),

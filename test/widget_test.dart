@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memento3d_frontend_app/l10n/app_localizations.dart';
 import 'package:memento3d_frontend_app/screens/camera_view.dart';
 import 'package:memento3d_frontend_app/screens/capture_wizard.dart';
+import 'package:memento3d_frontend_app/screens/capture_review_screen.dart';
 
 void main() {
   testWidgets('camera layout fits a Pixel 6a viewport', (tester) async {
@@ -31,11 +32,14 @@ void main() {
           cameraFailed: true,
           onCapture: () {},
           onRetry: () {},
+          onDone: null,
         ),
       ),
     );
 
     expect(find.text('Ch\u1ee5p'), findsOneWidget);
+    await tester.tap(find.text('Xong'));
+    expect(find.byType(CaptureReviewScreen), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -64,6 +68,7 @@ void main() {
             cameraFailed: true,
             onCapture: () {},
             onRetry: () {},
+            onDone: null,
           ),
         ),
       );

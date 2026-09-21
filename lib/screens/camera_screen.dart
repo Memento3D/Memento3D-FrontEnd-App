@@ -6,6 +6,8 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import 'camera_view.dart';
+import 'capture_review_screen.dart';
+import 'capture_session.dart';
 import 'capture_wizard.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _controller;
-  final List<XFile> _capturedPhotos = [];
+  final CaptureSession _session = CaptureSession();
   final CaptureWizardModel _wizard = CaptureWizardModel();
   StreamSubscription<AccelerometerEvent>? _gravitySubscription;
   StreamSubscription<UserAccelerometerEvent>? _accelerationSubscription;
@@ -29,6 +31,7 @@ class _CameraScreenState extends State<CameraScreen>
   bool _sensorActive = false;
   bool _capturing = false;
   bool _cameraFailed = false;
+  bool _reviewOpen = false;
   int _generation = 0;
 
   @override
@@ -174,7 +177,7 @@ class _CameraScreenState extends State<CameraScreen>
       final photo = await controller.takePicture();
       if (!mounted || controller != _controller) return;
       setState(() {
-        _capturedPhotos.add(photo);
+        _session.addPhoto(photo);
         _wizard.markCaptured(DateTime.now());
       });
       _feedbackTimer?.cancel();
@@ -192,6 +195,31 @@ class _CameraScreenState extends State<CameraScreen>
     }
   }
 
+  Future<void> _openReview() async {
+    if (!_session.canReview || _reviewOpen) return;
+    _reviewOpen = true;
+    ++_generation;
+    final controller = _controller;
+    setState(() => _controller = null);
+    _stopSensors();
+    await controller?.dispose();
+    if (!mounted) return;
+    try {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute(
+          builder: (context) => CaptureReviewScreen(session: _session),
+        ),
+      );
+    } finally {
+      _reviewOpen = false;
+      if (mounted) {
+        setState(() {});
+        _openCamera();
+        _startSensors();
+      }
+    }
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -206,12 +234,13 @@ class _CameraScreenState extends State<CameraScreen>
   Widget build(BuildContext context) {
     return CameraView(
       controller: _controller,
-      capturedPhotos: _capturedPhotos,
+      capturedPhotos: _session.capturedPhotos,
       wizardState: _wizard.stateAt(DateTime.now()),
       capturing: _capturing,
       cameraFailed: _cameraFailed,
       onCapture: _capture,
       onRetry: _openCamera,
+      onDone: _session.canReview ? _openReview : null,
     );
   }
 }

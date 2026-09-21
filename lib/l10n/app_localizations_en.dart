@@ -116,4 +116,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wizardCapturedBody => 'Continue moving around the object.';
+
+  @override
+  String get reviewTitle => 'Review';
+
+  @override
+  String get captureSessionTitle => 'Object capture session';
+
+  @override
+  String get sessionPhotoCount => 'Photos';
+
+  @override
+  String get sessionFileSize => 'File size';
+
+  @override
+  String get sessionQuality => '3D quality';
+
+  @override
+  String get metricUnavailable => 'Unavailable';
+
+  @override
+  String get sizeCalculating => 'Calculating';
+
+  @override
+  String get sizeIncomplete => 'Some files unavailable';
+
+  @override
+  String fileSizeKb(String value) {
+    return '$value KB';
+  }
+
+  @override
+  String fileSizeMb(String value) {
+    return '$value MB';
+  }
+
+  @override
+  String get capturedPhotoSection => 'Captured photos';
+
+  @override
+  String get addAngle => 'Add angle';
+
+  @override
+  String get addAngleHint => 'Capture another view';
+
+  @override
+  String photoNumber(int number) {
+    return 'Photo $number';
+  }
+
+  @override
+  String get imageUnavailable => 'Image unavailable';
+
+  @override
+  String get deletePhoto => 'Remove photo';
+
+  @override
+  String get retakePhoto => 'Retake';
+
+  @override
+  String get closePreview => 'Close preview';
+
+  @override
+  String get detailTitle => 'Detail level';
+
+  @override
+  String get detailSubtitle => 'For future 3D reconstruction';
+
+  @override
+  String get detailStandard => 'Standard';
+
+  @override
+  String get detailStandardDescription =>
+      'Suitable for quick web and mobile previews.';
+
+  @override
+  String get detailHigh => 'High detail';
+
+  @override
+  String get detailHighDescription =>
+      'Preserve more surface detail for a future 3D model.';
+
+  @override
+  String get detailSelectionOnly =>
+      'Selection only — reconstruction is not available yet.';
+
+  @override
+  String get modelPreviewUnavailable => '3D preview unavailable';
 }
