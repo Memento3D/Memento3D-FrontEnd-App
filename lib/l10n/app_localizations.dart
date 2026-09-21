@@ -457,6 +457,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'3D preview unavailable'**
   String get modelPreviewUnavailable;
+
+  /// No description provided for @processingCta.
+  ///
+  /// In en, this message translates to:
+  /// **'View processing status'**
+  String get processingCta;
+
+  /// No description provided for @processingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get processingTitle;
+
+  /// No description provided for @processingLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Local capture session'**
+  String get processingLocal;
+
+  /// No description provided for @processingCloudUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud service not connected'**
+  String get processingCloudUnavailable;
+
+  /// No description provided for @processingPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} photos captured'**
+  String processingPhotoCount(int count);
+
+  /// No description provided for @processingReadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to upload'**
+  String get processingReadyTitle;
+
+  /// No description provided for @processingReadyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos are prepared locally. Processing will be available when a service is connected.'**
+  String get processingReadyBody;
+
+  /// No description provided for @processingWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for processing service'**
+  String get processingWaiting;
+
+  /// No description provided for @processingProgressPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress will appear here when processing starts.'**
+  String get processingProgressPending;
+
+  /// No description provided for @processingStageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing stages'**
+  String get processingStageTitle;
+
+  /// No description provided for @processingStagePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get processingStagePending;
+
+  /// No description provided for @processingStageActive.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get processingStageActive;
+
+  /// No description provided for @processingStageCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get processingStageCompleted;
+
+  /// No description provided for @processingStageUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Data upload'**
+  String get processingStageUpload;
+
+  /// No description provided for @processingStagePrepare.
+  ///
+  /// In en, this message translates to:
+  /// **'Image preparation'**
+  String get processingStagePrepare;
+
+  /// No description provided for @processingStageStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'3D structure reconstruction'**
+  String get processingStageStructure;
+
+  /// No description provided for @processingStageDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail generation'**
+  String get processingStageDetail;
+
+  /// No description provided for @processingStageTexture.
+  ///
+  /// In en, this message translates to:
+  /// **'Texturing and finalization'**
+  String get processingStageTexture;
+
+  /// No description provided for @processingStageComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion'**
+  String get processingStageComplete;
+
+  /// No description provided for @processingSelectedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected detail'**
+  String get processingSelectedDetail;
+
+  /// No description provided for @processingFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Local file size'**
+  String get processingFileSize;
+
+  /// No description provided for @processingMissingImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured image unavailable'**
+  String get processingMissingImage;
+
+  /// No description provided for @processingNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'No upload or reconstruction has started.'**
+  String get processingNotStarted;
+
+  /// No description provided for @processingUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading photos'**
+  String get processingUploading;
+
+  /// No description provided for @processingRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing photos'**
+  String get processingRunning;
+
+  /// No description provided for @processingCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing completed'**
+  String get processingCompleted;
+
+  /// No description provided for @processingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing failed'**
+  String get processingFailed;
+
+  /// No description provided for @processingCloudConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing service connected'**
+  String get processingCloudConnected;
+
+  /// No description provided for @processingInProgressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress is based on service updates.'**
+  String get processingInProgressBody;
+
+  /// No description provided for @processingCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The processing service reports completion.'**
+  String get processingCompleteBody;
+
+  /// No description provided for @processingFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The processing service reported a problem.'**
+  String get processingFailedBody;
 }
 
 class _AppLocalizationsDelegate

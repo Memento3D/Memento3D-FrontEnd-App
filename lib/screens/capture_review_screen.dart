@@ -4,7 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import 'capture_size_format.dart';
 import 'capture_session.dart';
+import 'processing_screen.dart';
 
 const _purple = Color(0xFF6B4FE8);
 const _lavender = Color(0xFFF2EEFF);
@@ -39,6 +41,15 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
       }
       _sizeFuture = widget.session.measureSize();
     });
+  }
+
+  void _openProcessing() {
+    if (!widget.session.canReview) return;
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (context) => ProcessingScreen(session: widget.session),
+      ),
+    );
   }
 
   void _openPhoto(XFile photo) {
@@ -133,15 +144,6 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
         ),
       ),
     );
-  }
-
-  String _formatSize(AppLocalizations strings, int bytes) {
-    const bytesPerKilobyte = 1024;
-    const bytesPerMegabyte = bytesPerKilobyte * bytesPerKilobyte;
-    if (bytes >= bytesPerMegabyte) {
-      return strings.fileSizeMb((bytes / bytesPerMegabyte).toStringAsFixed(1));
-    }
-    return strings.fileSizeKb((bytes / bytesPerKilobyte).toStringAsFixed(1));
   }
 
   @override
@@ -320,6 +322,21 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
                         fontSize: 11,
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.icon(
+                        onPressed: widget.session.canReview
+                            ? _openProcessing
+                            : null,
+                        icon: const Icon(Icons.arrow_forward),
+                        label: Text(strings.processingCta),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: _purple,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -355,7 +372,7 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
                   return _summaryValue(
                     summary == null
                         ? strings.sizeCalculating
-                        : _formatSize(strings, summary.bytes),
+                        : formatCaptureSize(strings, summary.bytes),
                     strings.sessionFileSize,
                     _ink,
                   );

@@ -203,4 +203,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get modelPreviewUnavailable => '3D preview unavailable';
+
+  @override
+  String get processingCta => 'View processing status';
+
+  @override
+  String get processingTitle => 'Processing';
+
+  @override
+  String get processingLocal => 'Local capture session';
+
+  @override
+  String get processingCloudUnavailable => 'Cloud service not connected';
+
+  @override
+  String processingPhotoCount(int count) {
+    return '$count photos captured';
+  }
+
+  @override
+  String get processingReadyTitle => 'Ready to upload';
+
+  @override
+  String get processingReadyBody =>
+      'Your photos are prepared locally. Processing will be available when a service is connected.';
+
+  @override
+  String get processingWaiting => 'Waiting for processing service';
+
+  @override
+  String get processingProgressPending =>
+      'Progress will appear here when processing starts.';
+
+  @override
+  String get processingStageTitle => 'Processing stages';
+
+  @override
+  String get processingStagePending => 'Pending';
+
+  @override
+  String get processingStageActive => 'In progress';
+
+  @override
+  String get processingStageCompleted => 'Completed';
+
+  @override
+  String get processingStageUpload => 'Data upload';
+
+  @override
+  String get processingStagePrepare => 'Image preparation';
+
+  @override
+  String get processingStageStructure => '3D structure reconstruction';
+
+  @override
+  String get processingStageDetail => 'Detail generation';
+
+  @override
+  String get processingStageTexture => 'Texturing and finalization';
+
+  @override
+  String get processingStageComplete => 'Completion';
+
+  @override
+  String get processingSelectedDetail => 'Selected detail';
+
+  @override
+  String get processingFileSize => 'Local file size';
+
+  @override
+  String get processingMissingImage => 'Captured image unavailable';
+
+  @override
+  String get processingNotStarted => 'No upload or reconstruction has started.';
+
+  @override
+  String get processingUploading => 'Uploading photos';
+
+  @override
+  String get processingRunning => 'Processing photos';
+
+  @override
+  String get processingCompleted => 'Processing completed';
+
+  @override
+  String get processingFailed => 'Processing failed';
+
+  @override
+  String get processingCloudConnected => 'Processing service connected';
+
+  @override
+  String get processingInProgressBody =>
+      'Progress is based on service updates.';
+
+  @override
+  String get processingCompleteBody =>
+      'The processing service reports completion.';
+
+  @override
+  String get processingFailedBody =>
+      'The processing service reported a problem.';
 }

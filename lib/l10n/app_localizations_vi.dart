@@ -204,4 +204,102 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get modelPreviewUnavailable => 'Chưa có bản xem 3D';
+
+  @override
+  String get processingCta => 'Xem trạng thái xử lý';
+
+  @override
+  String get processingTitle => 'Xử lý';
+
+  @override
+  String get processingLocal => 'Phiên chụp trên thiết bị';
+
+  @override
+  String get processingCloudUnavailable => 'Chưa kết nối dịch vụ đám mây';
+
+  @override
+  String processingPhotoCount(int count) {
+    return 'Đã chụp $count ảnh';
+  }
+
+  @override
+  String get processingReadyTitle => 'Sẵn sàng tải lên';
+
+  @override
+  String get processingReadyBody =>
+      'Ảnh đang được lưu trên thiết bị. Chức năng xử lý sẽ khả dụng khi kết nối dịch vụ.';
+
+  @override
+  String get processingWaiting => 'Đang chờ dịch vụ xử lý';
+
+  @override
+  String get processingProgressPending =>
+      'Tiến độ sẽ xuất hiện khi quá trình xử lý bắt đầu.';
+
+  @override
+  String get processingStageTitle => 'Các bước xử lý';
+
+  @override
+  String get processingStagePending => 'Chưa bắt đầu';
+
+  @override
+  String get processingStageActive => 'Đang xử lý';
+
+  @override
+  String get processingStageCompleted => 'Hoàn tất';
+
+  @override
+  String get processingStageUpload => 'Tải dữ liệu lên';
+
+  @override
+  String get processingStagePrepare => 'Chuẩn bị hình ảnh';
+
+  @override
+  String get processingStageStructure => 'Dựng cấu trúc 3D';
+
+  @override
+  String get processingStageDetail => 'Tạo chi tiết';
+
+  @override
+  String get processingStageTexture => 'Tạo bề mặt và hoàn thiện';
+
+  @override
+  String get processingStageComplete => 'Hoàn thành';
+
+  @override
+  String get processingSelectedDetail => 'Mức chi tiết đã chọn';
+
+  @override
+  String get processingFileSize => 'Dung lượng trên thiết bị';
+
+  @override
+  String get processingMissingImage => 'Không thể mở ảnh đã chụp';
+
+  @override
+  String get processingNotStarted => 'Chưa tải lên hoặc bắt đầu dựng 3D.';
+
+  @override
+  String get processingUploading => 'Đang tải ảnh lên';
+
+  @override
+  String get processingRunning => 'Đang xử lý ảnh';
+
+  @override
+  String get processingCompleted => 'Đã xử lý xong';
+
+  @override
+  String get processingFailed => 'Xử lý thất bại';
+
+  @override
+  String get processingCloudConnected => 'Đã kết nối dịch vụ xử lý';
+
+  @override
+  String get processingInProgressBody =>
+      'Tiến độ dựa trên cập nhật từ dịch vụ.';
+
+  @override
+  String get processingCompleteBody => 'Dịch vụ thông báo đã xử lý xong.';
+
+  @override
+  String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
 }
