@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/widgets/home_header.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/widgets/home_hero_card.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/widgets/little_moments_section.dart';
@@ -7,10 +8,12 @@ import 'package:memento3d_frontend_app/features/home/presentation/widgets/trust_
 
 class HomeTabView extends StatelessWidget {
   final VoidCallback? onCreateKeepsake;
+  final VoidCallback? onViewAllScans;
 
   const HomeTabView({
     super.key,
     this.onCreateKeepsake,
+    this.onViewAllScans,
   });
 
   @override
@@ -32,10 +35,14 @@ class HomeTabView extends StatelessWidget {
               );
             },
             onProfileTap: () {
+              final user = AuthState.instance.currentUser;
+              final name = (user != null && user.fullName.trim().isNotEmpty)
+                  ? user.fullName.trim()
+                  : 'bạn';
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Hồ sơ người dùng Chloe.'),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text('Hồ sơ người dùng $name.'),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },
@@ -80,7 +87,7 @@ class HomeTabView extends StatelessWidget {
 
           // 4. Section: Your little moments (4 total)
           LittleMomentsSection(
-            onViewAll: () {
+            onViewAll: onViewAllScans ?? () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Xem toàn bộ các kỷ niệm của bạn.'),

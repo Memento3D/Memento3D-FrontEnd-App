@@ -7,6 +7,8 @@ import 'package:memento3d_frontend_app/features/auth/presentation/widgets/hero_k
 import 'package:memento3d_frontend_app/features/auth/presentation/widgets/login_header.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/screens/main_screen.dart';
 
+import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -28,19 +30,47 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
+  Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
 
-      // Client-side simulation
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        if (mounted) {
-          setState(() => _isLoading = false);
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const MainScreen()),
-          );
-        }
-      });
+      final success = await AuthState.instance.login(
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
+
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Chào mừng trở lại, ${AuthState.instance.currentUser?.fullName ?? 'bạn'}!',
+            ),
+            backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MainScreen()),
+        );
+      } else {
+        final error = AuthState.instance.errorMessage ?? 'Đăng nhập không thành công';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+      }
     }
   }
 

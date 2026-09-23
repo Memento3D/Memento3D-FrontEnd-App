@@ -6,6 +6,8 @@ import 'package:memento3d_frontend_app/features/auth/presentation/widgets/regist
 import 'package:memento3d_frontend_app/features/auth/presentation/widgets/register_hero_card.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/screens/main_screen.dart';
 
+import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -34,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _handleRegister() {
+  Future<void> _handleRegister() async {
     if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -52,16 +54,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
 
-      // Client-side simulation
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        if (mounted) {
-          setState(() => _isLoading = false);
+      final email = _emailController.text.trim();
+      final password = _passwordController.text;
+      final fullName = _fullNameController.text.trim();
+
+      final registerResponse = await AuthState.instance.register(
+        email: email,
+        password: password,
+        fullName: fullName,
+      );
+
+      if (!mounted) return;
+
+      if (registerResponse != null) {
+        // Auto-login after successful registration
+        final loginSuccess = await AuthState.instance.login(email, password);
+
+        if (!mounted) return;
+        setState(() => _isLoading = false);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              registerResponse.message.isNotEmpty
+                  ? registerResponse.message
+                  : 'Đăng ký tài khoản thành công! 🎉',
+            ),
+            backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+
+        if (loginSuccess) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => const MainScreen()),
             (route) => false,
           );
+        } else {
+          // If auto login fails for any reason, pop back to login
+          Navigator.of(context).maybePop();
         }
-      });
+      } else {
+        setState(() => _isLoading = false);
+        final error = AuthState.instance.errorMessage ?? 'Đăng ký không thành công';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -436,6 +485,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
             if (value.length < 8) {
               return 'Mật khẩu phải chứa ít nhất 8 ký tự';
+            }
+            if (!RegExp(r'[a-zA-Z]').hasMatch(value)) {
+              return 'Mật khẩu phải chứa ít nhất một chữ cái';
+            }
+            if (!RegExp(r'[0-9]').hasMatch(value)) {
+              return 'Mật khẩu phải chứa ít nhất một chữ số';
+            }
+            if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+              return 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt (!, @, #, \$, ...)';
             }
             return null;
           },

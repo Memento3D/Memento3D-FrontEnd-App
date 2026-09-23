@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
+import 'package:memento3d_frontend_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/screens/home_tab_view.dart';
+import 'package:memento3d_frontend_app/features/scans/presentation/screens/dashboard_scans_screen.dart';
+import 'package:memento3d_frontend_app/features/scans/presentation/widgets/create_scan_dialog.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,146 +22,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _openCreateBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE5E7EB),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  'Tạo kỷ niệm 3D mới ✨',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF111827),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Chọn ảnh kỷ niệm để chuyển thành tượng 3D Keepsake',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF6B7280),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                _buildActionTile(
-                  icon: Icons.photo_camera_rounded,
-                  iconBg: const Color(0xFFEDE9FE),
-                  iconColor: const Color(0xFF7C3AED),
-                  title: 'Chụp ảnh mới',
-                  subtitle: 'Mở máy ảnh chụp trực tiếp khoảnh khắc',
-                  onTap: () {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Tính năng chụp ảnh đang sẵn sàng.')),
-                    );
-                  },
-                ),
-                const SizedBox(height: 12),
-                _buildActionTile(
-                  icon: Icons.photo_library_rounded,
-                  iconBg: const Color(0xFFE0F2FE),
-                  iconColor: const Color(0xFF0284C7),
-                  title: 'Chọn từ thư viện ảnh',
-                  subtitle: 'Tải ảnh bạn bè, người yêu, thú cưng hoặc gia đình',
-                  onTap: () {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Đang mở thư viện ảnh...')),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        );
+    CreateScanBottomSheet.show(
+      context,
+      onScanCreated: (newScan) {
+        setState(() => _currentTabIndex = 1);
       },
-    );
-  }
-
-  Widget _buildActionTile({
-    required IconData icon,
-    required Color iconBg,
-    required Color iconColor,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFF1F0F5)),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: iconBg,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: iconColor, size: 22),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF111827),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF6B7280),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: Color(0xFF9CA3AF),
-              size: 20,
-            ),
-          ],
-        ),
-      ),
+      onNavigateToDashboard: () {
+        setState(() => _currentTabIndex = 1);
+      },
     );
   }
 
@@ -172,13 +44,12 @@ class _MainScreenState extends State<MainScreen> {
             // Tab 0: Home
             HomeTabView(
               onCreateKeepsake: _openCreateBottomSheet,
+              onViewAllScans: () => _onTabSelected(1),
             ),
 
-            // Tab 1: Memories
-            _buildPlaceholderTab(
-              icon: Icons.photo_library_outlined,
-              title: 'Your Memories',
-              subtitle: 'Tất cả các khoảnh khắc và kỷ niệm bạn đã lưu.',
+            // Tab 1: Scans Dashboard (Issue #43)
+            DashboardScansScreen(
+              onBackToHome: () => _onTabSelected(0),
             ),
 
             // Tab 2: Dummy for Center FAB (won't be directly indexed)
@@ -192,15 +63,305 @@ class _MainScreenState extends State<MainScreen> {
             ),
 
             // Tab 4: Profile
-            _buildPlaceholderTab(
-              icon: Icons.person_outline_rounded,
-              title: 'Profile',
-              subtitle: 'Quản lý tài khoản, địa chỉ giao hàng và cài đặt.',
-            ),
+            _buildProfileTab(),
           ],
         ),
       ),
       bottomNavigationBar: _buildCustomBottomBar(),
+    );
+  }
+
+  Widget _buildProfileTab() {
+    final user = AuthState.instance.currentUser;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header title
+          Text(
+            'Hồ sơ cá nhân',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF111827),
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // User Info Card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFF1F0F5)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEDE9FE),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      user?.fullName.isNotEmpty == true
+                          ? user!.fullName.substring(0, 1).toUpperCase()
+                          : 'U',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user?.fullName ?? 'Người dùng Memento3D',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF111827),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        user?.email ?? 'Chưa xác định email',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF6B7280),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF3F4F6),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          user?.role ?? 'USER',
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF4B5563),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Menu Options
+          Text(
+            'Tài khoản & Cài đặt',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF6B7280),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFF1F0F5)),
+            ),
+            child: Column(
+              children: [
+                _buildProfileOption(
+                  icon: Icons.person_outline_rounded,
+                  title: 'Thông tin tài khoản',
+                  onTap: () {},
+                ),
+                const Divider(height: 1, color: Color(0xFFF1F0F5)),
+                _buildProfileOption(
+                  icon: Icons.lock_outline_rounded,
+                  title: 'Bảo mật & Đổi mật khẩu',
+                  onTap: () {},
+                ),
+                const Divider(height: 1, color: Color(0xFFF1F0F5)),
+                _buildProfileOption(
+                  icon: Icons.notifications_none_rounded,
+                  title: 'Thông báo',
+                  onTap: () {},
+                ),
+                const Divider(height: 1, color: Color(0xFFF1F0F5)),
+                _buildProfileOption(
+                  icon: Icons.help_outline_rounded,
+                  title: 'Trợ giúp & Hỗ trợ',
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Logout Button
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: OutlinedButton.icon(
+              onPressed: () => _confirmLogout(context),
+              icon: const Icon(Icons.logout_rounded, color: AppColors.error, size: 20),
+              label: Text(
+                'Đăng xuất',
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.error,
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFFFEE2E2)),
+                backgroundColor: const Color(0xFFFEF2F2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileOption({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      onTap: onTap,
+      leading: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, size: 20, color: const Color(0xFF4B5563)),
+      ),
+      title: Text(
+        title,
+        style: GoogleFonts.plusJakartaSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF1F2937),
+        ),
+      ),
+      trailing: const Icon(
+        Icons.chevron_right_rounded,
+        size: 20,
+        color: Color(0xFF9CA3AF),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+    );
+  }
+
+  void _confirmLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'Đăng xuất',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF111827),
+            ),
+          ),
+          content: Text(
+            'Bạn có chắc chắn muốn đăng xuất khỏi tài khoản không?',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 14,
+              color: const Color(0xFF4B5563),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(
+                'Hủy',
+                style: GoogleFonts.plusJakartaSans(
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF6B7280),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+                await AuthState.instance.logout();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Đã đăng xuất thành công.'),
+                      backgroundColor: const Color(0xFF4B5563),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  );
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    (route) => false,
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Đăng xuất',
+                style: GoogleFonts.plusJakartaSans(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -278,11 +439,11 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Home',
           ),
 
-          // 2. Memories
+          // 2. Scans Dashboard (Issue #43)
           _buildNavItem(
             index: 1,
-            icon: Icons.photo_library_outlined,
-            label: 'Memories',
+            icon: Icons.view_in_ar_rounded,
+            label: 'Scans',
           ),
 
           // 3. Center FAB (+)
