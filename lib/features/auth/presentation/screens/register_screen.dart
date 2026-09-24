@@ -56,7 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       final email = _emailController.text.trim();
       final password = _passwordController.text;
-      final fullName = _fullNameController.text.trim();
+      final fullName = _fullNameController.text.trim().isNotEmpty
+          ? _fullNameController.text.trim()
+          : 'Đăng';
 
       final registerResponse = await AuthState.instance.register(
         email: email,
@@ -90,7 +92,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         if (loginSuccess) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const MainScreen()),
+            MaterialPageRoute(
+              builder: (_) => MainScreen(userName: fullName),
+            ),
             (route) => false,
           );
         } else {

@@ -4,11 +4,18 @@ import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/screens/home_tab_view.dart';
-import 'package:memento3d_frontend_app/features/scans/presentation/screens/dashboard_scans_screen.dart';
+import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
+import 'package:memento3d_frontend_app/features/scans/data/repositories/scan_repository.dart';
+import 'package:memento3d_frontend_app/features/scans/presentation/screens/dashboard_screen.dart';
 import 'package:memento3d_frontend_app/features/scans/presentation/widgets/create_scan_dialog.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final String userName;
+
+  const MainScreen({
+    super.key,
+    this.userName = 'Người dùng',
+  });
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -21,15 +28,186 @@ class _MainScreenState extends State<MainScreen> {
     setState(() => _currentTabIndex = index);
   }
 
-  void _openCreateBottomSheet() {
-    CreateScanBottomSheet.show(
+  void _openCreateScanDialog() {
+    CreateScanDialog.show(
       context,
-      onScanCreated: (newScan) {
-        setState(() => _currentTabIndex = 1);
+      onSubmit: ({
+        required String name,
+        required ScanInputMode inputMode,
+        String? description,
+        String? notes,
+      }) {
+        ScanRepository.instance.createScan(
+          name: name,
+          inputMode: inputMode,
+          description: description,
+          notes: notes,
+        );
+        setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       },
-      onNavigateToDashboard: () {
-        setState(() => _currentTabIndex = 1);
+    );
+  }
+
+  void _openCreateBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE5E7EB),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  'Tạo phiên Scan & Kỷ niệm 3D ✨',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF111827),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Số hóa kỷ niệm thành mô hình 3D hoặc đặt in Keepsake',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF6B7280),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _buildActionTile(
+                  icon: Icons.view_in_ar_rounded,
+                  iconBg: const Color(0xFFEDE9FE),
+                  iconColor: const Color(0xFF7C3AED),
+                  title: 'Tạo phiên Scan 3D mới',
+                  subtitle: 'Bắt đầu quy trình Guided Capture Wizard',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _openCreateScanDialog();
+                  },
+                ),
+                const SizedBox(height: 12),
+                _buildActionTile(
+                  icon: Icons.photo_camera_rounded,
+                  iconBg: const Color(0xFFE0F2FE),
+                  iconColor: const Color(0xFF0284C7),
+                  title: 'Chụp ảnh vật thể',
+                  subtitle: 'Mở máy ảnh chụp trực tiếp góc 360 độ',
+                  onTap: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Tính năng chụp ảnh đang sẵn sàng.')),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                _buildActionTile(
+                  icon: Icons.photo_library_rounded,
+                  iconBg: const Color(0xFFFEF3C7),
+                  iconColor: const Color(0xFFD97706),
+                  title: 'Chọn ảnh từ thư viện',
+                  subtitle: 'Tải bộ ảnh có sẵn lên để tái tạo 3D',
+                  onTap: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Đang mở thư viện ảnh...')),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        );
       },
+    );
+  }
+
+  Widget _buildActionTile({
+    required IconData icon,
+    required Color iconBg,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFF1F0F5)),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: iconBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: iconColor, size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF111827),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: Color(0xFF9CA3AF),
+              size: 20,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -41,15 +219,15 @@ class _MainScreenState extends State<MainScreen> {
         child: IndexedStack(
           index: _currentTabIndex,
           children: [
-            // Tab 0: Home
-            HomeTabView(
-              onCreateKeepsake: _openCreateBottomSheet,
-              onViewAllScans: () => _onTabSelected(1),
+            // Tab 0: Dashboard (Danh sách phiên Scan - Điểm vào chính sau khi đăng nhập)
+            DashboardScreen(
+              userName: widget.userName,
+              onNavigateToProfile: () => _onTabSelected(4),
             ),
 
-            // Tab 1: Scans Dashboard (Issue #43)
-            DashboardScansScreen(
-              onBackToHome: () => _onTabSelected(0),
+            // Tab 1: Khám phá Keepsake & Kỷ niệm
+            HomeTabView(
+              onCreateKeepsake: _openCreateBottomSheet,
             ),
 
             // Tab 2: Dummy for Center FAB (won't be directly indexed)
@@ -379,8 +557,8 @@ class _MainScreenState extends State<MainScreen> {
             Container(
               width: 64,
               height: 64,
-              decoration: BoxDecoration(
-                color: const Color(0xFFEDE9FE),
+              decoration: const BoxDecoration(
+                color: Color(0xFFEDE9FE),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 32, color: AppColors.primary),
@@ -432,23 +610,23 @@ class _MainScreenState extends State<MainScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          // 1. Home
+          // 1. Dashboard (My Scans)
           _buildNavItem(
             index: 0,
-            icon: Icons.home_rounded,
-            label: 'Home',
+            icon: Icons.dashboard_rounded,
+            label: 'Dashboard',
           ),
 
-          // 2. Scans Dashboard (Issue #43)
+          // 2. Khám phá (Showcase)
           _buildNavItem(
             index: 1,
-            icon: Icons.view_in_ar_rounded,
-            label: 'Scans',
+            icon: Icons.explore_outlined,
+            label: 'Khám phá',
           ),
 
           // 3. Center FAB (+)
           GestureDetector(
-            onTap: _openCreateBottomSheet,
+            onTap: _openCreateScanDialog,
             child: Container(
               width: 48,
               height: 48,
@@ -482,7 +660,7 @@ class _MainScreenState extends State<MainScreen> {
           _buildNavItem(
             index: 4,
             icon: Icons.person_outline_rounded,
-            label: 'Profile',
+            label: 'Hồ sơ',
           ),
         ],
       ),

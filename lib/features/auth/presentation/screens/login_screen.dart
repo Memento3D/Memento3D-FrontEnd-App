@@ -43,10 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = false);
 
       if (success) {
+        final email = _emailController.text.trim();
+        String userName = AuthState.instance.currentUser?.fullName.trim() ?? '';
+        if (userName.isEmpty && email.isNotEmpty) {
+          final prefix = email.split('@').first.trim();
+          if (prefix.isNotEmpty) {
+            userName = prefix[0].toUpperCase() + prefix.substring(1);
+          }
+        }
+        if (userName.isEmpty) userName = 'Đăng';
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Chào mừng trở lại, ${AuthState.instance.currentUser?.fullName ?? 'bạn'}!',
+              'Chào mừng trở lại, $userName!',
             ),
             backgroundColor: const Color(0xFF10B981),
             behavior: SnackBarBehavior.floating,
@@ -56,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainScreen()),
+          MaterialPageRoute(
+            builder: (_) => MainScreen(userName: userName),
+          ),
         );
       } else {
         final error = AuthState.instance.errorMessage ?? 'Đăng nhập không thành công';
