@@ -57,15 +57,30 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
     super.dispose();
   }
 
-  void _handleSubmit() {
+  bool _isSubmitting = false;
+
+  void _handleSubmit() async {
+    if (_isSubmitting) return;
     if (_formKey.currentState?.validate() ?? false) {
-      widget.onSubmit(
-        name: _nameController.text.trim(),
-        inputMode: _selectedMode,
-        description: _descController.text.trim().isEmpty ? null : _descController.text.trim(),
-        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-      );
-      Navigator.of(context).pop();
+      setState(() => _isSubmitting = true);
+      try {
+        final result = widget.onSubmit(
+          name: _nameController.text.trim(),
+          inputMode: _selectedMode,
+          description: _descController.text.trim().isEmpty ? null : _descController.text.trim(),
+          notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        );
+        if (result is Future) {
+          await result;
+        }
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      } catch (_) {
+        if (mounted) {
+          setState(() => _isSubmitting = false);
+        }
+      }
     }
   }
 
@@ -294,13 +309,22 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                         elevation: 2,
                         shadowColor: AppColors.primary.withValues(alpha: 0.4),
                       ),
-                      child: Text(
-                        'Tß║ío phi├¬n scan',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                      ),
+                      child: _isSubmitting
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Tạo phiên scan',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                              ),
+                            ),
                     ),
                   ),
                 ],

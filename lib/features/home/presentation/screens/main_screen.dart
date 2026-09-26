@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/core/network/api_exception.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/screens/home_tab_view.dart';
@@ -36,21 +37,47 @@ class _MainScreenState extends State<MainScreen> {
         required ScanInputMode inputMode,
         String? description,
         String? notes,
-      }) {
-        ScanRepository.instance.createScan(
-          name: name,
-          inputMode: inputMode,
-          description: description,
-          notes: notes,
-        );
-        setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
-            backgroundColor: AppColors.primary,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+      }) async {
+        try {
+          await ScanRepository.instance.createScanAsync(
+            name: name,
+            inputMode: inputMode,
+            description: description,
+            notes: notes,
+          );
+          if (mounted) {
+            setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
+                backgroundColor: AppColors.primary,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        } on ApiException catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.message),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+          rethrow;
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Không thể tạo phiên scan: ${e.toString()}'),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+          rethrow;
+        }
       },
     );
   }

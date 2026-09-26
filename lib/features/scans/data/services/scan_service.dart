@@ -9,6 +9,34 @@ class ScanService {
 
   ScanService({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
 
+  /// Normalize sort field/direction for backend API
+  static String? normalizeSort(String? sort) {
+    if (sort == null || sort.isEmpty) return null;
+    switch (sort) {
+      case 'newest':
+        return 'created_at:desc';
+      case 'oldest':
+        return 'created_at:asc';
+      case 'name_asc':
+        return 'name:asc';
+      case 'size_desc':
+        return 'total_size_bytes:desc';
+      default:
+        return sort;
+    }
+  }
+
+  /// Normalize status query string for backend API
+  static String? normalizeStatus(String? status) {
+    if (status == null || status.isEmpty || status.toLowerCase() == 'all') {
+      return null;
+    }
+    if (status.toLowerCase() == 'qualitycheck' || status.toLowerCase() == 'quality_check') {
+      return 'quality_check';
+    }
+    return status.toLowerCase();
+  }
+
   /// Retrieve paginated list of scans for authenticated user
   /// Optional filters: [status] ('draft', 'processing', 'done', 'failed', etc.), [page], [limit], [sort]
   Future<ScanListResponseModel> getScans({
@@ -21,12 +49,14 @@ class ScanService {
     queryParams.add('page=$page');
     queryParams.add('limit=$limit');
 
-    if (status != null && status.isNotEmpty && status.toLowerCase() != 'all') {
-      queryParams.add('status=${Uri.encodeQueryComponent(status.toLowerCase())}');
+    final normalizedStatus = normalizeStatus(status);
+    if (normalizedStatus != null) {
+      queryParams.add('status=${Uri.encodeQueryComponent(normalizedStatus)}');
     }
 
-    if (sort != null && sort.isNotEmpty) {
-      queryParams.add('sort=${Uri.encodeQueryComponent(sort)}');
+    final normalizedSort = normalizeSort(sort);
+    if (normalizedSort != null) {
+      queryParams.add('sort=${Uri.encodeQueryComponent(normalizedSort)}');
     }
 
     final query = queryParams.isNotEmpty ? '?${queryParams.join('&')}' : '';

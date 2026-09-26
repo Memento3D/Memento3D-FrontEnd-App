@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/core/network/api_exception.dart';
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
 import 'package:memento3d_frontend_app/features/scans/data/repositories/scan_repository.dart';
 import 'package:memento3d_frontend_app/features/scans/presentation/widgets/create_scan_dialog.dart';
@@ -33,6 +34,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String _sortBy = 'newest';
   bool _isGridView = true;
   String _searchQuery = '';
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -42,6 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _searchQuery = _searchController.text.trim();
       });
     });
+    _loadScans();
   }
 
   @override
@@ -50,6 +54,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
+  /// Load scans from Backend API (GET /api/v1/scans)
+  Future<void> _loadScans({bool refresh = false}) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await _repository.fetchScans(
+        statusFilter: _statusFilter,
+        searchQuery: _searchQuery,
+        sortBy: _sortBy,
+        refresh: refresh,
+      );
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = null;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e is ApiException
+              ? e.message
+              : 'Không thể kết nối đến máy chủ backend: ${e.toString()}';
+        });
+      }
+    }
+  }
+
+  /// Create a new scan session via Backend API (POST /api/v1/scans)
   void _openCreateScan() {
     CreateScanDialog.show(
       context,
@@ -58,50 +95,104 @@ class _DashboardScreenState extends State<DashboardScreen> {
         required ScanInputMode inputMode,
         String? description,
         String? notes,
-      }) {
-        setState(() {
-          _repository.createScan(
+      }) async {
+        try {
+          await _repository.createScanAsync(
             name: name,
             inputMode: inputMode,
             description: description,
             notes: notes,
           );
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
-            backgroundColor: AppColors.primary,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
+          if (mounted) {
+            setState(() {});
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
+                backgroundColor: AppColors.primary,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            );
+          }
+        } on ApiException catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.message),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            );
+          }
+          rethrow;
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Không thể tạo phiên scan: ${e.toString()}'),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            );
+          }
+          rethrow;
+        }
       },
     );
   }
 
+  /// Rename a scan session via Backend API (PATCH /api/v1/scans/{id})
   void _openRenameScan(ScanItem scan) {
     RenameScanDialog.show(
       context,
       scan: scan,
-      onRename: (newName) {
-        setState(() {
-          _repository.updateScanName(scan.id, newName);
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Đã đổi tên thành "$newName"'),
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+      onRename: (newName) async {
+        try {
+          final updated = await _repository.updateScanNameAsync(scan.id, newName);
+          if (mounted) {
+            setState(() {});
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Đã đổi tên thành "${updated?.name ?? newName}"'),
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        } on ApiException catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.message),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+          rethrow;
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Không thể đổi tên: ${e.toString()}'),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+          rethrow;
+        }
       },
     );
   }
 
+  /// Soft-delete scan session via Backend API (DELETE /api/v1/scans/{id})
   void _confirmDeleteScan(ScanItem scan) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'Xóa phiên scan?',
@@ -112,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         content: Text(
-          'Bạn có chắc chắn muốn xóa "${scan.name}"? Dữ liệu scan sẽ được chuyển vào mục lưu trữ tạm thời.',
+          'Bạn có chắc chắn muốn xóa "${scan.name}"? Dữ liệu scan sẽ được chuyển vào mục lưu trữ tạm thời (soft-delete).',
           style: GoogleFonts.plusJakartaSans(
             fontSize: 13,
             fontWeight: FontWeight.w500,
@@ -121,7 +212,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(dialogCtx).pop(),
             child: Text(
               'Hủy',
               style: GoogleFonts.plusJakartaSans(
@@ -131,18 +222,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _repository.deleteScan(scan.id);
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Đã xóa phiên scan "${scan.name}"'),
-                  backgroundColor: const Color(0xFFEF4444),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+            onPressed: () async {
+              Navigator.of(dialogCtx).pop();
+              try {
+                await _repository.deleteScanAsync(scan.id);
+                if (mounted) {
+                  setState(() {});
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Đã xóa phiên scan "${scan.name}"'),
+                      backgroundColor: const Color(0xFFEF4444),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              } on ApiException catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.message),
+                      backgroundColor: AppColors.error,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Không thể xóa phiên scan: ${e.toString()}'),
+                      backgroundColor: AppColors.error,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
@@ -206,10 +320,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: () async {
-            await Future.delayed(const Duration(milliseconds: 600));
-            setState(() {});
-          },
+          onRefresh: () => _loadScans(refresh: true),
           color: AppColors.primary,
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
@@ -221,6 +332,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: _buildHeader(),
                 ),
               ),
+
+              // Subtle Loading Indicator when syncing with backend
+              if (_isLoading)
+                const SliverToBoxAdapter(
+                  child: LinearProgressIndicator(
+                    color: AppColors.primary,
+                    backgroundColor: Colors.transparent,
+                    minHeight: 2.5,
+                  ),
+                ),
+
+              // Error Banner if backend synchronization fails
+              if (_errorMessage != null)
+                SliverToBoxAdapter(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF2F2),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFFFECACA)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.cloud_off_rounded, color: Color(0xFFEF4444), size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _errorMessage!,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 12,
+                              color: const Color(0xFF991B1B),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => _loadScans(refresh: true),
+                          child: const Icon(Icons.refresh_rounded, size: 18, color: Color(0xFF991B1B)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
               // 2. Quick Stats Overview
               SliverToBoxAdapter(

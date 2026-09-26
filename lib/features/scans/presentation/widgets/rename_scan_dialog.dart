@@ -5,7 +5,7 @@ import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart
 
 class RenameScanDialog extends StatefulWidget {
   final ScanItem scan;
-  final ValueChanged<String> onRename;
+  final dynamic Function(String) onRename;
 
   const RenameScanDialog({
     super.key,
@@ -16,7 +16,7 @@ class RenameScanDialog extends StatefulWidget {
   static Future<void> show(
     BuildContext context, {
     required ScanItem scan,
-    required ValueChanged<String> onRename,
+    required dynamic Function(String) onRename,
   }) {
     return showDialog(
       context: context,
@@ -34,6 +34,7 @@ class RenameScanDialog extends StatefulWidget {
 class _RenameScanDialogState extends State<RenameScanDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _controller;
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -47,10 +48,23 @@ class _RenameScanDialogState extends State<RenameScanDialog> {
     super.dispose();
   }
 
-  void _submit() {
+  void _submit() async {
+    if (_isSubmitting) return;
     if (_formKey.currentState?.validate() ?? false) {
-      widget.onRename(_controller.text.trim());
-      Navigator.of(context).pop();
+      setState(() => _isSubmitting = true);
+      try {
+        final result = widget.onRename(_controller.text.trim());
+        if (result is Future) {
+          await result;
+        }
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      } catch (_) {
+        if (mounted) {
+          setState(() => _isSubmitting = false);
+        }
+      }
     }
   }
 
@@ -132,12 +146,21 @@ class _RenameScanDialogState extends State<RenameScanDialog> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
-            'Lưu tên',
-            style: GoogleFonts.plusJakartaSans(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          child: _isSubmitting
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : Text(
+                  'Lưu tên',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
         ),
       ],
     );

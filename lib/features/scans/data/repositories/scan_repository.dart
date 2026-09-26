@@ -1,4 +1,5 @@
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
+import 'package:memento3d_frontend_app/features/scans/data/services/scan_service.dart';
 
 class StorageQuota {
   final int usedBytes;
@@ -23,15 +24,54 @@ class StorageQuota {
   String get formattedMax => '10 GB';
 }
 
-/// Repository managing user scan sessions
+/// Repository managing user scan sessions via Backend CRUD API with local cache
 class ScanRepository {
-  // Singleton pattern for simple state management across screens
+  // Singleton pattern for state management across screens
   static final ScanRepository instance = ScanRepository._internal();
-  ScanRepository._internal();
+  ScanRepository._internal({ScanService? scanService})
+      : _scanService = scanService ?? ScanService();
+
+  ScanService _scanService;
+
+  /// Allow injecting a mock ScanService in unit tests
+  void setService(ScanService service) {
+    _scanService = service;
+  }
 
   final List<ScanItem> _scans = [];
 
-  /// Get list of scans with optional filtering, search, and sorting
+  List<ScanItem> get cachedScans => List.unmodifiable(_scans);
+
+  /// Fetch scans from backend API (GET /api/v1/scans)
+  Future<List<ScanItem>> fetchScans({
+    String? statusFilter,
+    String? searchQuery,
+    String sortBy = 'newest',
+    bool refresh = false,
+  }) async {
+    final apiSort = ScanService.normalizeSort(sortBy);
+    final apiStatus = ScanService.normalizeStatus(statusFilter);
+
+    final response = await _scanService.getScans(
+      status: apiStatus,
+      page: 1,
+      limit: 100,
+      sort: apiSort,
+    );
+
+    final items = response.scans.map((m) => ScanItem.fromScanModel(m)).toList();
+
+    _scans.clear();
+    _scans.addAll(items);
+
+    return getScans(
+      statusFilter: statusFilter,
+      searchQuery: searchQuery,
+      sortBy: sortBy,
+    );
+  }
+
+  /// Get list of scans with optional filtering, search, and sorting (from cache)
   List<ScanItem> getScans({
     String? statusFilter,
     String? searchQuery,
@@ -41,7 +81,7 @@ class ScanRepository {
 
     // 1. Status Filter
     if (statusFilter != null && statusFilter.isNotEmpty && statusFilter != 'all') {
-      switch (statusFilter) {
+      switch (statusFilter.toLowerCase()) {
         case 'done':
           list = list.where((s) => s.status == ScanItemStatus.done).toList();
           break;
@@ -88,6 +128,133 @@ class ScanRepository {
     return list;
   }
 
+  /// Create a new scan session via Backend API (POST /api/v1/scans)
+  Future<ScanItem> createScanAsync({
+    required String name,
+    required ScanInputMode inputMode,
+    String? description,
+    String? notes,
+  }) async {
+    final scanModel = await _scanService.createScan(
+      name: name,
+      inputMode: inputMode.name,
+      description: description,
+      notes: notes,
+    );
+
+    final item = ScanItem.fromScanModel(scanModel);
+    _scans.removeWhere((s) => s.id == item.id);
+    _scans.insert(0, item);
+    return item;
+  }
+
+  /// Create a new scan session (synchronous version for local tests/mocking)
+  ScanItem createScan({
+    required String name,
+    required ScanInputMode inputMode,
+    String? description,
+    String? notes,
+  }) {
+    final newId = 'scan-${DateTime.now().millisecondsSinceEpoch}';
+    final newScan = ScanItem(
+      id: newId,
+      name: name.trim(),
+      description: description?.trim().isEmpty == true ? null : description?.trim(),
+      notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
+      inputMode: inputMode,
+      status: ScanItemStatus.draft,
+      fileCount: 0,
+      totalSizeBytes: 0,
+      createdAt: DateTime.now(),
+    );
+
+    _scans.insert(0, newScan);
+    return newScan;
+  }
+
+  /// Get scan session details by ID via Backend API (GET /api/v1/scans/{id})
+  Future<ScanItem> getScanByIdAsync(String id) async {
+    final scanModel = await _scanService.getScanById(id);
+    final item = ScanItem.fromScanModel(scanModel);
+    final index = _scans.indexWhere((s) => s.id == id);
+    if (index != -1) {
+      _scans[index] = item;
+    } else {
+      _scans.insert(0, item);
+    }
+    return item;
+  }
+
+  /// Update scan metadata via Backend API (PATCH /api/v1/scans/{id})
+  Future<ScanItem?> updateScanAsync(
+    String id, {
+    String? name,
+    String? description,
+    String? notes,
+  }) async {
+    final scanModel = await _scanService.updateScan(
+      id,
+      name: name,
+      description: description,
+      notes: notes,
+    );
+    final item = ScanItem.fromScanModel(scanModel);
+    final index = _scans.indexWhere((s) => s.id == id);
+    if (index != -1) {
+      _scans[index] = item;
+    }
+    return item;
+  }
+
+  /// Update scan name via Backend API (PATCH /api/v1/scans/{id})
+  Future<ScanItem?> updateScanNameAsync(String id, String newName) {
+    return updateScanAsync(id, name: newName);
+  }
+
+  /// Synchronous update scan name (for tests/local state)
+  ScanItem? updateScanName(String id, String newName) {
+    final index = _scans.indexWhere((s) => s.id == id);
+    if (index == -1) return null;
+
+    final updated = _scans[index].copyWith(
+      name: newName.trim(),
+      updatedAt: DateTime.now(),
+    );
+    _scans[index] = updated;
+    return updated;
+  }
+
+  /// Delete scan via Backend API (DELETE /api/v1/scans/{id})
+  Future<bool> deleteScanAsync(String id) async {
+    await _scanService.deleteScan(id);
+    _scans.removeWhere((s) => s.id == id);
+    return true;
+  }
+
+  /// Soft-delete scan (synchronous for tests/local state)
+  bool deleteScan(String id) {
+    final index = _scans.indexWhere((s) => s.id == id);
+    if (index == -1) return false;
+
+    _scans.removeWhere((s) => s.id == id);
+    return true;
+  }
+
+  /// Retry a failed scan
+  ScanItem? retryScan(String id) {
+    final index = _scans.indexWhere((s) => s.id == id);
+    if (index == -1) return null;
+
+    final retried = _scans[index].copyWith(
+      status: ScanItemStatus.processing,
+      progress: 0.1,
+      errorMessage: null,
+      updatedAt: DateTime.now(),
+    );
+    _scans[index] = retried;
+    return retried;
+  }
+
   /// Get storage quota metrics
   StorageQuota getStorageQuota() {
     final activeScans = _scans.where((s) => s.status != ScanItemStatus.deleted).toList();
@@ -122,67 +289,8 @@ class ScanRepository {
     };
   }
 
-  /// Create a new scan session
-  ScanItem createScan({
-    required String name,
-    required ScanInputMode inputMode,
-    String? description,
-    String? notes,
-  }) {
-    final newId = 'scan-${DateTime.now().millisecondsSinceEpoch}';
-    final newScan = ScanItem(
-      id: newId,
-      name: name.trim(),
-      description: description?.trim().isEmpty == true ? null : description?.trim(),
-      notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
-      inputMode: inputMode,
-      status: ScanItemStatus.draft,
-      fileCount: 0,
-      totalSizeBytes: 0,
-      createdAt: DateTime.now(),
-    );
-
-    _scans.insert(0, newScan);
-    return newScan;
-  }
-
-  /// Update scan name (FR-024)
-  ScanItem? updateScanName(String id, String newName) {
-    final index = _scans.indexWhere((s) => s.id == id);
-    if (index == -1) return null;
-
-    final updated = _scans[index].copyWith(
-      name: newName.trim(),
-      updatedAt: DateTime.now(),
-    );
-    _scans[index] = updated;
-    return updated;
-  }
-
-  /// Soft-delete scan
-  bool deleteScan(String id) {
-    final index = _scans.indexWhere((s) => s.id == id);
-    if (index == -1) return false;
-
-    _scans[index] = _scans[index].copyWith(
-      status: ScanItemStatus.deleted,
-      updatedAt: DateTime.now(),
-    );
-    return true;
-  }
-
-  /// Retry a failed scan
-  ScanItem? retryScan(String id) {
-    final index = _scans.indexWhere((s) => s.id == id);
-    if (index == -1) return null;
-
-    final retried = _scans[index].copyWith(
-      status: ScanItemStatus.processing,
-      progress: 0.1,
-      errorMessage: null,
-      updatedAt: DateTime.now(),
-    );
-    _scans[index] = retried;
-    return retried;
+  /// Clear in-memory scans (useful on logout)
+  void clear() {
+    _scans.clear();
   }
 }

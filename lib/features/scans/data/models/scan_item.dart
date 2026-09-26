@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'scan_model.dart';
 
 /// Capture mode for a scan session
 enum ScanInputMode {
@@ -227,6 +228,78 @@ class ScanItem {
       progress: progress ?? this.progress,
       qualityScore: qualityScore ?? this.qualityScore,
       errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  /// Construct a UI ScanItem from a backend API ScanModel
+  factory ScanItem.fromScanModel(ScanModel model) {
+    ScanItemStatus status;
+    switch (model.status.toLowerCase()) {
+      case 'draft':
+        status = ScanItemStatus.draft;
+        break;
+      case 'uploading':
+        status = ScanItemStatus.uploading;
+        break;
+      case 'uploaded':
+        status = ScanItemStatus.uploaded;
+        break;
+      case 'quality_check':
+      case 'qualitycheck':
+        status = ScanItemStatus.qualityCheck;
+        break;
+      case 'ready':
+        status = ScanItemStatus.ready;
+        break;
+      case 'processing':
+        status = ScanItemStatus.processing;
+        break;
+      case 'done':
+        status = ScanItemStatus.done;
+        break;
+      case 'failed':
+        status = ScanItemStatus.failed;
+        break;
+      case 'deleted':
+        status = ScanItemStatus.deleted;
+        break;
+      default:
+        status = ScanItemStatus.draft;
+    }
+
+    final mode = model.inputMode.toLowerCase() == 'video'
+        ? ScanInputMode.video
+        : ScanInputMode.image;
+
+    return ScanItem(
+      id: model.id,
+      name: model.name,
+      description: model.description,
+      notes: model.notes,
+      inputMode: mode,
+      status: status,
+      fileCount: model.fileCount,
+      totalSizeBytes: model.totalSizeBytes,
+      thumbnailAsset: model.thumbnailPath,
+      createdAt: model.createdAt ?? DateTime.now(),
+      updatedAt: model.updatedAt,
+    );
+  }
+
+  /// Convert ScanItem to backend DTO ScanModel
+  ScanModel toScanModel() {
+    return ScanModel(
+      id: id,
+      name: name,
+      description: description,
+      notes: notes,
+      inputMode: inputMode == ScanInputMode.video ? 'video' : 'image',
+      status: status == ScanItemStatus.qualityCheck ? 'quality_check' : status.name,
+      fileCount: fileCount,
+      totalSizeBytes: totalSizeBytes,
+      thumbnailPath: thumbnailAsset,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 }
