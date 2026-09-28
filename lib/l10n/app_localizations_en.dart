@@ -10,6 +10,94 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get reconstructionConfirmationTitle => 'Confirm reconstruction';
+
+  @override
+  String get reconstructionConfirmationHero =>
+      'Ready to create your 3D model? ✨';
+
+  @override
+  String get reconstructionConfirmationSubtitle =>
+      'Review the details before starting reconstruction.';
+
+  @override
+  String reconstructionQualifiedCount(int count) {
+    return '$count';
+  }
+
+  @override
+  String get reconstructionQualifiedImages => 'Qualified images';
+
+  @override
+  String reconstructionQualityScore(int score) {
+    return '$score%';
+  }
+
+  @override
+  String get reconstructionQualityLabel => 'Overall quality';
+
+  @override
+  String get reconstructionQualityGreen => 'Good';
+
+  @override
+  String get reconstructionQualityAmber => 'Some limitations';
+
+  @override
+  String reconstructionEstimatedMinutes(int minutes) {
+    return '~$minutes min';
+  }
+
+  @override
+  String get reconstructionEstimatedTime => 'Estimated processing time';
+
+  @override
+  String get reconstructionProcessTitle => 'What happens next?';
+
+  @override
+  String get reconstructionProcessImages => 'Selected images';
+
+  @override
+  String get reconstructionProcessCloud => 'Cloud processing';
+
+  @override
+  String get reconstructionProcessModel => '3D model';
+
+  @override
+  String get reconstructionProcessBody =>
+      'Your qualified images will be used to create the 3D model.';
+
+  @override
+  String get reconstructionResourceTitle => 'Before you start';
+
+  @override
+  String get reconstructionResourceBody =>
+      '3D reconstruction uses processing resources and may take several minutes. Once started, it cannot be easily cancelled. Now is the easiest time to go back and check your images.';
+
+  @override
+  String get reconstructionAmberReminderTitle =>
+      'Previously acknowledged warning';
+
+  @override
+  String get reconstructionAmberReminderBody =>
+      'You have already acknowledged the quality warning. This image set still has some limitations, so the model may lose some detail.';
+
+  @override
+  String get reconstructionStart => 'Start reconstruction';
+
+  @override
+  String get reconstructionBackToReview => 'Back to image review';
+
+  @override
+  String get reconstructionSubmitting => 'Submitting…';
+
+  @override
+  String get reconstructionSubmitted => 'Submitted';
+
+  @override
+  String get reconstructionSubmissionError =>
+      'Could not submit. Please try starting reconstruction again.';
+
+  @override
   String get captureTitle => 'Capture';
 
   @override

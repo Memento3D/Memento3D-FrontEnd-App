@@ -10,6 +10,92 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get reconstructionConfirmationTitle => 'Xác nhận tái tạo';
+
+  @override
+  String get reconstructionConfirmationHero => 'Sẵn sàng tạo mô hình 3D? ✨';
+
+  @override
+  String get reconstructionConfirmationSubtitle =>
+      'Kiểm tra lại thông tin trước khi bắt đầu tái tạo.';
+
+  @override
+  String reconstructionQualifiedCount(int count) {
+    return '$count';
+  }
+
+  @override
+  String get reconstructionQualifiedImages => 'Ảnh đạt yêu cầu';
+
+  @override
+  String reconstructionQualityScore(int score) {
+    return '$score%';
+  }
+
+  @override
+  String get reconstructionQualityLabel => 'Chất lượng tổng thể';
+
+  @override
+  String get reconstructionQualityGreen => 'Tốt';
+
+  @override
+  String get reconstructionQualityAmber => 'Còn hạn chế';
+
+  @override
+  String reconstructionEstimatedMinutes(int minutes) {
+    return '~$minutes phút';
+  }
+
+  @override
+  String get reconstructionEstimatedTime => 'Thời gian dự kiến';
+
+  @override
+  String get reconstructionProcessTitle => 'Điều gì sẽ xảy ra?';
+
+  @override
+  String get reconstructionProcessImages => 'Ảnh đã chọn';
+
+  @override
+  String get reconstructionProcessCloud => 'Xử lý trên đám mây';
+
+  @override
+  String get reconstructionProcessModel => 'Mô hình 3D';
+
+  @override
+  String get reconstructionProcessBody =>
+      'Các ảnh đạt yêu cầu sẽ được sử dụng để tạo mô hình 3D.';
+
+  @override
+  String get reconstructionResourceTitle => 'Trước khi bắt đầu';
+
+  @override
+  String get reconstructionResourceBody =>
+      'Tái tạo 3D sử dụng tài nguyên xử lý và có thể mất vài phút. Sau khi bắt đầu, quá trình không dễ hủy. Đây là thời điểm dễ dàng nhất để quay lại kiểm tra ảnh.';
+
+  @override
+  String get reconstructionAmberReminderTitle => 'Cảnh báo đã được xác nhận';
+
+  @override
+  String get reconstructionAmberReminderBody =>
+      'Bạn đã xác nhận cảnh báo chất lượng trước đó. Bộ ảnh vẫn còn một số hạn chế nên mô hình có thể mất một số chi tiết.';
+
+  @override
+  String get reconstructionStart => 'Bắt đầu tái tạo';
+
+  @override
+  String get reconstructionBackToReview => 'Quay lại kiểm tra ảnh';
+
+  @override
+  String get reconstructionSubmitting => 'Đang gửi…';
+
+  @override
+  String get reconstructionSubmitted => 'Đã gửi';
+
+  @override
+  String get reconstructionSubmissionError =>
+      'Chưa thể gửi yêu cầu. Vui lòng thử bắt đầu tái tạo lại.';
+
+  @override
   String get captureTitle => 'Chụp';
 
   @override
