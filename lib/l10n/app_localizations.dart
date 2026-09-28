@@ -98,6 +98,162 @@ abstract class AppLocalizations {
     Locale('vi'),
   ];
 
+  /// No description provided for @emailVerificationAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that the email address above is correct.'**
+  String get emailVerificationAddressHint;
+
+  /// No description provided for @emailVerificationDeliveryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Email delivery may take a little time.'**
+  String get emailVerificationDeliveryHint;
+
+  /// No description provided for @emailVerificationVerifyingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait while your verification link is checked.'**
+  String get emailVerificationVerifyingHint;
+
+  /// No description provided for @emailVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify email'**
+  String get emailVerificationTitle;
+
+  /// No description provided for @emailVerificationHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email'**
+  String get emailVerificationHeading;
+
+  /// No description provided for @emailVerificationSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A verification link has been sent to:'**
+  String get emailVerificationSentBody;
+
+  /// No description provided for @emailVerificationInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the verification link in your email to confirm your address.'**
+  String get emailVerificationInstruction;
+
+  /// No description provided for @emailVerificationWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for verification…'**
+  String get emailVerificationWaiting;
+
+  /// No description provided for @emailVerificationWaitingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the email link to verify your address. You can continue once verification is confirmed.'**
+  String get emailVerificationWaitingBody;
+
+  /// No description provided for @emailVerificationResendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t find the email?'**
+  String get emailVerificationResendTitle;
+
+  /// No description provided for @emailVerificationSpamHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your Spam or Junk folder, or request another verification email.'**
+  String get emailVerificationSpamHint;
+
+  /// No description provided for @emailVerificationResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend verification email'**
+  String get emailVerificationResend;
+
+  /// No description provided for @emailVerificationSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get emailVerificationSending;
+
+  /// No description provided for @emailVerificationResendSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'A new verification email has been sent. Check your inbox.'**
+  String get emailVerificationResendSuccess;
+
+  /// No description provided for @emailVerificationResendFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t send the email. Please try again.'**
+  String get emailVerificationResendFailure;
+
+  /// No description provided for @emailVerificationRetryAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds} seconds'**
+  String emailVerificationRetryAfter(int seconds);
+
+  /// No description provided for @emailVerificationVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying your email…'**
+  String get emailVerificationVerifying;
+
+  /// No description provided for @emailVerificationVerifyingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait while we check your verification link.'**
+  String get emailVerificationVerifyingBody;
+
+  /// No description provided for @emailVerificationSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verified!'**
+  String get emailVerificationSuccessTitle;
+
+  /// No description provided for @emailVerificationSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email address has been confirmed. You can continue to the next step.'**
+  String get emailVerificationSuccessBody;
+
+  /// No description provided for @emailVerificationContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get emailVerificationContinue;
+
+  /// No description provided for @emailVerificationInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This link is no longer valid'**
+  String get emailVerificationInvalidTitle;
+
+  /// No description provided for @emailVerificationInvalidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The verification link may have expired or be invalid. Request a new email to try again.'**
+  String get emailVerificationInvalidBody;
+
+  /// No description provided for @emailVerificationResendNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a new verification email'**
+  String get emailVerificationResendNew;
+
+  /// No description provided for @emailVerificationFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t check your link. Please try again when your connection is available.'**
+  String get emailVerificationFailure;
+
+  /// No description provided for @emailVerificationUnknownEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'The email address is unavailable. Return to registration to request another verification email.'**
+  String get emailVerificationUnknownEmail;
+
   /// No description provided for @captureTitle.
   ///
   /// In en, this message translates to:

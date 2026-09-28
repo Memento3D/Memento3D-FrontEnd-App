@@ -10,6 +10,99 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get emailVerificationAddressHint =>
+      'Kiểm tra địa chỉ email ở trên đã chính xác chưa.';
+
+  @override
+  String get emailVerificationDeliveryHint =>
+      'Email có thể mất một chút thời gian để đến hộp thư.';
+
+  @override
+  String get emailVerificationVerifyingHint =>
+      'Vui lòng chờ trong khi liên kết xác thực được kiểm tra.';
+
+  @override
+  String get emailVerificationTitle => 'Xác thực Email';
+
+  @override
+  String get emailVerificationHeading => 'Kiểm tra email của bạn';
+
+  @override
+  String get emailVerificationSentBody => 'Liên kết xác thực đã được gửi đến:';
+
+  @override
+  String get emailVerificationInstruction =>
+      'Mở liên kết xác thực trong email để xác nhận địa chỉ của bạn.';
+
+  @override
+  String get emailVerificationWaiting => 'Đang chờ xác thực...';
+
+  @override
+  String get emailVerificationWaitingBody =>
+      'Hãy mở liên kết trong email để xác thực. Bạn có thể tiếp tục sau khi việc xác thực được xác nhận.';
+
+  @override
+  String get emailVerificationResendTitle => 'Chưa thấy email?';
+
+  @override
+  String get emailVerificationSpamHint =>
+      'Kiểm tra thư mục Spam/Thư rác, hoặc yêu cầu gửi lại email xác thực.';
+
+  @override
+  String get emailVerificationResend => 'Gửi lại email xác thực';
+
+  @override
+  String get emailVerificationSending => 'Đang gửi...';
+
+  @override
+  String get emailVerificationResendSuccess =>
+      'Email xác thực mới đã được gửi. Hãy kiểm tra hộp thư của bạn.';
+
+  @override
+  String get emailVerificationResendFailure =>
+      'Chưa thể gửi email. Vui lòng thử lại.';
+
+  @override
+  String emailVerificationRetryAfter(int seconds) {
+    return 'Gửi lại sau $seconds giây';
+  }
+
+  @override
+  String get emailVerificationVerifying => 'Đang xác thực email...';
+
+  @override
+  String get emailVerificationVerifyingBody =>
+      'Vui lòng đợi trong khi liên kết xác thực được kiểm tra.';
+
+  @override
+  String get emailVerificationSuccessTitle => 'Email đã được xác thực!';
+
+  @override
+  String get emailVerificationSuccessBody =>
+      'Địa chỉ email của bạn đã được xác nhận. Bạn có thể tiếp tục bước tiếp theo.';
+
+  @override
+  String get emailVerificationContinue => 'Tiếp tục';
+
+  @override
+  String get emailVerificationInvalidTitle => 'Liên kết không còn hiệu lực';
+
+  @override
+  String get emailVerificationInvalidBody =>
+      'Liên kết xác thực có thể đã hết hạn hoặc không hợp lệ. Hãy yêu cầu email mới để thử lại.';
+
+  @override
+  String get emailVerificationResendNew => 'Gửi email xác thực mới';
+
+  @override
+  String get emailVerificationFailure =>
+      'Chưa thể kiểm tra liên kết. Vui lòng thử lại khi kết nối khả dụng.';
+
+  @override
+  String get emailVerificationUnknownEmail =>
+      'Chưa có địa chỉ email. Quay lại đăng ký để yêu cầu email xác thực mới.';
+
+  @override
   String get captureTitle => 'Chụp';
 
   @override

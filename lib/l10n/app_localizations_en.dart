@@ -10,6 +10,100 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get emailVerificationAddressHint =>
+      'Check that the email address above is correct.';
+
+  @override
+  String get emailVerificationDeliveryHint =>
+      'Email delivery may take a little time.';
+
+  @override
+  String get emailVerificationVerifyingHint =>
+      'Please wait while your verification link is checked.';
+
+  @override
+  String get emailVerificationTitle => 'Verify email';
+
+  @override
+  String get emailVerificationHeading => 'Check your email';
+
+  @override
+  String get emailVerificationSentBody =>
+      'A verification link has been sent to:';
+
+  @override
+  String get emailVerificationInstruction =>
+      'Open the verification link in your email to confirm your address.';
+
+  @override
+  String get emailVerificationWaiting => 'Waiting for verification…';
+
+  @override
+  String get emailVerificationWaitingBody =>
+      'Follow the email link to verify your address. You can continue once verification is confirmed.';
+
+  @override
+  String get emailVerificationResendTitle => 'Can\'t find the email?';
+
+  @override
+  String get emailVerificationSpamHint =>
+      'Check your Spam or Junk folder, or request another verification email.';
+
+  @override
+  String get emailVerificationResend => 'Resend verification email';
+
+  @override
+  String get emailVerificationSending => 'Sending…';
+
+  @override
+  String get emailVerificationResendSuccess =>
+      'A new verification email has been sent. Check your inbox.';
+
+  @override
+  String get emailVerificationResendFailure =>
+      'We couldn\'t send the email. Please try again.';
+
+  @override
+  String emailVerificationRetryAfter(int seconds) {
+    return 'Resend in $seconds seconds';
+  }
+
+  @override
+  String get emailVerificationVerifying => 'Verifying your email…';
+
+  @override
+  String get emailVerificationVerifyingBody =>
+      'Please wait while we check your verification link.';
+
+  @override
+  String get emailVerificationSuccessTitle => 'Email verified!';
+
+  @override
+  String get emailVerificationSuccessBody =>
+      'Your email address has been confirmed. You can continue to the next step.';
+
+  @override
+  String get emailVerificationContinue => 'Continue';
+
+  @override
+  String get emailVerificationInvalidTitle => 'This link is no longer valid';
+
+  @override
+  String get emailVerificationInvalidBody =>
+      'The verification link may have expired or be invalid. Request a new email to try again.';
+
+  @override
+  String get emailVerificationResendNew => 'Send a new verification email';
+
+  @override
+  String get emailVerificationFailure =>
+      'We couldn\'t check your link. Please try again when your connection is available.';
+
+  @override
+  String get emailVerificationUnknownEmail =>
+      'The email address is unavailable. Return to registration to request another verification email.';
+
+  @override
   String get captureTitle => 'Capture';
 
   @override
