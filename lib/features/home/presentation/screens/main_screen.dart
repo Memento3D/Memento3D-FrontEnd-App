@@ -8,6 +8,7 @@ import 'package:memento3d_frontend_app/features/home/presentation/screens/home_t
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
 import 'package:memento3d_frontend_app/features/scans/data/repositories/scan_repository.dart';
 import 'package:memento3d_frontend_app/features/scans/presentation/screens/dashboard_screen.dart';
+import 'package:memento3d_frontend_app/features/scans/presentation/screens/scan_wizard_screen.dart';
 import 'package:memento3d_frontend_app/features/scans/presentation/widgets/create_scan_dialog.dart';
 
 class MainScreen extends StatefulWidget {
@@ -37,46 +38,24 @@ class _MainScreenState extends State<MainScreen> {
         required ScanInputMode inputMode,
         String? description,
         String? notes,
-      }) async {
-        try {
-          await ScanRepository.instance.createScanAsync(
-            name: name,
-            inputMode: inputMode,
-            description: description,
-            notes: notes,
+      }) {
+        final newScan = ScanRepository.instance.createScanOptimistic(
+          name: name,
+          inputMode: inputMode,
+          description: description,
+          notes: notes,
+        );
+
+        if (mounted) {
+          setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ScanWizardScreen(
+                scanId: newScan.id,
+                scanName: newScan.name,
+              ),
+            ),
           );
-          if (mounted) {
-            setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
-                backgroundColor: AppColors.primary,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-        } on ApiException catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.message),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-          rethrow;
-        } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Không thể tạo phiên scan: ${e.toString()}'),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-          rethrow;
         }
       },
     );
@@ -146,8 +125,13 @@ class _MainScreenState extends State<MainScreen> {
                   subtitle: 'Mở máy ảnh chụp trực tiếp góc 360 độ',
                   onTap: () {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Tính năng chụp ảnh đang sẵn sàng.')),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ScanWizardScreen(
+                          scanId: 'scan_${DateTime.now().millisecondsSinceEpoch}',
+                          scanName: 'Chụp ảnh 360°',
+                        ),
+                      ),
                     );
                   },
                 ),

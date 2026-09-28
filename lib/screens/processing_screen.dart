@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import 'capture_session.dart';
 import 'capture_size_format.dart';
 import 'processing_state.dart';
+import '../features/home/presentation/screens/main_screen.dart';
 
 const _purple = Color(0xFF6B4FE8);
 const _lavender = Color(0xFFF2EEFF);
@@ -57,7 +58,16 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (_) => const MainScreen()),
+                          (route) => false,
+                        );
+                      }
+                    },
                     icon: const Icon(Icons.arrow_back, color: _ink),
                     tooltip: strings.back,
                   ),
@@ -119,6 +129,27 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
             _localSummary(strings),
             const SizedBox(height: 18),
             _stageCard(strings),
+            const SizedBox(height: 22),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const MainScreen()),
+                    (route) => false,
+                  );
+                },
+                icon: const Icon(Icons.dashboard_rounded, size: 18),
+                label: const Text('Về danh sách phiên Scan (Dashboard)'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: _purple,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

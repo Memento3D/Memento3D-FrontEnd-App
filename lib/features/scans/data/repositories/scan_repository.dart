@@ -1,5 +1,9 @@
+import 'package:memento3d_frontend_app/core/network/api_exception.dart';
+import 'package:memento3d_frontend_app/core/utils/app_messenger.dart';
+import 'package:memento3d_frontend_app/core/utils/error_mapper.dart';
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
 import 'package:memento3d_frontend_app/features/scans/data/services/scan_service.dart';
+import 'package:memento3d_frontend_app/features/scans/data/services/scan_sync_manager.dart';
 
 class StorageQuota {
   final int usedBytes;
@@ -41,6 +45,7 @@ class ScanRepository {
   final List<ScanItem> _scans = [];
 
   List<ScanItem> get cachedScans => List.unmodifiable(_scans);
+  List<ScanItem> get scans => cachedScans;
 
   /// Fetch scans from backend API (GET /api/v1/scans)
   Future<List<ScanItem>> fetchScans({
@@ -126,6 +131,94 @@ class ScanRepository {
     }
 
     return list;
+  }
+
+  /// Create a new scan session optimistically on client, sync to DB in background
+  ScanItem createScanOptimistic({
+    required String name,
+    required ScanInputMode inputMode,
+    String? description,
+    String? notes,
+  }) {
+    final tempId = 'temp_${DateTime.now().millisecondsSinceEpoch}';
+    final optimisticScan = ScanItem(
+      id: tempId,
+      name: name.trim(),
+      description: description?.trim().isEmpty == true ? null : description?.trim(),
+      notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
+      inputMode: inputMode,
+      status: ScanItemStatus.draft,
+      fileCount: 0,
+      totalSizeBytes: 0,
+      createdAt: DateTime.now(),
+    );
+
+    _scans.removeWhere((s) => s.id == optimisticScan.id);
+    _scans.insert(0, optimisticScan);
+
+    // Register sync start
+    ScanSyncManager.instance.registerSyncStart(
+      tempId,
+      onRetry: () => _syncOptimisticScanToDb(optimisticScan),
+    );
+
+    // Fire and forget background DB sync
+    _syncOptimisticScanToDb(optimisticScan);
+
+    return optimisticScan;
+  }
+
+  Future<void> _syncOptimisticScanToDb(ScanItem optimisticScan) async {
+    try {
+      final scanModel = await _scanService.createScan(
+        name: optimisticScan.name,
+        inputMode: optimisticScan.inputMode.name,
+        description: optimisticScan.description,
+        notes: optimisticScan.notes,
+      );
+
+      final realItem = ScanItem.fromScanModel(scanModel);
+      final index = _scans.indexWhere((s) => s.id == optimisticScan.id);
+      if (index != -1) {
+        _scans[index] = realItem;
+      } else {
+        _scans.removeWhere((s) => s.id == realItem.id);
+        _scans.insert(0, realItem);
+      }
+
+      ScanSyncManager.instance.registerSyncSuccess(
+        tempId: optimisticScan.id,
+        realId: realItem.id,
+      );
+    } on ApiException catch (e) {
+      _handleOptimisticSyncFailure(optimisticScan, e.message, e.statusCode);
+    } catch (e) {
+      final mappedMessage = ErrorMapper.map(rawMessage: e.toString());
+      _handleOptimisticSyncFailure(optimisticScan, mappedMessage, null);
+    }
+  }
+
+  void _handleOptimisticSyncFailure(
+    ScanItem optimisticScan,
+    String errorMsg,
+    int? statusCode,
+  ) {
+    _scans.removeWhere((s) => s.id == optimisticScan.id);
+
+    ScanSyncManager.instance.registerSyncFailure(
+      tempId: optimisticScan.id,
+      errorMessage: errorMsg,
+      statusCode: statusCode,
+    );
+
+    if (statusCode == 403) {
+      AppMessenger.showQuotaExceededDialog();
+    } else {
+      AppMessenger.showError(
+        'Không thể lưu phiên scan "${optimisticScan.name}" lên máy chủ: $errorMsg. Đã hoàn tác phiên scan.',
+        onRetry: () => _syncOptimisticScanToDb(optimisticScan),
+      );
+    }
   }
 
   /// Create a new scan session via Backend API (POST /api/v1/scans)

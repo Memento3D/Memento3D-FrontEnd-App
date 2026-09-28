@@ -1,4 +1,4 @@
-﻿import 'dart:math';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -59,12 +59,12 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
   ScanState get _state => widget.scanState ?? ScanState.instance;
 
   static const List<String> _sampleNames = [
-    'T╞░ß╗úng Ch├│ Corgi ─Éß╗â B├án',
-    'B├¼nh Hoa Gß╗æm Cß╗ò Men Rß║ín',
-    'M├┤ H├¼nh ─Éß╗ô Ch╞íi Mini',
-    '─É├┤i Gi├áy Sneaker Thß╗â Thao',
-    'Chß║¡u C├óy Sen ─É├í ─Éß╗â B├án',
-    'T╞░ß╗úng Gß╗ù Khß║»c Nghß╗ç Thuß║¡t',
+    'Tượng Chú Corgi Để Bàn',
+    'Bình Hoa Gốm Cổ Men Rạn',
+    'Mô Hình Đồ Chơi Mini',
+    'Đôi Giày Sneaker Thể Thao',
+    'Chậu Cây Sen Đá Để Bàn',
+    'Tượng Gỗ Khắc Nghệ Thuật',
   ];
 
   @override
@@ -90,7 +90,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
     });
   }
 
-  Future<void> _handleSubmit() async {
+  void _handleSubmit() {
     // Double-submit protection
     if (_isSubmitting) return;
 
@@ -98,57 +98,28 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
     setState(() => _serverInlineError = null);
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    setState(() => _isSubmitting = true);
-
-    final newScan = await _state.createScan(
+    // Optimistic creation: Create scan immediately for instant responsiveness,
+    // background sync persists to backend DB and handles rollbacks on error.
+    final optimisticScan = _state.createScanOptimistic(
       name: _nameController.text.trim(),
       description: _descController.text.trim().isNotEmpty ? _descController.text.trim() : null,
       notes: _descController.text.trim().isNotEmpty ? _descController.text.trim() : null,
       inputMode: _inputMode,
     );
 
-    if (!mounted) return;
+    final navigator = Navigator.of(context);
+    widget.onScanCreated?.call(optimisticScan);
+    navigator.pop(optimisticScan);
 
-    setState(() => _isSubmitting = false);
-
-    if (newScan != null) {
-      // 201 Created -> Pop bottom sheet & Redirect into Wizard with scan_id
-      final navigator = Navigator.of(context);
-      widget.onScanCreated?.call(newScan);
-      navigator.pop(newScan);
-
-      navigator.push(
-        MaterialPageRoute(
-          builder: (_) => ScanWizardScreen(
-            scanId: newScan.id,
-            scan: newScan,
-          ),
+    navigator.push(
+      MaterialPageRoute(
+        builder: (_) => ScanWizardScreen(
+          scanId: optimisticScan.id,
+          scan: optimisticScan,
+          scanName: optimisticScan.name,
         ),
-      );
-    } else {
-      final statusCode = _state.lastErrorStatusCode;
-
-      if (statusCode == 403) {
-        // 403 Forbidden -> Quota Exceeded Modal
-        _showQuotaModal();
-      } else if (statusCode == 400) {
-        // 400 Bad Request -> Inline validation error under name field
-        setState(() {
-          _serverInlineError = _state.errorMessage ?? 'T├¬n phi├¬n scan kh├┤ng hß╗úp lß╗ç';
-        });
-        _formKey.currentState?.validate();
-      } else {
-        // Generic fallback error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(_state.errorMessage ?? 'Kh├┤ng thß╗â tß║ío phi├¬n scan. Vui l├▓ng thß╗¡ lß║íi.'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
-      }
-    }
+      ),
+    );
   }
 
   void _showQuotaModal() {
@@ -173,7 +144,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
             ),
           ),
           title: Text(
-            'Hß║┐t dung l╞░ß╗úng l╞░u trß╗»',
+            'Hết dung lượng lưu trữ',
             textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
               fontSize: 18,
@@ -182,7 +153,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
             ),
           ),
           content: Text(
-            'Xo├í scan c┼⌐ ─æß╗â tiß║┐p tß╗Ñc. T├ái khoß║ún cß╗ºa bß║ín ─æ├ú ─æß║ít hß║ín mß╗⌐c 10 GB.',
+            'Xoá scan cũ để tiếp tục. Tài khoản của bạn đã đạt hạn mức 10 GB.',
             textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
               fontSize: 13.5,
@@ -203,7 +174,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text(
-                      '─É├│ng',
+                      'Đóng',
                       style: GoogleFonts.plusJakartaSans(
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF6B7280),
@@ -228,7 +199,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text(
-                      '─Éi tß╗¢i Dashboard',
+                      'Đi tới Dashboard',
                       style: GoogleFonts.plusJakartaSans(
                         fontWeight: FontWeight.w700,
                       ),
@@ -282,7 +253,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tß║ío Phi├¬n Scan Mß╗¢i Γ£¿',
+                            'Tạo Phiên Scan Mới ✨',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 18.5,
                               fontWeight: FontWeight.w800,
@@ -291,7 +262,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Thu thß║¡p ß║únh hoß║╖c video ─æß╗â AI t├íi tß║ío m├┤ h├¼nh 3D in ─æ╞░ß╗úc',
+                            'Thu thập ảnh hoặc video để AI tái tạo mô hình 3D in được',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 12.5,
                               fontWeight: FontWeight.w500,
@@ -323,13 +294,13 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                 ),
                 const SizedBox(height: 20),
 
-                // 2. T├èN PHI├èN SCAN *
+                // 2. TÊN PHIÊN SCAN *
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     RichText(
                       text: TextSpan(
-                        text: 'T├èN PHI├èN SCAN ',
+                        text: 'TÊN PHIÊN SCAN ',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w800,
@@ -360,7 +331,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                             const Icon(Icons.auto_awesome, size: 12, color: AppColors.primary),
                             const SizedBox(width: 4),
                             Text(
-                              'Gß╗úi ├╜ t├¬n',
+                              'Gợi ý tên',
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
@@ -386,7 +357,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                     }
                   },
                   decoration: InputDecoration(
-                    hintText: 'T╞░ß╗úng Ch├│ Corgi ─Éß╗â B├án',
+                    hintText: 'Tượng Chú Corgi Để Bàn',
                     hintStyle: GoogleFonts.plusJakartaSans(
                       fontSize: 13.5,
                       color: const Color(0xFF94A3B8),
@@ -422,50 +393,50 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                       return _serverInlineError;
                     }
                     if (value == null || value.trim().isEmpty) {
-                      return 'T├¬n phi├¬n scan kh├┤ng ─æ╞░ß╗úc ─æß╗â trß╗æng';
+                      return 'Tên phiên scan không được để trống';
                     }
                     if (value.trim().length > 255) {
-                      return 'T├¬n phi├¬n scan kh├┤ng ─æ╞░ß╗úc v╞░ß╗út qu├í 255 k├╜ tß╗▒';
+                      return 'Tên phiên scan không được vượt quá 255 ký tự';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 10),
 
-                // Gß╗úi ├╜ Tags
+                // Gợi ý Tags
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   child: Row(
                     children: [
                       Text(
-                        'Gß╗úi ├╜: ',
+                        'Gợi ý: ',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFF94A3B8),
                         ),
                       ),
-                      _buildSuggestionChip('≡ƒÉ╛ C├║n c╞░ng', 'T╞░ß╗úng C├║n C╞░ng Corgi'),
+                      _buildSuggestionChip('🐾 Cún cưng', 'Tượng Cún Cưng Corgi'),
                       const SizedBox(width: 6),
-                      _buildSuggestionChip('≡ƒº╕ ─Éß╗ô ch╞íi mini', 'M├┤ H├¼nh ─Éß╗ô Ch╞íi Mini'),
+                      _buildSuggestionChip('🧸 Đồ chơi mini', 'Mô Hình Đồ Chơi Mini'),
                       const SizedBox(width: 6),
-                      _buildSuggestionChip('≡ƒÅ║ B├¼nh gß╗æm', 'B├¼nh Hoa Gß╗æm Cß╗ò'),
+                      _buildSuggestionChip('🏺 Bình gốm', 'Bình Hoa Gốm Cổ'),
                       const SizedBox(width: 6),
-                      _buildSuggestionChip('≡ƒæƒ Gi├áy sneaker', '─É├┤i Gi├áy Sneaker Thß╗â Thao'),
+                      _buildSuggestionChip('👟 Giày sneaker', 'Đôi Giày Sneaker Thể Thao'),
                       const SizedBox(width: 6),
-                      _buildSuggestionChip('≡ƒ¬┤ Chß║¡u c├óy', 'Chß║¡u C├óy Sen ─É├í Mini'),
+                      _buildSuggestionChip('🪴 Chậu cây', 'Chậu Cây Sen Đá Mini'),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                // 3. CHß║╛ ─Éß╗ÿ THU THß║¼P Dß╗« LIß╗åU
+                // 3. CHẾ ĐỘ THU THẬP DỮ LIỆU
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'CHß║╛ ─Éß╗ÿ THU THß║¼P Dß╗« LIß╗åU',
+                      'CHẾ ĐỘ THU THẬP DỮ LIỆU',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w800,
@@ -474,7 +445,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                       ),
                     ),
                     Text(
-                      'chß╗ìn 1 ph╞░╞íng thß╗⌐c',
+                      'chọn 1 phương thức',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w600,
@@ -487,35 +458,35 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
 
                 Row(
                   children: [
-                    // Card 1: Chß╗Ñp ß║únh ─æa g├│c
+                    // Card 1: Chụp ảnh đa góc
                     Expanded(
                       child: _buildModeCard(
                         mode: 'image',
                         icon: Icons.camera_alt_outlined,
-                        title: 'Chß╗Ñp ß║únh ─æa g├│c',
-                        subtitle: '30 ΓÇô 100 ß║únh g├│c qu├⌐t xoay quanh mß║½u',
+                        title: 'Chụp ảnh đa góc',
+                        subtitle: '30 – 100 ảnh góc quét xoay quanh mẫu',
                       ),
                     ),
                     const SizedBox(width: 12),
-                    // Card 2: Quay video 360┬░
+                    // Card 2: Quay video 360°
                     Expanded(
                       child: _buildModeCard(
                         mode: 'video',
                         icon: Icons.videocam_outlined,
-                        title: 'Quay video 360┬░',
-                        subtitle: 'ΓëÑ 10s xoay m╞░ß╗út m├á, AI tß╗▒ tr├¡ch xuß║Ñt frame',
+                        title: 'Quay video 360°',
+                        subtitle: '≥ 10s xoay mượt mà, AI tự trích xuất frame',
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
 
-                // Secondary Action: Tß║úi tß╗½ th╞░ viß╗çn ß║únh m├íy...
+                // Secondary Action: Tải từ thư viện ảnh máy...
                 InkWell(
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('T├¡nh n─âng chß╗ìn ß║únh tß╗½ th╞░ viß╗çn sß║╜ mß╗ƒ sau khi khß╗ƒi tß║ío phi├¬n scan.'),
+                        content: const Text('Tính năng chọn ảnh từ thư viện sẽ mở sau khi khởi tạo phiên scan.'),
                         behavior: SnackBarBehavior.floating,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
@@ -535,7 +506,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                         const Icon(Icons.photo_library_outlined, size: 18, color: AppColors.primary),
                         const SizedBox(width: 10),
                         Text(
-                          'Tß║úi tß╗½ th╞░ viß╗çn ß║únh m├íy...',
+                          'Tải từ thư viện ảnh máy...',
                           style: GoogleFonts.plusJakartaSans(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w600,
@@ -548,12 +519,12 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                 ),
                 const SizedBox(height: 20),
 
-                // 4. GHI CH├Ü Bß╗ö SUNG
+                // 4. GHI CHÚ BỔ SUNG
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'GHI CH├Ü Bß╗ö SUNG',
+                      'GHI CHÚ BỔ SUNG',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w800,
@@ -562,7 +533,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                       ),
                     ),
                     Text(
-                      'T├ÖY CHß╗îN',
+                      'TÙY CHỌN',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -579,7 +550,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                   maxLines: 2,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    hintText: 'Ghi ch├║ vß╗ü chß║Ñt liß╗çu (b├│ng, kim loß║íi, mß╗¥), ─æiß╗üu kiß╗çn chiß║┐u s├íng hoß║╖c g├│c muß╗æn lß║Ñy n├⌐t nhß║Ñt...',
+                    hintText: 'Ghi chú về chất liệu (bóng, kim loại, mờ), điều kiện chiếu sáng hoặc góc muốn lấy nét nhất...',
                     hintStyle: GoogleFonts.plusJakartaSans(
                       fontSize: 12,
                       color: const Color(0xFF94A3B8),
@@ -604,7 +575,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                 ),
                 const SizedBox(height: 16),
 
-                // 5. Tip Banner (Mß║╣o qu├⌐t chuß║⌐n)
+                // 5. Tip Banner (Mẹo quét chuẩn)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: BoxDecoration(
@@ -615,12 +586,12 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('≡ƒÆí', style: TextStyle(fontSize: 17)),
+                      const Text('💡', style: TextStyle(fontSize: 17)),
                       const SizedBox(width: 10),
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            text: 'Mß║╣o qu├⌐t chuß║⌐n: ',
+                            text: 'Mẹo quét chuẩn: ',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 11.5,
                               fontWeight: FontWeight.w800,
@@ -629,7 +600,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                             ),
                             children: [
                               TextSpan(
-                                text: '─Éß║╖t vß║¡t phß║⌐m ß╗ƒ nß╗ün m├áu t╞░╞íng phß║ún, ├ính s├íng tß║ún ─æß╗üu kh├┤ng b├│ng gß║»t, xoay tß╗½ tß╗½ quanh g├│c 360┬░ ─æß╗â thu ─æ╞░ß╗úc ─æß║ºy ─æß╗º chiß╗üu s├óu.',
+                                text: 'Đặt vật phẩm ở nền màu tương phản, ánh sáng tán đều không bóng gắt, xoay từ từ quanh góc 360° để thu được đầy đủ chiều sâu.',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 11.5,
                                   fontWeight: FontWeight.w500,
@@ -646,7 +617,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                 ),
                 const SizedBox(height: 20),
 
-                // 6. Submit Button (Bß║»t ─æß║ºu Qu├⌐t Ngay Γ₧ö)
+                // 6. Submit Button (Bắt đầu Quét Ngay ➔)
                 SizedBox(
                   width: double.infinity,
                   height: 52,
@@ -676,7 +647,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                '─Éang khß╗ƒi tß║ío...',
+                                'Đang khởi tạo...',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 14.5,
                                   fontWeight: FontWeight.w700,
@@ -689,7 +660,7 @@ class _CreateScanBottomSheetState extends State<CreateScanBottomSheet> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Bß║»t ─æß║ºu Qu├⌐t Ngay',
+                                'Bắt đầu Quét Ngay',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w800,

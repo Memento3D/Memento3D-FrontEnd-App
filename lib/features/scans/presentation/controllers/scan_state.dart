@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/utils/app_messenger.dart';
 import '../../../../core/utils/error_mapper.dart';
 import '../../data/models/scan_model.dart';
 import '../../data/services/scan_service.dart';
+import '../../data/services/scan_sync_manager.dart';
 
 /// State management controller for 3D Scan Sessions conforming to Memento3D UI Blueprint
 class ScanState extends ChangeNotifier {
@@ -124,7 +126,111 @@ class ScanState extends ChangeNotifier {
     }
   }
 
-  /// Create a new scan session (US-005, FR-005)
+  /// Optimistically create a new scan session locally and sync to DB in background
+  ScanModel createScanOptimistic({
+    required String name,
+    String? description,
+    String? notes,
+    String inputMode = 'image',
+  }) {
+    final tempId = 'temp_${DateTime.now().millisecondsSinceEpoch}';
+    final optimisticScan = ScanModel(
+      id: tempId,
+      name: name.trim(),
+      description: description?.trim().isEmpty == true ? null : description?.trim(),
+      notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
+      inputMode: inputMode,
+      status: 'draft',
+      fileCount: 0,
+      totalSizeBytes: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    // Prepend to current list immediately for instant user feedback
+    _scans.insert(0, optimisticScan);
+    _totalCount += 1;
+    _errorMessage = null;
+    _lastErrorStatusCode = null;
+    notifyListeners();
+
+    // Register sync start
+    ScanSyncManager.instance.registerSyncStart(
+      tempId,
+      onRetry: () => _syncOptimisticScanToDb(optimisticScan),
+    );
+
+    // Fire & forget background DB sync
+    _syncOptimisticScanToDb(optimisticScan);
+
+    return optimisticScan;
+  }
+
+  /// Background database sync for optimistic scan
+  Future<void> _syncOptimisticScanToDb(ScanModel optimisticScan) async {
+    try {
+      final serverScan = await _scanService.createScan(
+        name: optimisticScan.name,
+        description: optimisticScan.description,
+        notes: optimisticScan.notes,
+        inputMode: optimisticScan.inputMode,
+      );
+
+      // Reconcile client list with real DB record
+      final index = _scans.indexWhere((s) => s.id == optimisticScan.id);
+      if (index != -1) {
+        _scans[index] = serverScan;
+      } else {
+        _scans.removeWhere((s) => s.id == serverScan.id);
+        _scans.insert(0, serverScan);
+      }
+
+      _errorMessage = null;
+      _lastErrorStatusCode = null;
+      ScanSyncManager.instance.registerSyncSuccess(
+        tempId: optimisticScan.id,
+        realId: serverScan.id,
+      );
+      notifyListeners();
+    } on ApiException catch (e) {
+      _handleOptimisticSyncFailure(optimisticScan, e.message, e.statusCode);
+    } catch (e) {
+      final mappedMessage = ErrorMapper.map(rawMessage: e.toString());
+      _handleOptimisticSyncFailure(optimisticScan, mappedMessage, null);
+    }
+  }
+
+  void _handleOptimisticSyncFailure(
+    ScanModel optimisticScan,
+    String errorMsg,
+    int? statusCode,
+  ) {
+    // Rollback optimistic item from list
+    _scans.removeWhere((s) => s.id == optimisticScan.id);
+    _totalCount = (_totalCount - 1).clamp(0, 999999);
+    _errorMessage = errorMsg;
+    _lastErrorStatusCode = statusCode;
+    notifyListeners();
+
+    // Register failure event
+    ScanSyncManager.instance.registerSyncFailure(
+      tempId: optimisticScan.id,
+      errorMessage: errorMsg,
+      statusCode: statusCode,
+    );
+
+    // Throw user-friendly error notification
+    if (statusCode == 403) {
+      AppMessenger.showQuotaExceededDialog();
+    } else {
+      AppMessenger.showError(
+        'Không thể lưu phiên scan "${optimisticScan.name}" lên máy chủ: $errorMsg. Đã hoàn tác phiên scan.',
+        onRetry: () => _syncOptimisticScanToDb(optimisticScan),
+      );
+    }
+  }
+
+  /// Create a new scan session (US-005, FR-005) - Synchronous or Awaitable
   Future<ScanModel?> createScan({
     required String name,
     String? description,

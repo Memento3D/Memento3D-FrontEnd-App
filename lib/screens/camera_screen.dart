@@ -11,7 +11,8 @@ import 'capture_session.dart';
 import 'capture_wizard.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  final String? scanId;
+  const CameraScreen({super.key, this.scanId});
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -20,7 +21,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _controller;
-  final CaptureSession _session = CaptureSession();
+  late final CaptureSession _session;
   final CaptureWizardModel _wizard = CaptureWizardModel();
   StreamSubscription<AccelerometerEvent>? _gravitySubscription;
   StreamSubscription<UserAccelerometerEvent>? _accelerationSubscription;
@@ -37,6 +38,7 @@ class _CameraScreenState extends State<CameraScreen>
   @override
   void initState() {
     super.initState();
+    _session = CaptureSession(scanId: widget.scanId);
     WidgetsBinding.instance.addObserver(this);
     _openCamera();
     _startSensors();
@@ -241,6 +243,7 @@ class _CameraScreenState extends State<CameraScreen>
       onCapture: _capture,
       onRetry: _openCamera,
       onDone: _session.canReview ? _openReview : null,
+      scanId: widget.scanId,
     );
   }
 }

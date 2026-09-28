@@ -4,6 +4,7 @@ import 'package:memento3d_frontend_app/core/theme/app_theme.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:memento3d_frontend_app/features/home/presentation/screens/main_screen.dart';
+import 'package:memento3d_frontend_app/core/utils/app_messenger.dart';
 import 'package:memento3d_frontend_app/l10n/app_localizations.dart';
 
 void main() async {
@@ -20,6 +21,8 @@ class Memento3DApp extends StatelessWidget {
     return MaterialApp(
       title: 'Memento3D',
       debugShowCheckedModeBanner: false,
+      navigatorKey: AppMessenger.navigatorKey,
+      scaffoldMessengerKey: AppMessenger.messengerKey,
       theme: AppTheme.lightTheme,
       locale: const Locale('vi'),
       supportedLocales: AppLocalizations.supportedLocales,

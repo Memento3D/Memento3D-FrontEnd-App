@@ -11,6 +11,7 @@ import 'package:memento3d_frontend_app/features/scans/presentation/widgets/scan_
 import 'package:memento3d_frontend_app/features/scans/presentation/widgets/scan_card_list_item.dart';
 import 'package:memento3d_frontend_app/features/scans/presentation/widgets/scan_details_sheet.dart';
 import 'package:memento3d_frontend_app/features/scans/presentation/widgets/scan_empty_state.dart';
+import 'scan_wizard_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String userName;
@@ -86,7 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  /// Create a new scan session via Backend API (POST /api/v1/scans)
+  /// Create a new scan session with optimistic UX (Instant creation & background DB sync)
   void _openCreateScan() {
     CreateScanDialog.show(
       context,
@@ -95,49 +96,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
         required ScanInputMode inputMode,
         String? description,
         String? notes,
-      }) async {
-        try {
-          await _repository.createScanAsync(
-            name: name,
-            inputMode: inputMode,
-            description: description,
-            notes: notes,
+      }) {
+        final newScan = _repository.createScanOptimistic(
+          name: name,
+          inputMode: inputMode,
+          description: description,
+          notes: notes,
+        );
+
+        if (mounted) {
+          setState(() {});
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ScanWizardScreen(
+                scanId: newScan.id,
+                scanName: newScan.name,
+              ),
+            ),
           );
-          if (mounted) {
-            setState(() {});
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
-                backgroundColor: AppColors.primary,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            );
-          }
-        } on ApiException catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.message),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            );
-          }
-          rethrow;
-        } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Không thể tạo phiên scan: ${e.toString()}'),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            );
-          }
-          rethrow;
         }
       },
     );

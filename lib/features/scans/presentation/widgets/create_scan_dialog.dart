@@ -59,28 +59,28 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
 
   bool _isSubmitting = false;
 
-  void _handleSubmit() async {
+  void _handleSubmit() {
     if (_isSubmitting) return;
     if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isSubmitting = true);
+      final name = _nameController.text.trim();
+      final mode = _selectedMode;
+      final desc = _descController.text.trim().isEmpty ? null : _descController.text.trim();
+      final notes = _notesController.text.trim().isEmpty ? null : _notesController.text.trim();
+
+      // Dismiss dialog immediately for instantaneous UX
+      Navigator.of(context).pop();
+
       try {
         final result = widget.onSubmit(
-          name: _nameController.text.trim(),
-          inputMode: _selectedMode,
-          description: _descController.text.trim().isEmpty ? null : _descController.text.trim(),
-          notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+          name: name,
+          inputMode: mode,
+          description: desc,
+          notes: notes,
         );
         if (result is Future) {
-          await result;
+          result.catchError((_) {});
         }
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
-      } catch (_) {
-        if (mounted) {
-          setState(() => _isSubmitting = false);
-        }
-      }
+      } catch (_) {}
     }
   }
 
@@ -120,7 +120,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Tß║ío phi├¬n Scan mß╗¢i Γ£¿',
+                    'Tạo phiên Scan mới ✨',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
@@ -135,7 +135,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Khß╗ƒi tß║ío phi├¬n sß╗æ h├│a 3D cho vß║¡t thß╗â hoß║╖c khoß║únh khß║»c cß╗ºa bß║ín',
+                'Khởi tạo phiên số hóa 3D cho vật thể hoặc khoảnh khắc của bạn',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 12.5,
                   fontWeight: FontWeight.w500,
@@ -147,7 +147,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
 
               // 1. Scan Name (Required - US-005)
               Text(
-                'T├¬n phi├¬n scan *',
+                'Tên phiên scan *',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -163,7 +163,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                   fontWeight: FontWeight.w600,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'VD: T╞░ß╗úng ch├║ c├║n c╞░ng, Lß╗ì hoa gß╗æm...',
+                  hintText: 'VD: Tượng chú cún cưng, Lọ hoa gốm...',
                   hintStyle: GoogleFonts.plusJakartaSans(
                     fontSize: 13,
                     color: const Color(0xFF9CA3AF),
@@ -186,10 +186,10 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                 ),
                 validator: (val) {
                   if (val == null || val.trim().isEmpty) {
-                    return 'Vui l├▓ng nhß║¡p t├¬n phi├¬n scan';
+                    return 'Vui lòng nhập tên phiên scan';
                   }
                   if (val.trim().length < 3) {
-                    return 'T├¬n scan phß║úi c├│ ├¡t nhß║Ñt 3 k├╜ tß╗▒';
+                    return 'Tên scan phải có ít nhất 3 ký tự';
                   }
                   return null;
                 },
@@ -199,7 +199,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
 
               // 2. Select Mode (Image or Video)
               Text(
-                'Chß║┐ ─æß╗Ö thu thß║¡p dß╗» liß╗çu',
+                'Chế độ thu thập dữ liệu',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -212,8 +212,8 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                   Expanded(
                     child: _buildModeOption(
                       mode: ScanInputMode.image,
-                      title: 'ß║ónh chß╗Ñp (Photo)',
-                      subtitle: '30 - 100 ß║únh g├│c bao quanh',
+                      title: 'Ảnh chụp (Photo)',
+                      subtitle: '30 - 100 ảnh góc bao quanh',
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -221,7 +221,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                     child: _buildModeOption(
                       mode: ScanInputMode.video,
                       title: 'Quay Video',
-                      subtitle: 'Video >= 10s xoay m╞░ß╗út m├á',
+                      subtitle: 'Video >= 10s xoay mượt mà',
                     ),
                   ),
                 ],
@@ -231,7 +231,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
 
               // 3. Description (Optional)
               Text(
-                'M├┤ tß║ú / Ghi ch├║ (t├╣y chß╗ìn)',
+                'Mô tả / Ghi chú (tùy chọn)',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -247,7 +247,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Th├¬m th├┤ng tin vß║¡t thß╗â, ─æiß╗üu kiß╗çn ├ính s├íng...',
+                  hintText: 'Thêm thông tin vật thể, điều kiện ánh sáng...',
                   hintStyle: GoogleFonts.plusJakartaSans(
                     fontSize: 12.5,
                     color: const Color(0xFF9CA3AF),
@@ -286,7 +286,7 @@ class _CreateScanDialogState extends State<CreateScanDialog> {
                         side: const BorderSide(color: Color(0xFFE5E7EB)),
                       ),
                       child: Text(
-                        'Hß╗ºy',
+                        'Hủy',
                         style: GoogleFonts.plusJakartaSans(
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFF6B7280),

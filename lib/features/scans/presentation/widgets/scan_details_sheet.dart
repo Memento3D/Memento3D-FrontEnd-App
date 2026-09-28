@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
+import '../../../../screens/capture_session.dart';
+import '../../../../screens/processing_screen.dart';
+import '../screens/scan_wizard_screen.dart';
 
 class ScanDetailsSheet extends StatelessWidget {
   final ScanItem scan;
@@ -222,6 +225,57 @@ class ScanDetailsSheet extends StatelessWidget {
                   label: const Text('Xem mô hình 3D (3D Viewer)'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+              ),
+
+            if (scan.status == ScanItemStatus.draft)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ScanWizardScreen(
+                          scanId: scan.id,
+                          scanName: scan.name,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.photo_camera_rounded, size: 20),
+                  label: const Text('Bắt đầu chụp quét (Guided Wizard)'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
+              ),
+
+            if (scan.isProcessing)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ProcessingScreen(
+                          session: CaptureSession(scanId: scan.id),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.hourglass_top_rounded, size: 20),
+                  label: const Text('Xem tiến trình dựng 3D (Processing)'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF6B4FE8),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

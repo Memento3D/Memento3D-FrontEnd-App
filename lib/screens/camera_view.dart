@@ -25,6 +25,7 @@ class CameraView extends StatelessWidget {
     required this.onCapture,
     required this.onRetry,
     required this.onDone,
+    this.scanId,
   });
 
   final CameraController? controller;
@@ -35,6 +36,7 @@ class CameraView extends StatelessWidget {
   final VoidCallback onCapture;
   final VoidCallback onRetry;
   final VoidCallback? onDone;
+  final String? scanId;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,29 @@ class CameraView extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    if (scanId != null) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _lavender,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          scanId!.length > 8
+                              ? scanId!.substring(0, 8)
+                              : scanId!,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: _purple,
+                          ),
+                        ),
+                      ),
+                    ],
                     const Spacer(),
                     IconButton(
                       onPressed: () {},
