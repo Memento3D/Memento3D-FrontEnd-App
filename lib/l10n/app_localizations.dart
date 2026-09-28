@@ -98,6 +98,156 @@ abstract class AppLocalizations {
     Locale('vi'),
   ];
 
+  /// No description provided for @reconstructionConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm reconstruction'**
+  String get reconstructionConfirmationTitle;
+
+  /// No description provided for @reconstructionConfirmationHero.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to create your 3D model? ✨'**
+  String get reconstructionConfirmationHero;
+
+  /// No description provided for @reconstructionConfirmationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the details before starting reconstruction.'**
+  String get reconstructionConfirmationSubtitle;
+
+  /// No description provided for @reconstructionQualifiedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}'**
+  String reconstructionQualifiedCount(int count);
+
+  /// No description provided for @reconstructionQualifiedImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualified images'**
+  String get reconstructionQualifiedImages;
+
+  /// No description provided for @reconstructionQualityScore.
+  ///
+  /// In en, this message translates to:
+  /// **'{score}%'**
+  String reconstructionQualityScore(int score);
+
+  /// No description provided for @reconstructionQualityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall quality'**
+  String get reconstructionQualityLabel;
+
+  /// No description provided for @reconstructionQualityGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get reconstructionQualityGreen;
+
+  /// No description provided for @reconstructionQualityAmber.
+  ///
+  /// In en, this message translates to:
+  /// **'Some limitations'**
+  String get reconstructionQualityAmber;
+
+  /// No description provided for @reconstructionEstimatedMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'~{minutes} min'**
+  String reconstructionEstimatedMinutes(int minutes);
+
+  /// No description provided for @reconstructionEstimatedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated processing time'**
+  String get reconstructionEstimatedTime;
+
+  /// No description provided for @reconstructionProcessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens next?'**
+  String get reconstructionProcessTitle;
+
+  /// No description provided for @reconstructionProcessImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected images'**
+  String get reconstructionProcessImages;
+
+  /// No description provided for @reconstructionProcessCloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud processing'**
+  String get reconstructionProcessCloud;
+
+  /// No description provided for @reconstructionProcessModel.
+  ///
+  /// In en, this message translates to:
+  /// **'3D model'**
+  String get reconstructionProcessModel;
+
+  /// No description provided for @reconstructionProcessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your qualified images will be used to create the 3D model.'**
+  String get reconstructionProcessBody;
+
+  /// No description provided for @reconstructionResourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you start'**
+  String get reconstructionResourceTitle;
+
+  /// No description provided for @reconstructionResourceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'3D reconstruction uses processing resources and may take several minutes. Once started, it cannot be easily cancelled. Now is the easiest time to go back and check your images.'**
+  String get reconstructionResourceBody;
+
+  /// No description provided for @reconstructionAmberReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Previously acknowledged warning'**
+  String get reconstructionAmberReminderTitle;
+
+  /// No description provided for @reconstructionAmberReminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have already acknowledged the quality warning. This image set still has some limitations, so the model may lose some detail.'**
+  String get reconstructionAmberReminderBody;
+
+  /// No description provided for @reconstructionStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start reconstruction'**
+  String get reconstructionStart;
+
+  /// No description provided for @reconstructionBackToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to image review'**
+  String get reconstructionBackToReview;
+
+  /// No description provided for @reconstructionSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting…'**
+  String get reconstructionSubmitting;
+
+  /// No description provided for @reconstructionSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get reconstructionSubmitted;
+
+  /// No description provided for @reconstructionSubmissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not submit. Please try starting reconstruction again.'**
+  String get reconstructionSubmissionError;
+
   /// No description provided for @captureTitle.
   ///
   /// In en, this message translates to:

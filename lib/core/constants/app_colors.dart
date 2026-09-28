@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 /// App color palette matching Memento3D UI tokens
 class AppColors {
   // Primary brand colors
-  static const Color primary = Color(0xFF6366F1); // Indigo / Violet brand accent
+  static const Color primary = Color(
+    0xFF6366F1,
+  ); // Indigo / Violet brand accent
   static const Color primaryLight = Color(0xFF818CF8);
   static const Color primaryDark = Color(0xFF4F46E5);
 
@@ -26,6 +28,10 @@ class AppColors {
 
   static const Color badgeGreenBg = Color(0xFFD1FAE5);
   static const Color badgeGreenText = Color(0xFF065F46);
+
+  // Existing scan warning palette.
+  static const Color badgeAmberBg = Color(0xFFFEF3C7);
+  static const Color badgeAmberText = Color(0xFFB45309);
 
   static const Color dotGreen = Color(0xFF10B981);
 
