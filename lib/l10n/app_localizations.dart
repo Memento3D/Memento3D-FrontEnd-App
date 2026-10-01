@@ -643,6 +643,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @processingSimulated.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated progress — demo only'**
+  String get processingSimulated;
+
+  /// No description provided for @processingTakesTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconstruction may take some time. The current stage is shown below.'**
+  String get processingTakesTime;
+
+  /// No description provided for @processingDemoCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation completed'**
+  String get processingDemoCompleted;
+
+  /// No description provided for @processingDemoCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This demo has finished. No 3D model was created.'**
+  String get processingDemoCompleteBody;
+
+  /// No description provided for @processingDemoFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The simulation stopped while generating details. You can retry the demo.'**
+  String get processingDemoFailure;
+
+  /// No description provided for @processingSourceFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress updates could not be received.'**
+  String get processingSourceFailure;
+
+  /// No description provided for @processingStoppedHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped at this stage'**
+  String get processingStoppedHere;
+
+  /// No description provided for @processingReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get processingReturn;
 }
 
 class _AppLocalizationsDelegate

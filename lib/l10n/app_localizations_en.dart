@@ -303,4 +303,32 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get processingSimulated => 'Simulated progress — demo only';
+
+  @override
+  String get processingTakesTime =>
+      'Reconstruction may take some time. The current stage is shown below.';
+
+  @override
+  String get processingDemoCompleted => 'Simulation completed';
+
+  @override
+  String get processingDemoCompleteBody =>
+      'This demo has finished. No 3D model was created.';
+
+  @override
+  String get processingDemoFailure =>
+      'The simulation stopped while generating details. You can retry the demo.';
+
+  @override
+  String get processingSourceFailure =>
+      'Progress updates could not be received.';
+
+  @override
+  String get processingStoppedHere => 'Stopped at this stage';
+
+  @override
+  String get processingReturn => 'Return';
 }
