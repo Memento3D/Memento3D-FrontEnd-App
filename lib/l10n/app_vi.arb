@@ -95,5 +95,13 @@
   "processingCloudConnected": "Đã kết nối dịch vụ xử lý",
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
-  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi.",
+  "processingSimulated": "Tiến độ mô phỏng — chỉ để xem thử",
+  "processingTakesTime": "Quá trình dựng 3D có thể mất một chút thời gian. Bước hiện tại được hiển thị bên dưới.",
+  "processingDemoCompleted": "Đã hoàn tất mô phỏng",
+  "processingDemoCompleteBody": "Bản mô phỏng đã hoàn tất. Chưa có mô hình 3D nào được tạo.",
+  "processingDemoFailure": "Mô phỏng đã dừng ở bước tạo chi tiết. Bạn có thể thử lại bản mô phỏng.",
+  "processingSourceFailure": "Không thể nhận thông tin cập nhật tiến độ.",
+  "processingStoppedHere": "Đã dừng tại bước này",
+  "processingReturn": "Quay lại"
 }

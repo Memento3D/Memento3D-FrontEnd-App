@@ -95,5 +95,13 @@
   "processingCloudConnected": "Processing service connected",
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
-  "processingFailedBody": "The processing service reported a problem."
+  "processingFailedBody": "The processing service reported a problem.",
+  "processingSimulated": "Simulated progress — demo only",
+  "processingTakesTime": "Reconstruction may take some time. The current stage is shown below.",
+  "processingDemoCompleted": "Simulation completed",
+  "processingDemoCompleteBody": "This demo has finished. No 3D model was created.",
+  "processingDemoFailure": "The simulation stopped while generating details. You can retry the demo.",
+  "processingSourceFailure": "Progress updates could not be received.",
+  "processingStoppedHere": "Stopped at this stage",
+  "processingReturn": "Return"
 }

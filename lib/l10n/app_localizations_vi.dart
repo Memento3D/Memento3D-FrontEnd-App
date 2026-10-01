@@ -302,4 +302,32 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get processingSimulated => 'Tiến độ mô phỏng — chỉ để xem thử';
+
+  @override
+  String get processingTakesTime =>
+      'Quá trình dựng 3D có thể mất một chút thời gian. Bước hiện tại được hiển thị bên dưới.';
+
+  @override
+  String get processingDemoCompleted => 'Đã hoàn tất mô phỏng';
+
+  @override
+  String get processingDemoCompleteBody =>
+      'Bản mô phỏng đã hoàn tất. Chưa có mô hình 3D nào được tạo.';
+
+  @override
+  String get processingDemoFailure =>
+      'Mô phỏng đã dừng ở bước tạo chi tiết. Bạn có thể thử lại bản mô phỏng.';
+
+  @override
+  String get processingSourceFailure =>
+      'Không thể nhận thông tin cập nhật tiến độ.';
+
+  @override
+  String get processingStoppedHere => 'Đã dừng tại bước này';
+
+  @override
+  String get processingReturn => 'Quay lại';
 }
