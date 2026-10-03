@@ -98,6 +98,96 @@ abstract class AppLocalizations {
     Locale('vi'),
   ];
 
+  /// No description provided for @modelViewerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3D model'**
+  String get modelViewerTitle;
+
+  /// No description provided for @modelViewerModelReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Model ready'**
+  String get modelViewerModelReady;
+
+  /// No description provided for @modelViewerReadyExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Your model is ready to explore. Rotate it to see it from every angle.'**
+  String get modelViewerReadyExplanation;
+
+  /// No description provided for @modelViewerPendingExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Your model is being prepared. You can explore it when it is ready.'**
+  String get modelViewerPendingExplanation;
+
+  /// No description provided for @modelViewerUnavailableExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'A model is not available for this item yet.'**
+  String get modelViewerUnavailableExplanation;
+
+  /// No description provided for @modelViewerReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference · {code}'**
+  String modelViewerReference(String code);
+
+  /// No description provided for @modelViewerFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Format'**
+  String get modelViewerFormat;
+
+  /// No description provided for @modelViewerFormatGlb.
+  ///
+  /// In en, this message translates to:
+  /// **'GLB'**
+  String get modelViewerFormatGlb;
+
+  /// No description provided for @modelViewerStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get modelViewerStatus;
+
+  /// No description provided for @modelViewerDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail'**
+  String get modelViewerDetail;
+
+  /// No description provided for @modelViewerDetailHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get modelViewerDetailHigh;
+
+  /// No description provided for @modelViewerPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String modelViewerPercentage(int value);
+
+  /// No description provided for @modelViewerContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get modelViewerContinue;
+
+  /// No description provided for @modelViewerPreviewName.
+  ///
+  /// In en, this message translates to:
+  /// **'Little robot · Development preview'**
+  String get modelViewerPreviewName;
+
+  /// No description provided for @modelViewerPreviewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview only — no next screen is connected.'**
+  String get modelViewerPreviewAction;
+
   /// No description provided for @captureTitle.
   ///
   /// In en, this message translates to:
@@ -643,6 +733,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @modelViewerPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3D viewer preview'**
+  String get modelViewerPreviewTitle;
+
+  /// No description provided for @modelViewerInitializing.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting 3D viewer…'**
+  String get modelViewerInitializing;
+
+  /// No description provided for @modelViewerReady.
+  ///
+  /// In en, this message translates to:
+  /// **'3D viewer ready'**
+  String get modelViewerReady;
+
+  /// No description provided for @modelViewerShaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Shaded'**
+  String get modelViewerShaded;
+
+  /// No description provided for @modelViewerWireframe.
+  ///
+  /// In en, this message translates to:
+  /// **'Wireframe'**
+  String get modelViewerWireframe;
+
+  /// No description provided for @modelViewerGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid'**
+  String get modelViewerGrid;
+
+  /// No description provided for @modelViewerReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset View'**
+  String get modelViewerReset;
+
+  /// No description provided for @modelViewerInteractionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate • Zoom • Pan'**
+  String get modelViewerInteractionHint;
+
+  /// No description provided for @modelViewerLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading 3D model…'**
+  String get modelViewerLoading;
+
+  /// No description provided for @modelViewerLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'3D model loaded'**
+  String get modelViewerLoaded;
+
+  /// No description provided for @modelViewerLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'The 3D model could not be loaded.'**
+  String get modelViewerLoadError;
+
+  /// No description provided for @modelViewerInitializationError.
+  ///
+  /// In en, this message translates to:
+  /// **'The 3D viewer could not start. Close this view and try again.'**
+  String get modelViewerInitializationError;
 }
 
 class _AppLocalizationsDelegate

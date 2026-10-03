@@ -10,6 +10,59 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get modelViewerTitle => 'Mô hình 3D';
+
+  @override
+  String get modelViewerModelReady => 'Mô hình đã sẵn sàng';
+
+  @override
+  String get modelViewerReadyExplanation =>
+      'Mô hình đã sẵn sàng để khám phá. Xoay mô hình để quan sát từ mọi góc độ.';
+
+  @override
+  String get modelViewerPendingExplanation =>
+      'Mô hình đang được chuẩn bị. Bạn có thể khám phá khi mô hình sẵn sàng.';
+
+  @override
+  String get modelViewerUnavailableExplanation =>
+      'Hiện chưa có mô hình cho mục này.';
+
+  @override
+  String modelViewerReference(String code) {
+    return 'Mã tham chiếu · $code';
+  }
+
+  @override
+  String get modelViewerFormat => 'Định dạng';
+
+  @override
+  String get modelViewerFormatGlb => 'GLB';
+
+  @override
+  String get modelViewerStatus => 'Trạng thái';
+
+  @override
+  String get modelViewerDetail => 'Độ chi tiết';
+
+  @override
+  String get modelViewerDetailHigh => 'Cao';
+
+  @override
+  String modelViewerPercentage(int value) {
+    return '$value%';
+  }
+
+  @override
+  String get modelViewerContinue => 'Tiếp tục';
+
+  @override
+  String get modelViewerPreviewName => 'Robot nhỏ · Bản xem thử';
+
+  @override
+  String get modelViewerPreviewAction =>
+      'Chỉ là bản xem thử — chưa kết nối màn hình tiếp theo.';
+
+  @override
   String get captureTitle => 'Chụp';
 
   @override
@@ -302,4 +355,41 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get modelViewerPreviewTitle => 'Xem thử trình xem 3D';
+
+  @override
+  String get modelViewerInitializing => 'Đang khởi động trình xem 3D…';
+
+  @override
+  String get modelViewerReady => 'Trình xem 3D đã sẵn sàng';
+
+  @override
+  String get modelViewerShaded => 'Khối';
+
+  @override
+  String get modelViewerWireframe => 'Lưới';
+
+  @override
+  String get modelViewerGrid => 'Lưới nền';
+
+  @override
+  String get modelViewerReset => 'Đặt lại góc nhìn';
+
+  @override
+  String get modelViewerInteractionHint => 'Xoay • Thu phóng • Di chuyển';
+
+  @override
+  String get modelViewerLoading => 'Đang tải mô hình 3D…';
+
+  @override
+  String get modelViewerLoaded => 'Đã tải mô hình 3D';
+
+  @override
+  String get modelViewerLoadError => 'Không thể tải mô hình 3D.';
+
+  @override
+  String get modelViewerInitializationError =>
+      'Không thể khởi động trình xem 3D. Hãy đóng màn hình này và thử lại.';
 }
