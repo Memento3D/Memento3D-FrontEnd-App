@@ -10,6 +10,59 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get modelViewerTitle => '3D model';
+
+  @override
+  String get modelViewerModelReady => 'Model ready';
+
+  @override
+  String get modelViewerReadyExplanation =>
+      'Your model is ready to explore. Rotate it to see it from every angle.';
+
+  @override
+  String get modelViewerPendingExplanation =>
+      'Your model is being prepared. You can explore it when it is ready.';
+
+  @override
+  String get modelViewerUnavailableExplanation =>
+      'A model is not available for this item yet.';
+
+  @override
+  String modelViewerReference(String code) {
+    return 'Reference · $code';
+  }
+
+  @override
+  String get modelViewerFormat => 'Format';
+
+  @override
+  String get modelViewerFormatGlb => 'GLB';
+
+  @override
+  String get modelViewerStatus => 'Status';
+
+  @override
+  String get modelViewerDetail => 'Detail';
+
+  @override
+  String get modelViewerDetailHigh => 'High';
+
+  @override
+  String modelViewerPercentage(int value) {
+    return '$value%';
+  }
+
+  @override
+  String get modelViewerContinue => 'Continue';
+
+  @override
+  String get modelViewerPreviewName => 'Little robot · Development preview';
+
+  @override
+  String get modelViewerPreviewAction =>
+      'Preview only — no next screen is connected.';
+
+  @override
   String get captureTitle => 'Capture';
 
   @override
@@ -303,4 +356,41 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get modelViewerPreviewTitle => '3D viewer preview';
+
+  @override
+  String get modelViewerInitializing => 'Starting 3D viewer…';
+
+  @override
+  String get modelViewerReady => '3D viewer ready';
+
+  @override
+  String get modelViewerShaded => 'Shaded';
+
+  @override
+  String get modelViewerWireframe => 'Wireframe';
+
+  @override
+  String get modelViewerGrid => 'Grid';
+
+  @override
+  String get modelViewerReset => 'Reset View';
+
+  @override
+  String get modelViewerInteractionHint => 'Rotate • Zoom • Pan';
+
+  @override
+  String get modelViewerLoading => 'Loading 3D model…';
+
+  @override
+  String get modelViewerLoaded => '3D model loaded';
+
+  @override
+  String get modelViewerLoadError => 'The 3D model could not be loaded.';
+
+  @override
+  String get modelViewerInitializationError =>
+      'The 3D viewer could not start. Close this view and try again.';
 }

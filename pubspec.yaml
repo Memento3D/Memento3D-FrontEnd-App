@@ -41,9 +41,12 @@ dependencies:
   google_fonts: ^6.2.1
   http: ^1.2.0
   shared_preferences: ^2.2.0
+  webview_flutter: 4.13.0
 
 
 dev_dependencies:
+  # Test platform adapter for viewer lifecycle/bridge checks; already transitive.
+  webview_flutter_platform_interface: 2.15.1
   flutter_test:
     sdk: flutter
 
@@ -69,6 +72,7 @@ flutter:
   # Assets
   assets:
     - assets/images/
+    - assets/model_viewer/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
