@@ -303,4 +303,83 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get modelConfirmationTitle => 'Create 3D Model from Photos';
+
+  @override
+  String get modelConfirmationAiTooltip => '3D Forge AI assistant';
+
+  @override
+  String get modelConfirmationOriginalPhoto => 'Original photo';
+
+  @override
+  String get modelConfirmationKeepsakePhoto => 'Keepsake doll';
+
+  @override
+  String get modelConfirmationConsentBadge => '100% consented';
+
+  @override
+  String get modelConfirmationAllPhotos => 'All captured photos';
+
+  @override
+  String get modelConfirmationHeader => 'Create a 3D model from photos ✨';
+
+  @override
+  String modelConfirmationSubtitle(int count) {
+    return 'We received $count photos to create a vivid 3D image.';
+  }
+
+  @override
+  String get modelConfirmationInfo =>
+      'Automatically convert photos into a complete 3D model in just a few taps';
+
+  @override
+  String get modelConfirmationUploadedTitle => 'Uploaded photos';
+
+  @override
+  String modelConfirmationUploadedValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sharp photos',
+      zero: 'No sharp photos yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get modelConfirmationGeneratedTitle => '3D model output';
+
+  @override
+  String get modelConfirmationGeneratedValue => 'Sharp 3D model';
+
+  @override
+  String get modelConfirmationGenerating => 'Processing';
+
+  @override
+  String get modelConfirmationFormatTitle => 'File format';
+
+  @override
+  String get modelConfirmationFormatValue => '.GLB / 3D ready (.STL)';
+
+  @override
+  String get modelConfirmationFormatBadge => '3D standard';
+
+  @override
+  String get modelConfirmationWarning =>
+      'No photos are ready yet. Go back and capture at least one photo before creating the 3D model.';
+
+  @override
+  String get modelConfirmationCta => 'Create 3D Model now';
+
+  @override
+  String get modelConfirmationSubmitting => 'Creating model...';
+
+  @override
+  String get modelConfirmationEstimate => 'Estimated time: 1–2 minutes';
+
+  @override
+  String get modelConfirmationError =>
+      'Could not create the 3D model. Please try again.';
 }

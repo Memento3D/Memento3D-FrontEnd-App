@@ -159,4 +159,20 @@ class ScanService {
   Future<void> deleteScan(String id) async {
     await _apiClient.delete('${ApiConfig.scans}/$id');
   }
+
+  /// Submit a reconstruction job for a scan session (US-027, FR-081, FR-082, FR-199)
+  /// POST /api/v1/scans/{id}/job → 202 Accepted with job_id; idempotent on retry.
+  Future<ReconstructionJobModel> createReconstructionJob(String scanId) async {
+    final response = await _apiClient.post('${ApiConfig.scans}/$scanId/job');
+
+    if (response is Map<String, dynamic>) {
+      return ReconstructionJobModel.fromJson(response);
+    }
+
+    throw ApiException(
+      statusCode: 500,
+      errorCode: 'ERR-017',
+      message: 'Không thể giải mã dữ liệu job dựng 3D vừa tạo.',
+    );
+  }
 }

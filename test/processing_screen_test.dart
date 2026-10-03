@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memento3d_frontend_app/l10n/app_localizations.dart';
 import 'package:memento3d_frontend_app/screens/capture_review_screen.dart';
 import 'package:memento3d_frontend_app/screens/capture_session.dart';
+import 'package:memento3d_frontend_app/screens/model_confirmation_screen.dart';
 import 'package:memento3d_frontend_app/screens/processing_screen.dart';
 import 'package:memento3d_frontend_app/screens/processing_state.dart';
 
@@ -47,6 +48,11 @@ void main() {
     await tester.ensureVisible(find.text('Xem trạng thái xử lý'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Xem trạng thái xử lý'));
+    await tester.pumpAndSettle();
+
+    // The review CTA now opens the confirmation screen first.
+    expect(find.byType(ModelConfirmationScreen), findsOneWidget);
+    await tester.tap(find.text('Tạo Mô hình 3D ngay'));
     await tester.pumpAndSettle();
 
     final screen = tester.widget<ProcessingScreen>(

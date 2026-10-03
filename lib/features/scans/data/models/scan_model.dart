@@ -282,3 +282,35 @@ class ScanListResponseModel {
     );
   }
 }
+
+/// Response DTO for POST /api/v1/scans/{id}/job (US-027, FR-081, FR-082, FR-199)
+///
+/// The backend returns 202 Accepted with the created (or, on a repeated
+/// request for the same scan, the already-existing) job id.
+class ReconstructionJobModel {
+  final String jobId;
+  final String scanId;
+  final String status; // 'queued', 'extracting', ... (see UC-05 pipeline stages)
+  final int? queuePosition;
+  final DateTime? createdAt;
+
+  const ReconstructionJobModel({
+    required this.jobId,
+    required this.scanId,
+    this.status = 'queued',
+    this.queuePosition,
+    this.createdAt,
+  });
+
+  factory ReconstructionJobModel.fromJson(Map<String, dynamic> json) {
+    return ReconstructionJobModel(
+      jobId: json['job_id']?.toString() ?? json['jobId']?.toString() ?? json['id']?.toString() ?? '',
+      scanId: json['scan_id']?.toString() ?? json['scanId']?.toString() ?? '',
+      status: json['status']?.toString() ?? 'queued',
+      queuePosition: (json['queue_position'] ?? json['queuePosition'] as num?)?.toInt(),
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
+          : (json['createdAt'] != null ? DateTime.tryParse(json['createdAt'].toString())?.toLocal() : null),
+    );
+  }
+}

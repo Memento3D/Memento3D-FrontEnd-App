@@ -643,6 +643,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @modelConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create 3D Model from Photos'**
+  String get modelConfirmationTitle;
+
+  /// No description provided for @modelConfirmationAiTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'3D Forge AI assistant'**
+  String get modelConfirmationAiTooltip;
+
+  /// No description provided for @modelConfirmationOriginalPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Original photo'**
+  String get modelConfirmationOriginalPhoto;
+
+  /// No description provided for @modelConfirmationKeepsakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Keepsake doll'**
+  String get modelConfirmationKeepsakePhoto;
+
+  /// No description provided for @modelConfirmationConsentBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'100% consented'**
+  String get modelConfirmationConsentBadge;
+
+  /// No description provided for @modelConfirmationAllPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'All captured photos'**
+  String get modelConfirmationAllPhotos;
+
+  /// No description provided for @modelConfirmationHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a 3D model from photos ✨'**
+  String get modelConfirmationHeader;
+
+  /// No description provided for @modelConfirmationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We received {count} photos to create a vivid 3D image.'**
+  String modelConfirmationSubtitle(int count);
+
+  /// No description provided for @modelConfirmationInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically convert photos into a complete 3D model in just a few taps'**
+  String get modelConfirmationInfo;
+
+  /// No description provided for @modelConfirmationUploadedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded photos'**
+  String get modelConfirmationUploadedTitle;
+
+  /// No description provided for @modelConfirmationUploadedValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No sharp photos yet} other{{count} sharp photos}}'**
+  String modelConfirmationUploadedValue(int count);
+
+  /// No description provided for @modelConfirmationGeneratedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3D model output'**
+  String get modelConfirmationGeneratedTitle;
+
+  /// No description provided for @modelConfirmationGeneratedValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharp 3D model'**
+  String get modelConfirmationGeneratedValue;
+
+  /// No description provided for @modelConfirmationGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get modelConfirmationGenerating;
+
+  /// No description provided for @modelConfirmationFormatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'File format'**
+  String get modelConfirmationFormatTitle;
+
+  /// No description provided for @modelConfirmationFormatValue.
+  ///
+  /// In en, this message translates to:
+  /// **'.GLB / 3D ready (.STL)'**
+  String get modelConfirmationFormatValue;
+
+  /// No description provided for @modelConfirmationFormatBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'3D standard'**
+  String get modelConfirmationFormatBadge;
+
+  /// No description provided for @modelConfirmationWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'No photos are ready yet. Go back and capture at least one photo before creating the 3D model.'**
+  String get modelConfirmationWarning;
+
+  /// No description provided for @modelConfirmationCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Create 3D Model now'**
+  String get modelConfirmationCta;
+
+  /// No description provided for @modelConfirmationSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating model...'**
+  String get modelConfirmationSubmitting;
+
+  /// No description provided for @modelConfirmationEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated time: 1–2 minutes'**
+  String get modelConfirmationEstimate;
+
+  /// No description provided for @modelConfirmationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create the 3D model. Please try again.'**
+  String get modelConfirmationError;
 }
 
 class _AppLocalizationsDelegate

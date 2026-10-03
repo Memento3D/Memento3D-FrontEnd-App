@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'capture_size_format.dart';
 import 'capture_session.dart';
-import 'processing_screen.dart';
+import 'model_confirmation_screen.dart';
 
 const _purple = Color(0xFF6B4FE8);
 const _lavender = Color(0xFFF2EEFF);
@@ -47,7 +47,7 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
     if (!widget.session.canReview) return;
     Navigator.of(context).push<void>(
       MaterialPageRoute(
-        builder: (context) => ProcessingScreen(session: widget.session),
+        builder: (context) => ModelConfirmationScreen(session: widget.session),
       ),
     );
   }

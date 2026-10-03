@@ -302,4 +302,83 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get modelConfirmationTitle => 'Tạo Mô hình 3D từ Ảnh';
+
+  @override
+  String get modelConfirmationAiTooltip => 'Trợ lý AI 3D Forge';
+
+  @override
+  String get modelConfirmationOriginalPhoto => 'Ảnh gốc';
+
+  @override
+  String get modelConfirmationKeepsakePhoto => 'Búp bê kỷ niệm';
+
+  @override
+  String get modelConfirmationConsentBadge => '100% Đã đồng ý';
+
+  @override
+  String get modelConfirmationAllPhotos => 'Tất cả ảnh chụp';
+
+  @override
+  String get modelConfirmationHeader => 'Tạo mô hình 3D từ ảnh ✨';
+
+  @override
+  String modelConfirmationSubtitle(int count) {
+    return 'Chúng tôi đã tiếp nhận $count ảnh để tạo hình ảnh 3D sinh động.';
+  }
+
+  @override
+  String get modelConfirmationInfo =>
+      'Tự động chuyển đổi từ ảnh sang Model 3D hoàn chỉnh chỉ sau vài chạm';
+
+  @override
+  String get modelConfirmationUploadedTitle => 'Ảnh đã tải lên';
+
+  @override
+  String modelConfirmationUploadedValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ảnh nét',
+      zero: 'Chưa có ảnh nét',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get modelConfirmationGeneratedTitle => 'Mô hình 3D tạo ra';
+
+  @override
+  String get modelConfirmationGeneratedValue => 'Mô hình 3D sắc nét';
+
+  @override
+  String get modelConfirmationGenerating => 'Đang xử lý';
+
+  @override
+  String get modelConfirmationFormatTitle => 'Định dạng file';
+
+  @override
+  String get modelConfirmationFormatValue => '.GLB / sẵn sàng 3D (.STL)';
+
+  @override
+  String get modelConfirmationFormatBadge => 'Chuẩn 3D';
+
+  @override
+  String get modelConfirmationWarning =>
+      'Chưa có ảnh nào sẵn sàng. Vui lòng quay lại và chụp ít nhất một bức ảnh trước khi tạo mô hình 3D.';
+
+  @override
+  String get modelConfirmationCta => 'Tạo Mô hình 3D ngay';
+
+  @override
+  String get modelConfirmationSubmitting => 'Đang tạo mô hình...';
+
+  @override
+  String get modelConfirmationEstimate => 'Thời gian ước tính: 1–2 phút';
+
+  @override
+  String get modelConfirmationError =>
+      'Không thể tạo mô hình 3D. Vui lòng thử lại.';
 }

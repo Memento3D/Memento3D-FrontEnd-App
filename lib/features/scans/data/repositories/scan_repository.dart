@@ -1,4 +1,5 @@
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
+import 'package:memento3d_frontend_app/features/scans/data/models/scan_model.dart' show ReconstructionJobModel;
 import 'package:memento3d_frontend_app/features/scans/data/services/scan_service.dart';
 
 class StorageQuota {
@@ -222,6 +223,20 @@ class ScanRepository {
     );
     _scans[index] = updated;
     return updated;
+  }
+
+  /// Submit reconstruction job for a scan via Backend API (POST /api/v1/scans/{id}/job)
+  /// (US-027, FR-081, FR-082, FR-199). Marks the cached scan as "processing" on success
+  /// so the dashboard reflects the new state without an extra round-trip.
+  Future<ReconstructionJobModel> submitReconstructionJobAsync(String scanId) async {
+    final job = await _scanService.createReconstructionJob(scanId);
+
+    final index = _scans.indexWhere((s) => s.id == scanId);
+    if (index != -1) {
+      _scans[index] = _scans[index].copyWith(status: ScanItemStatus.processing);
+    }
+
+    return job;
   }
 
   /// Delete scan via Backend API (DELETE /api/v1/scans/{id})

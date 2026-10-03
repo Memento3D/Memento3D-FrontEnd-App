@@ -33,4 +33,10 @@ class AppColors {
   static const Color inputBorder = Color(0xFFE5E7EB);
   static const Color inputFocusBorder = Color(0xFF6366F1);
   static const Color error = Color(0xFFEF4444);
+
+  // Warning / Amber colors (quality-check warnings, non-blocking alerts)
+  static const Color warningAmberBg = Color(0xFFFFFBEB);
+  static const Color warningAmberBorder = Color(0xFFFDE68A);
+  static const Color warningAmberText = Color(0xFF92400E);
+  static const Color warningAmberIcon = Color(0xFFD97706);
 }
