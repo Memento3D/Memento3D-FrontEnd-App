@@ -302,4 +302,163 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get uploadTitle => 'Đang tải ảnh';
+
+  @override
+  String get uploadPreparing => 'Đang chuẩn bị tải lên';
+
+  @override
+  String get uploadUploading => 'Đang tải lên';
+
+  @override
+  String get uploadWaiting => 'Đang chờ kết nối';
+
+  @override
+  String get uploadReconciling => 'Đang khôi phục';
+
+  @override
+  String get uploadRetryNeeded => 'Cần thử lại';
+
+  @override
+  String get uploadCompleted => 'Tải ảnh lên hoàn tất';
+
+  @override
+  String get uploadMainTitle => 'Đang tải bộ ảnh lên';
+
+  @override
+  String get uploadNetworkBanner => 'Đang chờ kết nối lại';
+
+  @override
+  String get uploadNetworkBody =>
+      'Tiến trình đã xác nhận được giữ nguyên. Quá trình tải sẽ tiếp tục khi có kết nối trở lại.';
+
+  @override
+  String get uploadReconcilingTitle => 'Đang khôi phục phiên tải';
+
+  @override
+  String get uploadReconcilingBody =>
+      'Đang kiểm tra vị trí đã xác nhận trước khi tiếp tục. Tiến trình được giữ nguyên trong lúc kiểm tra.';
+
+  @override
+  String get uploadCompletionBody => 'Đang chuyển sang kiểm tra chất lượng...';
+
+  @override
+  String get uploadFailureBody =>
+      'Tiến trình đã xác nhận được giữ nguyên. Thử lại để tiếp tục từ vị trí đã xác nhận gần nhất.';
+
+  @override
+  String get uploadSourceFailureBody =>
+      'Chưa thể cập nhật tiến trình tải. Tiến trình đã xác nhận được giữ nguyên; hãy thử kết nối lại.';
+
+  @override
+  String get uploadLocalPhotos => 'Ảnh trên thiết bị';
+
+  @override
+  String get uploadSavedTitle => 'Tiến trình được lưu tự động';
+
+  @override
+  String get uploadSavedBody =>
+      'Bạn có thể quay lại phiên tải sau khi gián đoạn. Quá trình tải sẽ tiếp tục từ vị trí đã xác nhận gần nhất.';
+
+  @override
+  String get uploadSessionOnlyTitle => 'Giữ phiên tải này mở';
+
+  @override
+  String get uploadSessionOnlyBody =>
+      'Tiến trình đã xác nhận vẫn hiển thị trong phiên này. Chưa hỗ trợ khôi phục sau khi đóng ứng dụng.';
+
+  @override
+  String uploadPhotoCount(int count) {
+    return '$count ảnh';
+  }
+
+  @override
+  String uploadPercent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String uploadSummaryProgress(String value) {
+    return 'Đã tải lên $value%';
+  }
+
+  @override
+  String uploadUnitCount(int confirmed, int total) {
+    return '$confirmed / $total';
+  }
+
+  @override
+  String uploadConfirmedParts(int confirmed, int total) {
+    return '$confirmed / $total phần đã tải lên';
+  }
+
+  @override
+  String get uploadProgressLabel => 'Tiến trình tải đã xác nhận';
+
+  @override
+  String get uploadSpeed => 'Tốc độ';
+
+  @override
+  String uploadSpeedValue(String value) {
+    return '$value MB/s';
+  }
+
+  @override
+  String get uploadRemaining => 'Còn lại';
+
+  @override
+  String uploadEtaValue(int minutes, int seconds) {
+    return '~$minutes phút $seconds giây';
+  }
+
+  @override
+  String get uploadEtaWaiting => 'Đang chờ';
+
+  @override
+  String get uploadUnknownMetric => '—';
+
+  @override
+  String get uploadConfirmed => 'Đã tải';
+
+  @override
+  String get uploadPhotosTitle => 'Ảnh đang tải';
+
+  @override
+  String get uploadPhotoCompleted => 'Đã tải';
+
+  @override
+  String get uploadPhotoCurrent => 'Đang tải';
+
+  @override
+  String get uploadPhotoPending => 'Chờ tải';
+
+  @override
+  String get uploadPhotoPaused => 'Tạm dừng';
+
+  @override
+  String uploadPhotoDescription(String photo, String status) {
+    return '$photo. $status';
+  }
+
+  @override
+  String get uploadNextSteps => 'Các bước tiếp theo';
+
+  @override
+  String get uploadCloudStep => 'Tải dữ liệu lên đám mây';
+
+  @override
+  String uploadStepProgress(String status, int confirmed, int total) {
+    return '$status ($confirmed/$total phần)';
+  }
+
+  @override
+  String get uploadQualityStep => 'Kiểm tra chất lượng & Tiền xử lý';
+
+  @override
+  String get uploadQualityNextBody => 'Bước tiếp theo sau khi tải xong';
+
+  @override
+  String get uploadNext => 'Tiếp theo';
 }

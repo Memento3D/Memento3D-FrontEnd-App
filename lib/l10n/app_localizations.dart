@@ -643,6 +643,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @uploadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading photos'**
+  String get uploadTitle;
+
+  /// No description provided for @uploadPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing upload'**
+  String get uploadPreparing;
+
+  /// No description provided for @uploadUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading'**
+  String get uploadUploading;
+
+  /// No description provided for @uploadWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for connection'**
+  String get uploadWaiting;
+
+  /// No description provided for @uploadReconciling.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring upload'**
+  String get uploadReconciling;
+
+  /// No description provided for @uploadRetryNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry needed'**
+  String get uploadRetryNeeded;
+
+  /// No description provided for @uploadCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo upload complete'**
+  String get uploadCompleted;
+
+  /// No description provided for @uploadMainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading your photos'**
+  String get uploadMainTitle;
+
+  /// No description provided for @uploadNetworkBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting to reconnect'**
+  String get uploadNetworkBanner;
+
+  /// No description provided for @uploadNetworkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed progress is unchanged. Uploading will continue when the connection returns.'**
+  String get uploadNetworkBody;
+
+  /// No description provided for @uploadReconcilingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring your upload session'**
+  String get uploadReconcilingTitle;
+
+  /// No description provided for @uploadReconcilingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking the last confirmed position before continuing. Your progress stays unchanged while we check.'**
+  String get uploadReconcilingBody;
+
+  /// No description provided for @uploadCompletionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving to quality check...'**
+  String get uploadCompletionBody;
+
+  /// No description provided for @uploadFailureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your confirmed progress is unchanged. Try again to continue from the last confirmed position.'**
+  String get uploadFailureBody;
+
+  /// No description provided for @uploadSourceFailureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload updates are unavailable. Your confirmed progress is unchanged; try again to reconnect.'**
+  String get uploadSourceFailureBody;
+
+  /// No description provided for @uploadLocalPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Local photos'**
+  String get uploadLocalPhotos;
+
+  /// No description provided for @uploadSavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress is saved automatically'**
+  String get uploadSavedTitle;
+
+  /// No description provided for @uploadSavedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can return to this upload after an interruption. It will continue from the last confirmed position.'**
+  String get uploadSavedBody;
+
+  /// No description provided for @uploadSessionOnlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this session open'**
+  String get uploadSessionOnlyTitle;
+
+  /// No description provided for @uploadSessionOnlyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed progress remains visible in this session. Recovery after closing the app is not available yet.'**
+  String get uploadSessionOnlyBody;
+
+  /// No description provided for @uploadPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 photo} other{{count} photos}}'**
+  String uploadPhotoCount(int count);
+
+  /// No description provided for @uploadPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String uploadPercent(String value);
+
+  /// No description provided for @uploadSummaryProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}% uploaded'**
+  String uploadSummaryProgress(String value);
+
+  /// No description provided for @uploadUnitCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{confirmed} / {total}'**
+  String uploadUnitCount(int confirmed, int total);
+
+  /// No description provided for @uploadConfirmedParts.
+  ///
+  /// In en, this message translates to:
+  /// **'{confirmed} / {total} parts uploaded'**
+  String uploadConfirmedParts(int confirmed, int total);
+
+  /// No description provided for @uploadProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed upload progress'**
+  String get uploadProgressLabel;
+
+  /// No description provided for @uploadSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed'**
+  String get uploadSpeed;
+
+  /// No description provided for @uploadSpeedValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} MB/s'**
+  String uploadSpeedValue(String value);
+
+  /// No description provided for @uploadRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get uploadRemaining;
+
+  /// No description provided for @uploadEtaValue.
+  ///
+  /// In en, this message translates to:
+  /// **'~{minutes}m {seconds}s'**
+  String uploadEtaValue(int minutes, int seconds);
+
+  /// No description provided for @uploadEtaWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get uploadEtaWaiting;
+
+  /// No description provided for @uploadUnknownMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get uploadUnknownMetric;
+
+  /// No description provided for @uploadConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded'**
+  String get uploadConfirmed;
+
+  /// No description provided for @uploadPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos in this upload'**
+  String get uploadPhotosTitle;
+
+  /// No description provided for @uploadPhotoCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploaded'**
+  String get uploadPhotoCompleted;
+
+  /// No description provided for @uploadPhotoCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading'**
+  String get uploadPhotoCurrent;
+
+  /// No description provided for @uploadPhotoPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get uploadPhotoPending;
+
+  /// No description provided for @uploadPhotoPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get uploadPhotoPaused;
+
+  /// No description provided for @uploadPhotoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{photo}. {status}'**
+  String uploadPhotoDescription(String photo, String status);
+
+  /// No description provided for @uploadNextSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Next steps'**
+  String get uploadNextSteps;
+
+  /// No description provided for @uploadCloudStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload to the cloud'**
+  String get uploadCloudStep;
+
+  /// No description provided for @uploadStepProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{status} ({confirmed}/{total} parts)'**
+  String uploadStepProgress(String status, int confirmed, int total);
+
+  /// No description provided for @uploadQualityStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality check & preparation'**
+  String get uploadQualityStep;
+
+  /// No description provided for @uploadQualityNextBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The next step after upload'**
+  String get uploadQualityNextBody;
+
+  /// No description provided for @uploadNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get uploadNext;
 }
 
 class _AppLocalizationsDelegate
