@@ -302,4 +302,86 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get processingProgressTitle => 'Đang tạo mô hình 3D...';
+
+  @override
+  String get processingProgressSubtitle =>
+      'AI đang phân tích cấu trúc góc cạnh và các chi tiết của vật thể để tạo ra bản 3D sống động.';
+
+  @override
+  String get processingProgressLabel => 'TIẾN TRÌNH';
+
+  @override
+  String get processingHistoryTitle => 'NHẬT KÝ TẠO MÔ HÌNH';
+
+  @override
+  String get processingTipTitle => 'Mẹo nhỏ từ Memento3D';
+
+  @override
+  String get processingTipBody =>
+      'Bạn có thể chụp thêm góc ảnh để mô hình 3D chính xác hơn.';
+
+  @override
+  String get processingRunInBackground => 'Chạy dưới nền & Nhận thông báo';
+
+  @override
+  String get processingBackgroundAck =>
+      'Bạn sẽ nhận thông báo khi quá trình hoàn tất.';
+
+  @override
+  String get processingReconnecting => 'Đang kết nối lại...';
+
+  @override
+  String get processingEtaUnknown => 'Đang ước tính thời gian...';
+
+  @override
+  String get processingEtaShort => 'gần hoàn tất';
+
+  @override
+  String processingEtaMinutes(int minutes) {
+    return 'còn khoảng $minutes phút';
+  }
+
+  @override
+  String get jobStageQueued => 'Chờ trong hàng đợi';
+
+  @override
+  String get jobStageDownloading => 'Đang tải ảnh đầu vào';
+
+  @override
+  String get jobStagePreprocessing => 'Xử lý trước dữ liệu';
+
+  @override
+  String get jobStageShapeGeneration => 'Dựng hình 3D';
+
+  @override
+  String get jobStageTexturing => 'Tạo texture';
+
+  @override
+  String get jobStageValidating => 'Kiểm tra chất lượng';
+
+  @override
+  String get jobStageExporting => 'Xuất mô hình';
+
+  @override
+  String get jobStageUploading => 'Tải mô hình lên';
+
+  @override
+  String get jobStageDone => 'Hoàn tất';
+
+  @override
+  String processingPhaseStep(int step, int total, String label) {
+    return 'Bước $step/$total: $label';
+  }
+
+  @override
+  String get processingPhaseAnalyzing => 'Phân tích ảnh đầu vào';
+
+  @override
+  String get processingPhaseModeling => 'Dựng khối & kết cấu';
+
+  @override
+  String get processingPhaseFinishing => 'Phối màu & chuẩn hóa mô hình';
 }

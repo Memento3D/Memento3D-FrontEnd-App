@@ -643,6 +643,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @processingProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating 3D model...'**
+  String get processingProgressTitle;
+
+  /// No description provided for @processingProgressSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is analyzing angles and details to build a vivid 3D model.'**
+  String get processingProgressSubtitle;
+
+  /// No description provided for @processingProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PROGRESS'**
+  String get processingProgressLabel;
+
+  /// No description provided for @processingHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PROCESSING LOG'**
+  String get processingHistoryTitle;
+
+  /// No description provided for @processingTipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip from Memento3D'**
+  String get processingTipTitle;
+
+  /// No description provided for @processingTipBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture extra angles to make the 3D model more accurate.'**
+  String get processingTipBody;
+
+  /// No description provided for @processingRunInBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Run in background & Get notified'**
+  String get processingRunInBackground;
+
+  /// No description provided for @processingBackgroundAck.
+  ///
+  /// In en, this message translates to:
+  /// **'You will be notified when processing completes.'**
+  String get processingBackgroundAck;
+
+  /// No description provided for @processingReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting...'**
+  String get processingReconnecting;
+
+  /// No description provided for @processingEtaUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimating remaining time...'**
+  String get processingEtaUnknown;
+
+  /// No description provided for @processingEtaShort.
+  ///
+  /// In en, this message translates to:
+  /// **'almost done'**
+  String get processingEtaShort;
+
+  /// No description provided for @processingEtaMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'about {minutes} minutes left'**
+  String processingEtaMinutes(int minutes);
+
+  /// No description provided for @jobStageQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued'**
+  String get jobStageQueued;
+
+  /// No description provided for @jobStageDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading input image'**
+  String get jobStageDownloading;
+
+  /// No description provided for @jobStagePreprocessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preprocessing'**
+  String get jobStagePreprocessing;
+
+  /// No description provided for @jobStageShapeGeneration.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating 3D shape'**
+  String get jobStageShapeGeneration;
+
+  /// No description provided for @jobStageTexturing.
+  ///
+  /// In en, this message translates to:
+  /// **'Texturing'**
+  String get jobStageTexturing;
+
+  /// No description provided for @jobStageValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating'**
+  String get jobStageValidating;
+
+  /// No description provided for @jobStageExporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting'**
+  String get jobStageExporting;
+
+  /// No description provided for @jobStageUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading model'**
+  String get jobStageUploading;
+
+  /// No description provided for @jobStageDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get jobStageDone;
+
+  /// No description provided for @processingPhaseStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step}/{total}: {label}'**
+  String processingPhaseStep(int step, int total, String label);
+
+  /// No description provided for @processingPhaseAnalyzing.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing input image'**
+  String get processingPhaseAnalyzing;
+
+  /// No description provided for @processingPhaseModeling.
+  ///
+  /// In en, this message translates to:
+  /// **'Building shape & mesh'**
+  String get processingPhaseModeling;
+
+  /// No description provided for @processingPhaseFinishing.
+  ///
+  /// In en, this message translates to:
+  /// **'Texturing & finalizing model'**
+  String get processingPhaseFinishing;
 }
 
 class _AppLocalizationsDelegate

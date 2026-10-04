@@ -303,4 +303,86 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get processingProgressTitle => 'Creating 3D model...';
+
+  @override
+  String get processingProgressSubtitle =>
+      'AI is analyzing angles and details to build a vivid 3D model.';
+
+  @override
+  String get processingProgressLabel => 'PROGRESS';
+
+  @override
+  String get processingHistoryTitle => 'PROCESSING LOG';
+
+  @override
+  String get processingTipTitle => 'Tip from Memento3D';
+
+  @override
+  String get processingTipBody =>
+      'Capture extra angles to make the 3D model more accurate.';
+
+  @override
+  String get processingRunInBackground => 'Run in background & Get notified';
+
+  @override
+  String get processingBackgroundAck =>
+      'You will be notified when processing completes.';
+
+  @override
+  String get processingReconnecting => 'Reconnecting...';
+
+  @override
+  String get processingEtaUnknown => 'Estimating remaining time...';
+
+  @override
+  String get processingEtaShort => 'almost done';
+
+  @override
+  String processingEtaMinutes(int minutes) {
+    return 'about $minutes minutes left';
+  }
+
+  @override
+  String get jobStageQueued => 'Queued';
+
+  @override
+  String get jobStageDownloading => 'Downloading input image';
+
+  @override
+  String get jobStagePreprocessing => 'Preprocessing';
+
+  @override
+  String get jobStageShapeGeneration => 'Generating 3D shape';
+
+  @override
+  String get jobStageTexturing => 'Texturing';
+
+  @override
+  String get jobStageValidating => 'Validating';
+
+  @override
+  String get jobStageExporting => 'Exporting';
+
+  @override
+  String get jobStageUploading => 'Uploading model';
+
+  @override
+  String get jobStageDone => 'Done';
+
+  @override
+  String processingPhaseStep(int step, int total, String label) {
+    return 'Step $step/$total: $label';
+  }
+
+  @override
+  String get processingPhaseAnalyzing => 'Analyzing input image';
+
+  @override
+  String get processingPhaseModeling => 'Building shape & mesh';
+
+  @override
+  String get processingPhaseFinishing => 'Texturing & finalizing model';
 }

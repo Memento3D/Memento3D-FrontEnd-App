@@ -1,4 +1,4 @@
-{
+﻿{
   "@@locale": "en",
   "captureTitle": "Capture",
   "back": "Back",
@@ -96,4 +96,32 @@
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
   "processingFailedBody": "The processing service reported a problem."
+,
+  "processingProgressTitle": "Creating 3D model...",
+  "processingProgressSubtitle": "AI is analyzing angles and details to build a vivid 3D model.",
+  "processingProgressLabel": "PROGRESS",
+  "processingHistoryTitle": "PROCESSING LOG",
+  "processingTipTitle": "Tip from Memento3D",
+  "processingTipBody": "Capture extra angles to make the 3D model more accurate.",
+  "processingRunInBackground": "Run in background & Get notified",
+  "processingBackgroundAck": "You will be notified when processing completes.",
+  "processingReconnecting": "Reconnecting...",
+  "processingEtaUnknown": "Estimating remaining time...",
+  "processingEtaShort": "almost done",
+  "processingEtaMinutes": "about {minutes} minutes left",
+  "@processingEtaMinutes": {"placeholders": {"minutes": {"type": "int"}}},
+  "jobStageQueued": "Queued",
+  "jobStageDownloading": "Downloading input image",
+  "jobStagePreprocessing": "Preprocessing",
+  "jobStageShapeGeneration": "Generating 3D shape",
+  "jobStageTexturing": "Texturing",
+  "jobStageValidating": "Validating",
+  "jobStageExporting": "Exporting",
+  "jobStageUploading": "Uploading model",
+  "jobStageDone": "Done",
+  "processingPhaseStep": "Step {step}/{total}: {label}",
+  "@processingPhaseStep": {"placeholders": {"step": {"type": "int"}, "total": {"type": "int"}, "label": {"type": "String"}}},
+  "processingPhaseAnalyzing": "Analyzing input image",
+  "processingPhaseModeling": "Building shape & mesh",
+  "processingPhaseFinishing": "Texturing & finalizing model"
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "@@locale": "vi",
   "captureTitle": "Chụp",
   "back": "Quay lại",
@@ -96,4 +96,32 @@
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
   "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+,
+  "processingProgressTitle": "Đang tạo mô hình 3D...",
+  "processingProgressSubtitle": "AI đang phân tích cấu trúc góc cạnh và các chi tiết của vật thể để tạo ra bản 3D sống động.",
+  "processingProgressLabel": "TIẾN TRÌNH",
+  "processingHistoryTitle": "NHẬT KÝ TẠO MÔ HÌNH",
+  "processingTipTitle": "Mẹo nhỏ từ Memento3D",
+  "processingTipBody": "Bạn có thể chụp thêm góc ảnh để mô hình 3D chính xác hơn.",
+  "processingRunInBackground": "Chạy dưới nền & Nhận thông báo",
+  "processingBackgroundAck": "Bạn sẽ nhận thông báo khi quá trình hoàn tất.",
+  "processingReconnecting": "Đang kết nối lại...",
+  "processingEtaUnknown": "Đang ước tính thời gian...",
+  "processingEtaShort": "gần hoàn tất",
+  "processingEtaMinutes": "còn khoảng {minutes} phút",
+  "@processingEtaMinutes": {"placeholders": {"minutes": {"type": "int"}}},
+  "jobStageQueued": "Chờ trong hàng đợi",
+  "jobStageDownloading": "Đang tải ảnh đầu vào",
+  "jobStagePreprocessing": "Xử lý trước dữ liệu",
+  "jobStageShapeGeneration": "Dựng hình 3D",
+  "jobStageTexturing": "Tạo texture",
+  "jobStageValidating": "Kiểm tra chất lượng",
+  "jobStageExporting": "Xuất mô hình",
+  "jobStageUploading": "Tải mô hình lên",
+  "jobStageDone": "Hoàn tất",
+  "processingPhaseStep": "Bước {step}/{total}: {label}",
+  "@processingPhaseStep": {"placeholders": {"step": {"type": "int"}, "total": {"type": "int"}, "label": {"type": "String"}}},
+  "processingPhaseAnalyzing": "Phân tích ảnh đầu vào",
+  "processingPhaseModeling": "Dựng khối & kết cấu",
+  "processingPhaseFinishing": "Phối màu & chuẩn hóa mô hình"
 }

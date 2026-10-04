@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../features/scans/data/services/job_service.dart';
+import '../features/scans/presentation/controllers/processing_progress_controller.dart';
 import '../l10n/app_localizations.dart';
 import 'capture_session.dart';
-import 'capture_size_format.dart';
 import 'processing_state.dart';
 
 const _purple = Color(0xFF6B4FE8);
@@ -15,37 +16,126 @@ const _border = Color(0xFFE6DFFF);
 class ProcessingScreen extends StatefulWidget {
   const ProcessingScreen({
     super.key,
-    required this.session,
-    this.snapshot = const ProcessingSnapshot.waiting(),
+    this.session,
+    this.scanId,
+    this.jobService,
+    this.snapshot,
+    this.onDone,
+    this.onFailed,
   });
 
-  final CaptureSession session;
-  final ProcessingSnapshot snapshot;
+  /// Local capture session (optional; used for the preview card photo).
+  final CaptureSession? session;
+
+  /// When provided, the screen subscribes to the real backend job for
+  /// this scan id (WebSocket + polling fallback).
+  final String? scanId;
+
+  /// Injectable for tests.
+  final JobService? jobService;
+
+  /// Optional pre-built snapshot (kept for POC/widget tests).
+  final ProcessingSnapshot? snapshot;
+
+  final VoidCallback? onDone;
+  final VoidCallback? onFailed;
 
   @override
   State<ProcessingScreen> createState() => _ProcessingScreenState();
 }
 
 class _ProcessingScreenState extends State<ProcessingScreen> {
-  late Future<CaptureSizeSummary> _sizeFuture;
+  ProcessingProgressController? _controller;
+  bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
-    _sizeFuture = widget.session.measureSize();
+    final scanId = widget.scanId;
+    if (scanId != null) {
+      _controller = ProcessingProgressController(
+        scanId: scanId,
+        jobService: widget.jobService ?? JobService(),
+        onDone: _handleDone,
+        onFailed: _handleFailed,
+      )..start();
+    }
+  }
+
+  void _handleDone() {
+    if (!mounted || _navigated) return;
+    _navigated = true;
+    widget.onDone?.call();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) =>
+            ProcessingViewerPlaceholderScreen(scanId: widget.scanId),
+      ),
+    );
+  }
+
+  void _handleFailed() {
+    if (!mounted || _navigated) return;
+    _navigated = true;
+    widget.onFailed?.call();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => ProcessingFailedPlaceholderScreen(
+          scanId: widget.scanId,
+          message: _controller?.errorMessage,
+        ),
+      ),
+    );
   }
 
   @override
-  void didUpdateWidget(covariant ProcessingScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.session != widget.session) {
-      _sizeFuture = widget.session.measureSize();
-    }
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  ProcessingSnapshot get _snapshot {
+    final provided = widget.snapshot;
+    if (provided != null) return provided;
+    final controller = _controller;
+    if (controller == null) return const ProcessingSnapshot.waiting();
+    return ProcessingSnapshot(
+      status: switch (controller.status) {
+        ProcessingViewStatus.loading => ProcessingStatus.waiting,
+        ProcessingViewStatus.running ||
+        ProcessingViewStatus.reconnecting => ProcessingStatus.running,
+        ProcessingViewStatus.completed => ProcessingStatus.completed,
+        ProcessingViewStatus.failed => ProcessingStatus.failed,
+      },
+      stage: controller.stage,
+      progress: controller.job?.effectiveProgress ?? controller.progress,
+      etaSeconds: controller.etaSeconds,
+      errorMessage: controller.errorMessage,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context)!;
+    return AnimatedBuilder(
+      animation: _controller ?? const AlwaysStoppedAnimation(0),
+      builder: (context, _) => _buildBody(context, strings),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, AppLocalizations strings) {
+    final snapshot = _snapshot;
+    final progress = snapshot.progress;
+    final progressPercent = progress == null ? null : (progress * 100).round();
+    final currentPhase = snapshot.currentPhase;
+    final stageLabel = currentPhase == null
+        ? strings.processingStagePending
+        : strings.processingPhaseStep(
+            currentPhase.index + 1,
+            ProcessingPhase.values.length,
+            phaseLabelFor(strings, currentPhase),
+          );
+
     return Scaffold(
       backgroundColor: const Color(0xFFFCFAFF),
       body: SafeArea(
@@ -61,102 +151,218 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
                     icon: const Icon(Icons.arrow_back, color: _ink),
                     tooltip: strings.back,
                   ),
-                  Text(
-                    strings.processingTitle,
-                    style: const TextStyle(
-                      color: _ink,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 19,
-                    ),
-                  ),
                   const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_vert, color: _ink),
-                    tooltip: strings.moreOptions,
-                  ),
-                  const SizedBox(width: 6),
                   Tooltip(
-                    message: strings.profile,
-                    child: const CircleAvatar(
-                      radius: 18,
-                      backgroundColor: _purple,
-                      child: Icon(
-                        Icons.person_outline,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+                    message: strings.back,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close, color: _ink),
+                      tooltip: strings.moreOptions,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                _statusPill(
-                  strings.processingLocal,
-                  Icons.phone_android_outlined,
-                  _purple,
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
                 ),
-                const Spacer(),
-                Flexible(
-                  child: _statusPill(
-                    widget.snapshot.status == ProcessingStatus.readyToUpload
-                        ? strings.processingCloudUnavailable
-                        : strings.processingCloudConnected,
-                    Icons.cloud_off_outlined,
-                    const Color(0xFF777183),
-                  ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: _border),
+                  borderRadius: BorderRadius.circular(18),
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.auto_awesome, color: _purple, size: 14),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'Memento3D AI Engine',
+                      style: TextStyle(
+                        color: _ink,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 16),
             _previewCard(strings),
             const SizedBox(height: 18),
-            _statusArea(strings),
+            Text(
+              strings.processingProgressTitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: _ink,
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              strings.processingProgressSubtitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Color(0xFF777183), fontSize: 12),
+            ),
             const SizedBox(height: 18),
-            _localSummary(strings),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: _border),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          stageLabel,
+                          style: const TextStyle(color: _ink, fontSize: 11),
+                        ),
+                      ),
+                      Text(
+                        progressPercent == null ? '--%' : '$progressPercent%',
+                        style: const TextStyle(
+                          color: _purple,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 22,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: LinearProgressIndicator(
+                      value: progress ?? 0.0,
+                      minHeight: 8,
+                      backgroundColor: _lavender,
+                      valueColor: const AlwaysStoppedAnimation(_purple),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          formatEta(strings, snapshot.etaSeconds),
+                          style: const TextStyle(
+                            color: Color(0xFF777183),
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                      if (_controller?.isUsingPollingFallback == true)
+                        Text(
+                          strings.processingReconnecting,
+                          style: const TextStyle(
+                            color: Color(0xFFB45309),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 18),
-            _stageCard(strings),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: _border),
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    strings.processingHistoryTitle,
+                    style: const TextStyle(
+                      color: _ink,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  for (final phase in ProcessingPhase.values)
+                    _phaseRow(snapshot, phase, strings),
+                ],
+              ),
+            ),
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFBF7FF),
+                border: Border.all(color: _border),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.lightbulb_outline, color: _purple, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          strings.processingTipTitle,
+                          style: const TextStyle(
+                            color: _ink,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          strings.processingTipBody,
+                          style: const TextStyle(
+                            color: Color(0xFF777183),
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 18),
+            FilledButton.icon(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(strings.processingBackgroundAck),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: _purple,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+              icon: const Icon(Icons.notifications_active_outlined, size: 18),
+              label: Text(strings.processingRunInBackground),
+            ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
 
-  Widget _statusPill(String text, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: _border),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color, size: 13),
-          const SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              text,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: color,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _previewCard(AppLocalizations strings) {
-    final photo = widget.session.latestPhoto;
+    final photo = widget.session?.latestPhoto;
     return Container(
       height: 282,
       decoration: BoxDecoration(
@@ -205,15 +411,6 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
                     ),
                   ),
                 ),
-              Positioned(
-                left: 10,
-                bottom: 10,
-                child: _statusPill(
-                  strings.processingPhotoCount(widget.session.photoCount),
-                  Icons.photo_library_outlined,
-                  _ink,
-                ),
-              ),
             ],
           ),
         ),
@@ -221,203 +418,19 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     );
   }
 
-  Widget _statusArea(AppLocalizations strings) {
-    final status = widget.snapshot.status;
-    final title = switch (status) {
-      ProcessingStatus.readyToUpload => strings.processingReadyTitle,
-      ProcessingStatus.uploading => strings.processingUploading,
-      ProcessingStatus.processing => strings.processingRunning,
-      ProcessingStatus.completed => strings.processingCompleted,
-      ProcessingStatus.failed => strings.processingFailed,
-    };
-    return Column(
-      children: [
-        if (widget.snapshot.hasMeasuredProgress)
-          Text(
-            '${widget.snapshot.progressPercent!.toStringAsFixed(0)}%',
-            style: const TextStyle(
-              color: _purple,
-              fontWeight: FontWeight.w700,
-              fontSize: 42,
-            ),
-          )
-        else
-          const Icon(Icons.cloud_upload_outlined, color: _purple, size: 44),
-        const SizedBox(height: 4),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: _ink,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          switch (status) {
-            ProcessingStatus.readyToUpload => strings.processingReadyBody,
-            ProcessingStatus.uploading ||
-            ProcessingStatus.processing => strings.processingInProgressBody,
-            ProcessingStatus.completed => strings.processingCompleteBody,
-            ProcessingStatus.failed => strings.processingFailedBody,
-          },
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Color(0xFF777183), fontSize: 12),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          status == ProcessingStatus.readyToUpload
-              ? strings.processingWaiting
-              : strings.processingProgressPending,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: _purple,
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _localSummary(AppLocalizations strings) {
-    final detail =
-        widget.session.detailLevel == ReconstructionDetailLevel.standard
-        ? strings.detailStandard
-        : strings.detailHigh;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: _border),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.tune, color: _purple, size: 17),
-              const SizedBox(width: 7),
-              Expanded(
-                child: Text(
-                  strings.processingSelectedDetail,
-                  style: const TextStyle(color: _ink, fontSize: 12),
-                ),
-              ),
-              Text(
-                detail,
-                style: const TextStyle(
-                  color: _purple,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-          const Divider(height: 18, color: _border),
-          Row(
-            children: [
-              const Icon(Icons.folder_outlined, color: _purple, size: 17),
-              const SizedBox(width: 7),
-              Expanded(
-                child: Text(
-                  strings.processingFileSize,
-                  style: const TextStyle(color: _ink, fontSize: 12),
-                ),
-              ),
-              FutureBuilder<CaptureSizeSummary>(
-                future: _sizeFuture,
-                builder: (context, snapshot) => Text(
-                  snapshot.data == null
-                      ? strings.sizeCalculating
-                      : formatCaptureSize(strings, snapshot.data!.bytes),
-                  style: const TextStyle(
-                    color: _purple,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          FutureBuilder<CaptureSizeSummary>(
-            future: _sizeFuture,
-            builder: (context, snapshot) =>
-                (snapshot.data?.unavailableFiles ?? 0) == 0
-                ? const SizedBox.shrink()
-                : Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                      strings.sizeIncomplete,
-                      style: const TextStyle(
-                        color: Color(0xFF9A5760),
-                        fontSize: 11,
-                      ),
-                    ),
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _stageCard(AppLocalizations strings) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: _border),
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.auto_awesome_outlined, color: _purple, size: 18),
-              const SizedBox(width: 7),
-              Text(
-                strings.processingStageTitle,
-                style: const TextStyle(
-                  color: _ink,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            widget.snapshot.status == ProcessingStatus.readyToUpload
-                ? strings.processingNotStarted
-                : strings.processingInProgressBody,
-            style: const TextStyle(color: Color(0xFF777183), fontSize: 11),
-          ),
-          const Divider(height: 20, color: _border),
-          for (final stage in ProcessingStage.values) _stageRow(stage, strings),
-        ],
-      ),
-    );
-  }
-
-  Widget _stageRow(ProcessingStage stage, AppLocalizations strings) {
-    final stageStatus = widget.snapshot.statusFor(stage);
-    final label = switch (stage) {
-      ProcessingStage.dataUpload => strings.processingStageUpload,
-      ProcessingStage.imagePreparation => strings.processingStagePrepare,
-      ProcessingStage.structureReconstruction =>
-        strings.processingStageStructure,
-      ProcessingStage.detailGeneration => strings.processingStageDetail,
-      ProcessingStage.texturing => strings.processingStageTexture,
-      ProcessingStage.completion => strings.processingStageComplete,
-    };
+  Widget _phaseRow(
+    ProcessingSnapshot snapshot,
+    ProcessingPhase phase,
+    AppLocalizations strings,
+  ) {
+    final stageStatus = snapshot.statusForPhase(phase);
+    final active = stageStatus == ProcessingStageStatus.active;
+    final completed = stageStatus == ProcessingStageStatus.completed;
     final statusLabel = switch (stageStatus) {
       ProcessingStageStatus.pending => strings.processingStagePending,
       ProcessingStageStatus.active => strings.processingStageActive,
       ProcessingStageStatus.completed => strings.processingStageCompleted,
     };
-    final active = stageStatus == ProcessingStageStatus.active;
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
@@ -428,16 +441,18 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       child: Row(
         children: [
           Icon(
-            stageStatus == ProcessingStageStatus.completed
+            completed
                 ? Icons.check_circle
-                : Icons.circle_outlined,
+                : (active ? Icons.sync_rounded : Icons.circle_outlined),
             size: 17,
-            color: active ? _purple : const Color(0xFFA6A0B3),
+            color: active || completed
+                ? (completed ? const Color(0xFF10B981) : _purple)
+                : const Color(0xFFA6A0B3),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              label,
+              phaseLabelFor(strings, phase),
               style: TextStyle(
                 color: active ? _purple : _ink,
                 fontSize: 11,
@@ -450,6 +465,103 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
             style: const TextStyle(color: Color(0xFF777183), fontSize: 10),
           ),
         ],
+      ),
+    );
+  }
+}
+
+String phaseLabelFor(AppLocalizations strings, ProcessingPhase phase) {
+  switch (phase) {
+    case ProcessingPhase.analyzing:
+      return strings.processingPhaseAnalyzing;
+    case ProcessingPhase.modeling:
+      return strings.processingPhaseModeling;
+    case ProcessingPhase.finishing:
+      return strings.processingPhaseFinishing;
+  }
+}
+
+String stageLabelFor(AppLocalizations strings, JobStage stage) {
+  switch (stage) {
+    case JobStage.queued:
+      return strings.jobStageQueued;
+    case JobStage.downloading:
+      return strings.jobStageDownloading;
+    case JobStage.preprocessing:
+      return strings.jobStagePreprocessing;
+    case JobStage.shapeGeneration:
+      return strings.jobStageShapeGeneration;
+    case JobStage.texturing:
+      return strings.jobStageTexturing;
+    case JobStage.validating:
+      return strings.jobStageValidating;
+    case JobStage.exporting:
+      return strings.jobStageExporting;
+    case JobStage.uploading:
+      return strings.jobStageUploading;
+    case JobStage.done:
+      return strings.jobStageDone;
+  }
+}
+
+String formatEta(AppLocalizations strings, int? etaSeconds) {
+  if (etaSeconds == null) return strings.processingEtaUnknown;
+  if (etaSeconds <= 60) return strings.processingEtaShort;
+  final minutes = (etaSeconds / 60).round();
+  if (minutes <= 1) return strings.processingEtaShort;
+  return strings.processingEtaMinutes(minutes);
+}
+
+/// Placeholder for the 3D Viewer route ([#20]) until the real viewer
+/// screen lands; receives the scan id.
+class ProcessingViewerPlaceholderScreen extends StatelessWidget {
+  const ProcessingViewerPlaceholderScreen({super.key, this.scanId});
+
+  final String? scanId;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context)!;
+    return Scaffold(
+      backgroundColor: const Color(0xFFFCFAFF),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            '${strings.processingCompleted}\n${scanId ?? ''}',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Error state navigation target ([#19]) until a dedicated failure
+/// screen exists; shows the backend error when available.
+class ProcessingFailedPlaceholderScreen extends StatelessWidget {
+  const ProcessingFailedPlaceholderScreen({
+    super.key,
+    this.scanId,
+    this.message,
+  });
+
+  final String? scanId;
+  final String? message;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context)!;
+    return Scaffold(
+      backgroundColor: const Color(0xFFFCFAFF),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            '${strings.processingFailed}\n${message ?? ''}',
+            textAlign: TextAlign.center,
+          ),
+        ),
       ),
     );
   }
