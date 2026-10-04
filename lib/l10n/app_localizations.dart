@@ -643,6 +643,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @jobFailedHeaderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create 3D Model'**
+  String get jobFailedHeaderTitle;
+
+  /// No description provided for @jobFailedStatusBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: Failed'**
+  String get jobFailedStatusBadge;
+
+  /// No description provided for @jobFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the 3D model'**
+  String get jobFailedTitle;
+
+  /// No description provided for @jobFailedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Some reconstruction steps encountered an issue. Don\'t worry, your captures are safe.'**
+  String get jobFailedSubtitle;
+
+  /// No description provided for @jobFailedCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened?'**
+  String get jobFailedCardTitle;
+
+  /// No description provided for @jobRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry 3D generation'**
+  String get jobRetry;
+
+  /// No description provided for @jobRetrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Retrying...'**
+  String get jobRetrying;
+
+  /// No description provided for @jobDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Dashboard'**
+  String get jobDashboard;
+
+  /// No description provided for @jobRetryLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'You have exceeded the allowed retry attempts. Please contact support or create a new scan.'**
+  String get jobRetryLimit;
+
+  /// No description provided for @jobRetryFailedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry is unavailable right now. Check your connection and try again.'**
+  String get jobRetryFailedHint;
+
+  /// No description provided for @jobFailedIllustrationTag.
+  ///
+  /// In en, this message translates to:
+  /// **'3D AI Engine'**
+  String get jobFailedIllustrationTag;
 }
 
 class _AppLocalizationsDelegate

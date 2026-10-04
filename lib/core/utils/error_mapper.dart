@@ -116,4 +116,31 @@ class ErrorMapper {
 
     return errorMessages[resolvedCode] ?? 'Đã xảy ra lỗi không xác định. Vui lòng thử lại.';
   }
+
+  /// Maps a raw backend job error message to a friendly Vietnamese text.
+  static String friendlyJobErrorMessage(String? rawMessage) {
+    if (rawMessage == null || rawMessage.trim().isEmpty) {
+      return 'Đã xảy ra lỗi khi tạo mô hình 3D. Vui lòng thử lại.';
+    }
+    final lower = rawMessage.toLowerCase();
+    if (lower.contains('timeout') || lower.contains('timed out')) {
+      return 'Quá trình xử lý mất quá nhiều thời gian. Vui lòng thử lại.';
+    }
+    if (lower.contains('network') || lower.contains('connection')) {
+      return 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra mạng.';
+    }
+    if (lower.contains('insufficient') || lower.contains('not enough')) {
+      return 'Cần thêm ảnh để tái tạo mô hình. Vui lòng chụp thêm ảnh.';
+    }
+    if (lower.contains('image')) {
+      return 'Không thể xử lý ảnh đã chụp. Vui lòng chụp lại và thử lại.';
+    }
+    if (lower.contains('reconstruct') || lower.contains('sfm') || lower.contains('mvs')) {
+      return 'Không thể dựng lại cấu trúc 3D từ ảnh. Vui lòng thử lại.';
+    }
+    if (lower.contains('internal') || lower.contains('server')) {
+      return 'Hệ thống đang gặp sự cố. Vui lòng thử lại sau.';
+    }
+    return rawMessage;
+  }
 }

@@ -303,4 +303,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get jobFailedHeaderTitle => 'Create 3D Model';
+
+  @override
+  String get jobFailedStatusBadge => 'Status: Failed';
+
+  @override
+  String get jobFailedTitle => 'Couldn\'t create the 3D model';
+
+  @override
+  String get jobFailedSubtitle =>
+      'Some reconstruction steps encountered an issue. Don\'t worry, your captures are safe.';
+
+  @override
+  String get jobFailedCardTitle => 'What happened?';
+
+  @override
+  String get jobRetry => 'Retry 3D generation';
+
+  @override
+  String get jobRetrying => 'Retrying...';
+
+  @override
+  String get jobDashboard => 'Back to Dashboard';
+
+  @override
+  String get jobRetryLimit =>
+      'You have exceeded the allowed retry attempts. Please contact support or create a new scan.';
+
+  @override
+  String get jobRetryFailedHint =>
+      'Retry is unavailable right now. Check your connection and try again.';
+
+  @override
+  String get jobFailedIllustrationTag => '3D AI Engine';
 }

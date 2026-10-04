@@ -1,4 +1,4 @@
-{
+﻿{
   "@@locale": "en",
   "captureTitle": "Capture",
   "back": "Back",
@@ -96,4 +96,16 @@
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
   "processingFailedBody": "The processing service reported a problem."
+,
+  "jobFailedHeaderTitle": "Create 3D Model",
+  "jobFailedStatusBadge": "Status: Failed",
+  "jobFailedTitle": "Couldn't create the 3D model",
+  "jobFailedSubtitle": "Some reconstruction steps encountered an issue. Don't worry, your captures are safe.",
+  "jobFailedCardTitle": "What happened?",
+  "jobRetry": "Retry 3D generation",
+  "jobRetrying": "Retrying...",
+  "jobDashboard": "Back to Dashboard",
+  "jobRetryLimit": "You have exceeded the allowed retry attempts. Please contact support or create a new scan.",
+  "jobRetryFailedHint": "Retry is unavailable right now. Check your connection and try again.",
+  "jobFailedIllustrationTag": "3D AI Engine"
 }

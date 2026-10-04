@@ -302,4 +302,40 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get jobFailedHeaderTitle => 'Tạo Mô Hình 3D';
+
+  @override
+  String get jobFailedStatusBadge => 'Trạng thái: Thất bại';
+
+  @override
+  String get jobFailedTitle => 'Chưa thể tạo mô hình 3D';
+
+  @override
+  String get jobFailedSubtitle =>
+      'Một số bước tái tạo 3D gặp sự cố. Đừng lo, ảnh chụp của bạn vẫn được lưu an toàn.';
+
+  @override
+  String get jobFailedCardTitle => 'Điều gì đã xảy ra?';
+
+  @override
+  String get jobRetry => 'Thử lại tạo 3D';
+
+  @override
+  String get jobRetrying => 'Đang thử lại...';
+
+  @override
+  String get jobDashboard => 'Quay về Dashboard';
+
+  @override
+  String get jobRetryLimit =>
+      'Bạn đã vượt quá số lần thử lại cho phép. Vui lòng liên hệ hỗ trợ hoặc tạo một lượt quét mới.';
+
+  @override
+  String get jobRetryFailedHint =>
+      'Không thể thử lại lúc này. Vui lòng kiểm tra kết nối và thử lại.';
+
+  @override
+  String get jobFailedIllustrationTag => '3D AI Engine';
 }

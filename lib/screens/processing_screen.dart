@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'capture_session.dart';
 import 'capture_size_format.dart';
+import 'job_failed_screen.dart';
 import 'processing_state.dart';
 
 const _purple = Color(0xFF6B4FE8);
@@ -28,11 +29,13 @@ class ProcessingScreen extends StatefulWidget {
 
 class _ProcessingScreenState extends State<ProcessingScreen> {
   late Future<CaptureSizeSummary> _sizeFuture;
+  bool _navigatedToFailure = false;
 
   @override
   void initState() {
     super.initState();
     _sizeFuture = widget.session.measureSize();
+    _maybeNavigateToFailure();
   }
 
   @override
@@ -41,6 +44,24 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     if (oldWidget.session != widget.session) {
       _sizeFuture = widget.session.measureSize();
     }
+    _maybeNavigateToFailure();
+  }
+
+  void _maybeNavigateToFailure() {
+    if (_navigatedToFailure) return;
+    if (widget.snapshot.status != ProcessingStatus.failed) return;
+    _navigatedToFailure = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => JobFailedScreen(
+            jobId: widget.snapshot.jobId ?? '',
+            errorMessage: widget.snapshot.errorMessage,
+          ),
+        ),
+      );
+    });
   }
 
   @override

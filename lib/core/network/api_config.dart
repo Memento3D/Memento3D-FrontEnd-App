@@ -40,6 +40,7 @@ class ApiConfig {
   static const String currentUser = '/api/auth/me';
   static const String logout = '/api/auth/logout';
   static const String scans = '/api/v1/scans';
+  static const String jobs = '/api/v1/jobs';
 
   // Request timeout
   static const Duration timeout = Duration(seconds: 15);
