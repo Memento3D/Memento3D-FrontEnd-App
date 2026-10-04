@@ -124,5 +124,12 @@
   "modelViewerLoading": "Loading 3D model…",
   "modelViewerLoaded": "3D model loaded",
   "modelViewerLoadError": "The 3D model could not be loaded.",
-  "modelViewerInitializationError": "The 3D viewer could not start. Close this view and try again."
+  "modelViewerInitializationError": "The 3D viewer could not start. Close this view and try again.",
+  "modelViewerScreenTitle": "3D Model Viewer",
+  "modelViewerFetchingOutputs": "Fetching model information…",
+  "modelViewerDownloading": "Downloading 3D model…",
+  "modelViewerNoPrimaryGlb": "No primary GLB model is available for this scan.",
+  "modelViewerRetry": "Retry",
+  "checkPrintabilityCta": "Check Printability",
+  "rateAndShareCta": "Rate & Share"
 }

@@ -805,6 +805,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The 3D viewer could not start. Close this view and try again.'**
   String get modelViewerInitializationError;
+
+  /// No description provided for @modelViewerScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3D Model Viewer'**
+  String get modelViewerScreenTitle;
+
+  /// No description provided for @modelViewerFetchingOutputs.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetching model information…'**
+  String get modelViewerFetchingOutputs;
+
+  /// No description provided for @modelViewerDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading 3D model…'**
+  String get modelViewerDownloading;
+
+  /// No description provided for @modelViewerNoPrimaryGlb.
+  ///
+  /// In en, this message translates to:
+  /// **'No primary GLB model is available for this scan.'**
+  String get modelViewerNoPrimaryGlb;
+
+  /// No description provided for @modelViewerRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get modelViewerRetry;
+
+  /// No description provided for @checkPrintabilityCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Printability'**
+  String get checkPrintabilityCta;
+
+  /// No description provided for @rateAndShareCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate & Share'**
+  String get rateAndShareCta;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/features/model_viewer/presentation/screens/model_viewer_screen.dart';
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
 
 class ScanDetailsSheet extends StatelessWidget {
@@ -210,11 +211,12 @@ class ScanDetailsSheet extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Mở trình xem 3D cho "${scan.name}" ✨'),
-                        backgroundColor: AppColors.primary,
-                        behavior: SnackBarBehavior.floating,
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ModelViewerScreen(
+                          scanId: scan.id,
+                          scanName: scan.name,
+                        ),
                       ),
                     );
                   },

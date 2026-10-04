@@ -266,7 +266,7 @@ void main() {
           expect(find.text('63%'), findsOneWidget);
           expect(find.text(strings.detailStandard), findsOneWidget);
           expect(find.text(strings.modelViewerFormatGlb), findsOneWidget);
-          expect(find.text(strings.captureTitle), findsOneWidget);
+          expect(find.text(strings.modelViewerScreenTitle), findsOneWidget);
           expect(
             find.text(strings.modelViewerFormat.toUpperCase()),
             findsOneWidget,

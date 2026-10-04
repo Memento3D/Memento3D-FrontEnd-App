@@ -393,4 +393,26 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get modelViewerInitializationError =>
       'The 3D viewer could not start. Close this view and try again.';
+
+  @override
+  String get modelViewerScreenTitle => '3D Model Viewer';
+
+  @override
+  String get modelViewerFetchingOutputs => 'Fetching model information…';
+
+  @override
+  String get modelViewerDownloading => 'Downloading 3D model…';
+
+  @override
+  String get modelViewerNoPrimaryGlb =>
+      'No primary GLB model is available for this scan.';
+
+  @override
+  String get modelViewerRetry => 'Retry';
+
+  @override
+  String get checkPrintabilityCta => 'Check Printability';
+
+  @override
+  String get rateAndShareCta => 'Rate & Share';
 }

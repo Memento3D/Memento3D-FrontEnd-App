@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../screens/printability_report_screen.dart';
+import '../../../../screens/rate_share_screen.dart';
+import '../../data/services/model_download_service.dart';
+import '../../data/services/model_output_service.dart';
 import '../models/model_viewer_data.dart';
 import '../widgets/three_d_model_viewer.dart';
 
@@ -8,20 +12,29 @@ const _primary = Color(0xFF5B3CDD);
 const _success = Color(0xFF006A3B);
 
 /// Host-owned facts and navigation around the reusable real Three.js viewer.
-class ModelViewerScreen extends StatelessWidget {
+class ModelViewerScreen extends StatefulWidget {
   const ModelViewerScreen({
     super.key,
-    required this.modelUrl,
-    required this.data,
+    this.modelUrl,
+    this.data,
     this.onContinue,
     this.onBack,
     this.onMenu,
     this.onProfile,
     this.enableDiagnostics = false,
-  });
+    this.scanId,
+    this.scanName,
+    this.onCheckPrintability,
+    this.onRateShare,
+    this.modelOutputService,
+    this.modelDownloadService,
+  }) : assert(
+         scanId != null || (modelUrl != null && data != null),
+         'Provide either scanId (real data flow) or modelUrl/data.',
+       );
 
   final String? modelUrl;
-  final ModelViewerData data;
+  final ModelViewerData? data;
   final VoidCallback? onContinue;
   final VoidCallback? onBack;
   final VoidCallback? onMenu;
@@ -29,6 +42,84 @@ class ModelViewerScreen extends StatelessWidget {
 
   /// Development-only opt-in; leaves the production composition unchanged.
   final bool enableDiagnostics;
+
+  /// Production flow: fetch the primary GLB from model_outputs and viewer it.
+  final String? scanId;
+  final String? scanName;
+  final VoidCallback? onCheckPrintability;
+  final VoidCallback? onRateShare;
+  final ModelOutputService? modelOutputService;
+  final ModelDownloadService? modelDownloadService;
+
+  @override
+  State<ModelViewerScreen> createState() => _ModelViewerScreenState();
+}
+
+enum _FlowPhase { fetching, downloading, ready, unavailable, error }
+
+class _ModelViewerScreenState extends State<ModelViewerScreen> {
+  late final ModelOutputService _outputs =
+      widget.modelOutputService ?? ModelOutputService();
+  late final ModelDownloadService _downloads =
+      widget.modelDownloadService ?? ModelDownloadService();
+
+  _FlowPhase _phase = _FlowPhase.fetching;
+  int _loadedBytes = 0;
+  int? _totalBytes;
+  String? _modelUrl;
+  ModelViewerData? _data;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.scanId != null) {
+      _loadRealModel();
+    }
+  }
+
+  Future<void> _loadRealModel() async {
+    setState(() {
+      _phase = _FlowPhase.fetching;
+      _loadedBytes = 0;
+      _totalBytes = null;
+    });
+    try {
+      final output = await _outputs.getPrimaryGlbOutput(widget.scanId!);
+      if (!mounted) return;
+      if (output == null || output.downloadUrl == null) {
+        setState(() => _phase = _FlowPhase.unavailable);
+        return;
+      }
+      setState(() => _phase = _FlowPhase.downloading);
+      final file = await _downloads.downloadGlb(
+        url: output.downloadUrl!,
+        onProgress: (loaded, total) {
+          if (!mounted) return;
+          setState(() {
+            _loadedBytes = loaded;
+            _totalBytes = total;
+          });
+        },
+      );
+      if (!mounted) return;
+      setState(() {
+        _modelUrl = 'file://${file.path}';
+        _data = ModelViewerData(
+          modelName: widget.scanName ?? output.id,
+          referenceCode: widget.scanId,
+          availability: ModelAvailability.ready,
+          format: ModelFileFormat.glb,
+          completionPercentage: 100,
+        );
+        _phase = _FlowPhase.ready;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _phase = _FlowPhase.error;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +147,119 @@ class ModelViewerScreen extends StatelessWidget {
     );
     return Theme(
       data: theme,
-      child: Builder(builder: (context) => _buildScreen(context)),
+      child: Builder(
+        builder: (context) {
+          if (widget.scanId != null && _phase != _FlowPhase.ready) {
+            return _buildFlowScreen(context);
+          }
+          return _buildScreen(
+            context,
+            modelUrl: _modelUrl ?? widget.modelUrl,
+            data: _data ?? widget.data!,
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildScreen(BuildContext context) {
+  /// Loading / ready / error indicators for the real data pipeline.
+  Widget _buildFlowScreen(BuildContext context) {
+    final strings = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed:
+              widget.onBack ?? () => Navigator.of(context).maybePop(),
+        ),
+        titleSpacing: 0,
+        title: Text(
+          strings.modelViewerScreenTitle,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        scrolledUnderElevation: 0,
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: switch (_phase) {
+              _FlowPhase.fetching => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  Text(strings.modelViewerFetchingOutputs),
+                ],
+              ),
+              _FlowPhase.downloading => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LinearProgressIndicator(
+                    value: _totalBytes == null || _totalBytes == 0
+                        ? null
+                        : (_loadedBytes / _totalBytes!).clamp(0.0, 1.0),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    _totalBytes == null || _totalBytes == 0
+                        ? strings.modelViewerDownloading
+                        : '${strings.modelViewerDownloading} ${((_loadedBytes / _totalBytes!) * 100).round()}%',
+                  ),
+                ],
+              ),
+              _FlowPhase.unavailable => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 40,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    strings.modelViewerNoPrimaryGlb,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              _FlowPhase.error => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.error_outline_rounded,
+                    size: 40,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    strings.modelViewerLoadError,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  FilledButton.icon(
+                    onPressed: _loadRealModel,
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: Text(strings.modelViewerRetry),
+                  ),
+                ],
+              ),
+              _FlowPhase.ready => const SizedBox.shrink(),
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildScreen(
+    BuildContext context, {
+    required String? modelUrl,
+    required ModelViewerData data,
+  }) {
     final strings = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
@@ -128,7 +327,7 @@ class ModelViewerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: onBack ?? () => Navigator.of(context).maybePop(),
+          onPressed: widget.onBack ?? () => Navigator.of(context).maybePop(),
         ),
         titleSpacing: 0,
         title: Row(
@@ -136,7 +335,7 @@ class ModelViewerScreen extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                strings.captureTitle,
+                strings.modelViewerScreenTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -158,14 +357,14 @@ class ModelViewerScreen extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: strings.moreOptions,
-            onPressed: onMenu,
+            onPressed: widget.onMenu,
             icon: const Icon(Icons.more_horiz),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: IconButton(
               tooltip: strings.profile,
-              onPressed: onProfile,
+              onPressed: widget.onProfile,
               style: IconButton.styleFrom(backgroundColor: colors.primaryFixed),
               icon: const Icon(Icons.person_outline, color: _primary),
             ),
@@ -216,7 +415,7 @@ class ModelViewerScreen extends StatelessWidget {
                       _Surface(
                         child: ThreeDModelViewer(
                           modelUrl: modelUrl,
-                          enableDiagnostics: enableDiagnostics,
+                          enableDiagnostics: widget.enableDiagnostics,
                           viewportHeight: largeText ? 440 : 350,
                         ),
                       ),
@@ -328,18 +527,97 @@ class ModelViewerScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
+                      if (widget.scanId != null) ...[
+                        FilledButton(
+                          key: const ValueKey('model-viewer-check-printability'),
+                          onPressed:
+                              widget.onCheckPrintability ??
+                              () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => PrintabilityReportScreen(
+                                    scanId: widget.scanId!,
+                                    scanName: widget.scanName,
+                                  ),
+                                ),
+                              ),
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 20,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.print_outlined, size: 20),
+                              const SizedBox(width: 10),
+                              Flexible(
+                                child: Text(
+                                  strings.checkPrintabilityCta,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        OutlinedButton(
+                          key: const ValueKey('model-viewer-rate-share'),
+                          onPressed:
+                              widget.onRateShare ??
+                              () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => RateShareScreen(
+                                    scanId: widget.scanId!,
+                                    scanName: widget.scanName,
+                                  ),
+                                ),
+                              ),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 20,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.share_outlined, size: 20),
+                              const SizedBox(width: 10),
+                              Flexible(
+                                child: Text(
+                                  strings.rateAndShareCta,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else
                       DecoratedBox(
                         decoration: BoxDecoration(
-                          gradient: onContinue == null
+                          gradient: widget.onContinue == null
                               ? null
                               : const LinearGradient(
                                   colors: [_primary, Color(0xFF7459F7)],
                                 ),
-                          color: onContinue == null
+                          color: widget.onContinue == null
                               ? colors.surfaceContainer
                               : null,
                           borderRadius: BorderRadius.circular(24),
-                          boxShadow: onContinue == null
+                          boxShadow: widget.onContinue == null
                               ? null
                               : [
                                   BoxShadow(
@@ -351,7 +629,7 @@ class ModelViewerScreen extends StatelessWidget {
                         ),
                         child: FilledButton(
                           key: const ValueKey('model-viewer-continue'),
-                          onPressed: onContinue,
+                          onPressed: widget.onContinue,
                           style: FilledButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             disabledBackgroundColor: Colors.transparent,

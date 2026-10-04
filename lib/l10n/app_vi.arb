@@ -124,5 +124,12 @@
   "modelViewerLoading": "Đang tải mô hình 3D…",
   "modelViewerLoaded": "Đã tải mô hình 3D",
   "modelViewerLoadError": "Không thể tải mô hình 3D.",
-  "modelViewerInitializationError": "Không thể khởi động trình xem 3D. Hãy đóng màn hình này và thử lại."
+  "modelViewerInitializationError": "Không thể khởi động trình xem 3D. Hãy đóng màn hình này và thử lại.",
+  "modelViewerScreenTitle": "Trình xem mô hình 3D",
+  "modelViewerFetchingOutputs": "Đang tải thông tin mô hình…",
+  "modelViewerDownloading": "Đang tải mô hình 3D…",
+  "modelViewerNoPrimaryGlb": "Không có mô hình GLB chính cho bản scan này.",
+  "modelViewerRetry": "Thử lại",
+  "checkPrintabilityCta": "Kiểm tra khả năng in",
+  "rateAndShareCta": "Đánh giá & Chia sẻ"
 }

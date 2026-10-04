@@ -392,4 +392,26 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get modelViewerInitializationError =>
       'Không thể khởi động trình xem 3D. Hãy đóng màn hình này và thử lại.';
+
+  @override
+  String get modelViewerScreenTitle => 'Trình xem mô hình 3D';
+
+  @override
+  String get modelViewerFetchingOutputs => 'Đang tải thông tin mô hình…';
+
+  @override
+  String get modelViewerDownloading => 'Đang tải mô hình 3D…';
+
+  @override
+  String get modelViewerNoPrimaryGlb =>
+      'Không có mô hình GLB chính cho bản scan này.';
+
+  @override
+  String get modelViewerRetry => 'Thử lại';
+
+  @override
+  String get checkPrintabilityCta => 'Kiểm tra khả năng in';
+
+  @override
+  String get rateAndShareCta => 'Đánh giá & Chia sẻ';
 }
