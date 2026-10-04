@@ -95,5 +95,72 @@
   "processingCloudConnected": "Đã kết nối dịch vụ xử lý",
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
-  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi.",
+  "qualityRiskTitle": "Xác nhận rủi ro",
+  "qualityNeedsConfirmation": "CẦN XÁC NHẬN",
+  "qualityHeroTitle": "Chất lượng ảnh chưa hoàn toàn tối ưu",
+  "qualityHeroBody": "Bạn vẫn có thể dựng mô hình, nhưng một số ảnh có thể ảnh hưởng đến độ chính xác của mô hình 3D.",
+  "qualitySummaryTitle": "Tóm tắt chất lượng ảnh",
+  "qualityQualified": "Đạt chuẩn",
+  "qualityNeedsAttention": "Cần lưu ý",
+  "qualityOverallScore": "Chất lượng tổng thể",
+  "qualityPercentage": "{value}%",
+  "@qualityPercentage": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "qualityReviewImages": "{count, plural, =0{Xem cảnh báo chất lượng} other{{count} ảnh cần được xem xét}}",
+  "@qualityReviewImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityViewDetails": "Xem chi tiết cảnh báo & mức độ ảnh hưởng",
+  "qualityRiskDetailsTitle": "Kiểm tra trước khi tiếp tục",
+  "qualityRiskDetailsSubtitle": "{count, plural, =0{Xem cảnh báo chất lượng trước khi quyết định.} other{Xem ảnh hưởng có thể có của {count} ảnh trước khi quyết định.}}",
+  "@qualityRiskDetailsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityAffectedImages": "Ảnh cần lưu ý",
+  "qualityAdditionalAffectedImages": "Còn {count} ảnh cần lưu ý",
+  "@qualityAdditionalAffectedImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityNoAffectedImages": "Không có ảnh cần lưu ý để xem trước.",
+  "qualityImpactTitle": "Điều này có thể ảnh hưởng gì?",
+  "qualitySurfaceRisk": "Chi tiết bề mặt có thể kém sắc nét ở một số vùng.",
+  "qualityGeometryRisk": "Độ chính xác hình học có thể giảm nhẹ ở những vùng chụp chưa tốt.",
+  "qualityReassurance": "Bạn có thể tiếp tục với bộ ảnh hiện tại hoặc quay lại cải thiện ảnh chụp để có kết quả tốt hơn.",
+  "qualityAcknowledgement": "Tôi hiểu rủi ro và vẫn muốn tiếp tục",
+  "qualityAcknowledgementHint": "Cảnh báo chất lượng có thể ảnh hưởng đến kết quả 3D cuối cùng. Chỉ xác nhận khi bạn sẵn sàng chấp nhận những rủi ro này.",
+  "qualityCloseDetails": "Đóng chi tiết rủi ro",
+  "qualityContextChanged": "Báo cáo chất lượng đã thay đổi. Đóng bảng này và xem báo cáo hiện tại.",
+  "qualityContinue": "Xác nhận và tiếp tục",
+  "qualitySubmitting": "Đang xác nhận...",
+  "qualityBackToImages": "Quay lại kiểm tra ảnh",
+  "qualityBackToReport": "Quay lại báo cáo chất lượng",
+  "qualityBlockedStatus": "CHƯA THỂ TIẾP TỤC",
+  "qualityRejectedTitle": "Không thể tiếp tục với bộ ảnh này",
+  "qualityRejectedBody": "Chất lượng ảnh hiện chưa phù hợp để tiếp tục. Vui lòng quay lại kiểm tra ảnh.",
+  "qualityIneligibleStatus": "CẦN KIỂM TRA LẠI",
+  "qualityIneligibleTitle": "Vui lòng quay lại báo cáo chất lượng",
+  "qualityIneligibleBody": "Xác nhận rủi ro không khả dụng cho báo cáo này. Quay lại kiểm tra chất lượng ảnh hiện tại.",
+  "qualityRecoverableFailure": "Chưa thể xác nhận yêu cầu. Lựa chọn xác nhận rủi ro của bạn đã được giữ lại; vui lòng thử lại.",
+  "qualityRetry": "Thử xác nhận lại",
+  "qualityConfirmedStatus": "ĐÃ XÁC NHẬN",
+  "qualityConfirmedTitle": "Đã xác nhận rủi ro",
+  "qualityConfirmedBody": "Xác nhận của bạn đã được chấp nhận."
 }
