@@ -95,5 +95,72 @@
   "processingCloudConnected": "Processing service connected",
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
-  "processingFailedBody": "The processing service reported a problem."
+  "processingFailedBody": "The processing service reported a problem.",
+  "qualityRiskTitle": "Confirm risks",
+  "qualityNeedsConfirmation": "CONFIRMATION NEEDED",
+  "qualityHeroTitle": "Image quality is not fully optimal",
+  "qualityHeroBody": "Reconstruction is still possible, but some images may affect the accuracy of your 3D model.",
+  "qualitySummaryTitle": "Image quality summary",
+  "qualityQualified": "Qualified",
+  "qualityNeedsAttention": "Needs attention",
+  "qualityOverallScore": "Overall quality",
+  "qualityPercentage": "{value}%",
+  "@qualityPercentage": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "qualityReviewImages": "{count, plural, =0{Review quality warnings} =1{1 image needs review} other{{count} images need review}}",
+  "@qualityReviewImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityViewDetails": "View warnings and potential impact",
+  "qualityRiskDetailsTitle": "Check before continuing",
+  "qualityRiskDetailsSubtitle": "{count, plural, =0{Review the quality warnings before deciding.} =1{Review the possible impact of 1 image before deciding.} other{Review the possible impact of {count} images before deciding.}}",
+  "@qualityRiskDetailsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityAffectedImages": "Images needing attention",
+  "qualityAdditionalAffectedImages": "{count} additional images need attention",
+  "@qualityAdditionalAffectedImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityNoAffectedImages": "No affected images to preview.",
+  "qualityImpactTitle": "What could this affect?",
+  "qualitySurfaceRisk": "Surface details may be less sharp in some areas.",
+  "qualityGeometryRisk": "Geometry may be slightly less accurate in poorly captured areas.",
+  "qualityReassurance": "You can continue with these images, or go back to improve the capture for potentially better results.",
+  "qualityAcknowledgement": "I understand the risks and still want to continue",
+  "qualityAcknowledgementHint": "Quality warnings may affect the final 3D result. Confirm only when you are ready to accept these risks.",
+  "qualityCloseDetails": "Close risk details",
+  "qualityContextChanged": "The quality report changed. Close this sheet and review the current report.",
+  "qualityContinue": "Confirm and continue",
+  "qualitySubmitting": "Confirming…",
+  "qualityBackToImages": "Go back to review images",
+  "qualityBackToReport": "Go back to the quality report",
+  "qualityBlockedStatus": "UNABLE TO CONTINUE",
+  "qualityRejectedTitle": "Cannot continue with these images",
+  "qualityRejectedBody": "The current image quality is not suitable for continuing. Please go back to review your images.",
+  "qualityIneligibleStatus": "REVIEW REQUIRED",
+  "qualityIneligibleTitle": "Please return to the quality report",
+  "qualityIneligibleBody": "Risk confirmation is not available for this report. Go back to review the current image quality.",
+  "qualityRecoverableFailure": "We could not confirm your request. Your acknowledgement is saved; please try again.",
+  "qualityRetry": "Try confirmation again",
+  "qualityConfirmedStatus": "CONFIRMED",
+  "qualityConfirmedTitle": "Risks confirmed",
+  "qualityConfirmedBody": "Your confirmation has been accepted."
 }

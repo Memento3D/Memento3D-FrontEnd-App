@@ -303,4 +303,153 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get qualityRiskTitle => 'Confirm risks';
+
+  @override
+  String get qualityNeedsConfirmation => 'CONFIRMATION NEEDED';
+
+  @override
+  String get qualityHeroTitle => 'Image quality is not fully optimal';
+
+  @override
+  String get qualityHeroBody =>
+      'Reconstruction is still possible, but some images may affect the accuracy of your 3D model.';
+
+  @override
+  String get qualitySummaryTitle => 'Image quality summary';
+
+  @override
+  String get qualityQualified => 'Qualified';
+
+  @override
+  String get qualityNeedsAttention => 'Needs attention';
+
+  @override
+  String get qualityOverallScore => 'Overall quality';
+
+  @override
+  String qualityPercentage(String value) {
+    return '$value%';
+  }
+
+  @override
+  String qualityReviewImages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count images need review',
+      one: '1 image needs review',
+      zero: 'Review quality warnings',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get qualityViewDetails => 'View warnings and potential impact';
+
+  @override
+  String get qualityRiskDetailsTitle => 'Check before continuing';
+
+  @override
+  String qualityRiskDetailsSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Review the possible impact of $count images before deciding.',
+      one: 'Review the possible impact of 1 image before deciding.',
+      zero: 'Review the quality warnings before deciding.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get qualityAffectedImages => 'Images needing attention';
+
+  @override
+  String qualityAdditionalAffectedImages(int count) {
+    return '$count additional images need attention';
+  }
+
+  @override
+  String get qualityNoAffectedImages => 'No affected images to preview.';
+
+  @override
+  String get qualityImpactTitle => 'What could this affect?';
+
+  @override
+  String get qualitySurfaceRisk =>
+      'Surface details may be less sharp in some areas.';
+
+  @override
+  String get qualityGeometryRisk =>
+      'Geometry may be slightly less accurate in poorly captured areas.';
+
+  @override
+  String get qualityReassurance =>
+      'You can continue with these images, or go back to improve the capture for potentially better results.';
+
+  @override
+  String get qualityAcknowledgement =>
+      'I understand the risks and still want to continue';
+
+  @override
+  String get qualityAcknowledgementHint =>
+      'Quality warnings may affect the final 3D result. Confirm only when you are ready to accept these risks.';
+
+  @override
+  String get qualityCloseDetails => 'Close risk details';
+
+  @override
+  String get qualityContextChanged =>
+      'The quality report changed. Close this sheet and review the current report.';
+
+  @override
+  String get qualityContinue => 'Confirm and continue';
+
+  @override
+  String get qualitySubmitting => 'Confirming…';
+
+  @override
+  String get qualityBackToImages => 'Go back to review images';
+
+  @override
+  String get qualityBackToReport => 'Go back to the quality report';
+
+  @override
+  String get qualityBlockedStatus => 'UNABLE TO CONTINUE';
+
+  @override
+  String get qualityRejectedTitle => 'Cannot continue with these images';
+
+  @override
+  String get qualityRejectedBody =>
+      'The current image quality is not suitable for continuing. Please go back to review your images.';
+
+  @override
+  String get qualityIneligibleStatus => 'REVIEW REQUIRED';
+
+  @override
+  String get qualityIneligibleTitle => 'Please return to the quality report';
+
+  @override
+  String get qualityIneligibleBody =>
+      'Risk confirmation is not available for this report. Go back to review the current image quality.';
+
+  @override
+  String get qualityRecoverableFailure =>
+      'We could not confirm your request. Your acknowledgement is saved; please try again.';
+
+  @override
+  String get qualityRetry => 'Try confirmation again';
+
+  @override
+  String get qualityConfirmedStatus => 'CONFIRMED';
+
+  @override
+  String get qualityConfirmedTitle => 'Risks confirmed';
+
+  @override
+  String get qualityConfirmedBody => 'Your confirmation has been accepted.';
 }

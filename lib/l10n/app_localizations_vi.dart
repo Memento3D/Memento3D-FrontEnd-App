@@ -302,4 +302,150 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get qualityRiskTitle => 'Xác nhận rủi ro';
+
+  @override
+  String get qualityNeedsConfirmation => 'CẦN XÁC NHẬN';
+
+  @override
+  String get qualityHeroTitle => 'Chất lượng ảnh chưa hoàn toàn tối ưu';
+
+  @override
+  String get qualityHeroBody =>
+      'Bạn vẫn có thể dựng mô hình, nhưng một số ảnh có thể ảnh hưởng đến độ chính xác của mô hình 3D.';
+
+  @override
+  String get qualitySummaryTitle => 'Tóm tắt chất lượng ảnh';
+
+  @override
+  String get qualityQualified => 'Đạt chuẩn';
+
+  @override
+  String get qualityNeedsAttention => 'Cần lưu ý';
+
+  @override
+  String get qualityOverallScore => 'Chất lượng tổng thể';
+
+  @override
+  String qualityPercentage(String value) {
+    return '$value%';
+  }
+
+  @override
+  String qualityReviewImages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ảnh cần được xem xét',
+      zero: 'Xem cảnh báo chất lượng',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get qualityViewDetails => 'Xem chi tiết cảnh báo & mức độ ảnh hưởng';
+
+  @override
+  String get qualityRiskDetailsTitle => 'Kiểm tra trước khi tiếp tục';
+
+  @override
+  String qualityRiskDetailsSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Xem ảnh hưởng có thể có của $count ảnh trước khi quyết định.',
+      zero: 'Xem cảnh báo chất lượng trước khi quyết định.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get qualityAffectedImages => 'Ảnh cần lưu ý';
+
+  @override
+  String qualityAdditionalAffectedImages(int count) {
+    return 'Còn $count ảnh cần lưu ý';
+  }
+
+  @override
+  String get qualityNoAffectedImages => 'Không có ảnh cần lưu ý để xem trước.';
+
+  @override
+  String get qualityImpactTitle => 'Điều này có thể ảnh hưởng gì?';
+
+  @override
+  String get qualitySurfaceRisk =>
+      'Chi tiết bề mặt có thể kém sắc nét ở một số vùng.';
+
+  @override
+  String get qualityGeometryRisk =>
+      'Độ chính xác hình học có thể giảm nhẹ ở những vùng chụp chưa tốt.';
+
+  @override
+  String get qualityReassurance =>
+      'Bạn có thể tiếp tục với bộ ảnh hiện tại hoặc quay lại cải thiện ảnh chụp để có kết quả tốt hơn.';
+
+  @override
+  String get qualityAcknowledgement => 'Tôi hiểu rủi ro và vẫn muốn tiếp tục';
+
+  @override
+  String get qualityAcknowledgementHint =>
+      'Cảnh báo chất lượng có thể ảnh hưởng đến kết quả 3D cuối cùng. Chỉ xác nhận khi bạn sẵn sàng chấp nhận những rủi ro này.';
+
+  @override
+  String get qualityCloseDetails => 'Đóng chi tiết rủi ro';
+
+  @override
+  String get qualityContextChanged =>
+      'Báo cáo chất lượng đã thay đổi. Đóng bảng này và xem báo cáo hiện tại.';
+
+  @override
+  String get qualityContinue => 'Xác nhận và tiếp tục';
+
+  @override
+  String get qualitySubmitting => 'Đang xác nhận...';
+
+  @override
+  String get qualityBackToImages => 'Quay lại kiểm tra ảnh';
+
+  @override
+  String get qualityBackToReport => 'Quay lại báo cáo chất lượng';
+
+  @override
+  String get qualityBlockedStatus => 'CHƯA THỂ TIẾP TỤC';
+
+  @override
+  String get qualityRejectedTitle => 'Không thể tiếp tục với bộ ảnh này';
+
+  @override
+  String get qualityRejectedBody =>
+      'Chất lượng ảnh hiện chưa phù hợp để tiếp tục. Vui lòng quay lại kiểm tra ảnh.';
+
+  @override
+  String get qualityIneligibleStatus => 'CẦN KIỂM TRA LẠI';
+
+  @override
+  String get qualityIneligibleTitle => 'Vui lòng quay lại báo cáo chất lượng';
+
+  @override
+  String get qualityIneligibleBody =>
+      'Xác nhận rủi ro không khả dụng cho báo cáo này. Quay lại kiểm tra chất lượng ảnh hiện tại.';
+
+  @override
+  String get qualityRecoverableFailure =>
+      'Chưa thể xác nhận yêu cầu. Lựa chọn xác nhận rủi ro của bạn đã được giữ lại; vui lòng thử lại.';
+
+  @override
+  String get qualityRetry => 'Thử xác nhận lại';
+
+  @override
+  String get qualityConfirmedStatus => 'ĐÃ XÁC NHẬN';
+
+  @override
+  String get qualityConfirmedTitle => 'Đã xác nhận rủi ro';
+
+  @override
+  String get qualityConfirmedBody => 'Xác nhận của bạn đã được chấp nhận.';
 }

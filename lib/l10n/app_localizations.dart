@@ -643,6 +643,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @qualityRiskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm risks'**
+  String get qualityRiskTitle;
+
+  /// No description provided for @qualityNeedsConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'CONFIRMATION NEEDED'**
+  String get qualityNeedsConfirmation;
+
+  /// No description provided for @qualityHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image quality is not fully optimal'**
+  String get qualityHeroTitle;
+
+  /// No description provided for @qualityHeroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconstruction is still possible, but some images may affect the accuracy of your 3D model.'**
+  String get qualityHeroBody;
+
+  /// No description provided for @qualitySummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image quality summary'**
+  String get qualitySummaryTitle;
+
+  /// No description provided for @qualityQualified.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualified'**
+  String get qualityQualified;
+
+  /// No description provided for @qualityNeedsAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs attention'**
+  String get qualityNeedsAttention;
+
+  /// No description provided for @qualityOverallScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall quality'**
+  String get qualityOverallScore;
+
+  /// No description provided for @qualityPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String qualityPercentage(String value);
+
+  /// No description provided for @qualityReviewImages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Review quality warnings} =1{1 image needs review} other{{count} images need review}}'**
+  String qualityReviewImages(int count);
+
+  /// No description provided for @qualityViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View warnings and potential impact'**
+  String get qualityViewDetails;
+
+  /// No description provided for @qualityRiskDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check before continuing'**
+  String get qualityRiskDetailsTitle;
+
+  /// No description provided for @qualityRiskDetailsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Review the quality warnings before deciding.} =1{Review the possible impact of 1 image before deciding.} other{Review the possible impact of {count} images before deciding.}}'**
+  String qualityRiskDetailsSubtitle(int count);
+
+  /// No description provided for @qualityAffectedImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Images needing attention'**
+  String get qualityAffectedImages;
+
+  /// No description provided for @qualityAdditionalAffectedImages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} additional images need attention'**
+  String qualityAdditionalAffectedImages(int count);
+
+  /// No description provided for @qualityNoAffectedImages.
+  ///
+  /// In en, this message translates to:
+  /// **'No affected images to preview.'**
+  String get qualityNoAffectedImages;
+
+  /// No description provided for @qualityImpactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What could this affect?'**
+  String get qualityImpactTitle;
+
+  /// No description provided for @qualitySurfaceRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Surface details may be less sharp in some areas.'**
+  String get qualitySurfaceRisk;
+
+  /// No description provided for @qualityGeometryRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Geometry may be slightly less accurate in poorly captured areas.'**
+  String get qualityGeometryRisk;
+
+  /// No description provided for @qualityReassurance.
+  ///
+  /// In en, this message translates to:
+  /// **'You can continue with these images, or go back to improve the capture for potentially better results.'**
+  String get qualityReassurance;
+
+  /// No description provided for @qualityAcknowledgement.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand the risks and still want to continue'**
+  String get qualityAcknowledgement;
+
+  /// No description provided for @qualityAcknowledgementHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality warnings may affect the final 3D result. Confirm only when you are ready to accept these risks.'**
+  String get qualityAcknowledgementHint;
+
+  /// No description provided for @qualityCloseDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Close risk details'**
+  String get qualityCloseDetails;
+
+  /// No description provided for @qualityContextChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The quality report changed. Close this sheet and review the current report.'**
+  String get qualityContextChanged;
+
+  /// No description provided for @qualityContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm and continue'**
+  String get qualityContinue;
+
+  /// No description provided for @qualitySubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirming…'**
+  String get qualitySubmitting;
+
+  /// No description provided for @qualityBackToImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back to review images'**
+  String get qualityBackToImages;
+
+  /// No description provided for @qualityBackToReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back to the quality report'**
+  String get qualityBackToReport;
+
+  /// No description provided for @qualityBlockedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'UNABLE TO CONTINUE'**
+  String get qualityBlockedStatus;
+
+  /// No description provided for @qualityRejectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot continue with these images'**
+  String get qualityRejectedTitle;
+
+  /// No description provided for @qualityRejectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The current image quality is not suitable for continuing. Please go back to review your images.'**
+  String get qualityRejectedBody;
+
+  /// No description provided for @qualityIneligibleStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'REVIEW REQUIRED'**
+  String get qualityIneligibleStatus;
+
+  /// No description provided for @qualityIneligibleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please return to the quality report'**
+  String get qualityIneligibleTitle;
+
+  /// No description provided for @qualityIneligibleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk confirmation is not available for this report. Go back to review the current image quality.'**
+  String get qualityIneligibleBody;
+
+  /// No description provided for @qualityRecoverableFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not confirm your request. Your acknowledgement is saved; please try again.'**
+  String get qualityRecoverableFailure;
+
+  /// No description provided for @qualityRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try confirmation again'**
+  String get qualityRetry;
+
+  /// No description provided for @qualityConfirmedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'CONFIRMED'**
+  String get qualityConfirmedStatus;
+
+  /// No description provided for @qualityConfirmedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Risks confirmed'**
+  String get qualityConfirmedTitle;
+
+  /// No description provided for @qualityConfirmedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your confirmation has been accepted.'**
+  String get qualityConfirmedBody;
 }
 
 class _AppLocalizationsDelegate
