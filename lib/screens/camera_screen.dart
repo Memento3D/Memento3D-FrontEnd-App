@@ -6,12 +6,29 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import 'camera_view.dart';
+import 'video_recording.dart';
+import 'capture_mode.dart';
 import 'capture_review_screen.dart';
+import 'video_preview_screen.dart';
+import 'video_playback.dart';
 import 'capture_session.dart';
 import 'capture_wizard.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  const CameraScreen({
+    super.key,
+    this.developmentWrapper,
+    this.cameraFactory,
+    this.previewPlaybackFactory,
+  });
+
+  /// Hardware-free integration tests; controller ownership stays in this screen.
+  final Future<CameraController> Function()? cameraFactory;
+  final VideoPlaybackFactory? previewPlaybackFactory;
+
+  /// Optional device-harness decoration; absent from production capture routes.
+  final Widget Function(BuildContext, VideoRecordingDiagnostics, Widget)?
+  developmentWrapper;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -20,6 +37,86 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _controller;
+  final VideoRecordingCoordinator _video = VideoRecordingCoordinator();
+  Future<void> _cameraRelease = Future.value();
+  bool _foreground = true;
+  bool _exiting = false;
+  bool _allowPop = false;
+
+  void _videoChanged() {
+    if (!mounted) return;
+    setState(() {});
+    final error = _video.error;
+    if (error != null && _video.state == VideoRecordingState.error) {
+      final strings = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            error == VideoRecordingError.finalize
+                ? strings.videoFinalizeError
+                : error == VideoRecordingError.unavailable
+                ? strings.cameraError
+                : strings.videoStartError,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _releaseCamera() {
+    ++_generation;
+    final controller = _controller;
+    _controller = null;
+    _cameraRelease = _cameraRelease.then((_) async {
+      await _video.quiesce();
+      await controller?.dispose();
+    });
+    return _cameraRelease;
+  }
+
+  Future<void> _exit() async {
+    if (_exiting) return;
+    _exiting = true;
+    setState(() {});
+    await _releaseCamera();
+    if (!mounted) return;
+    setState(() => _allowPop = true);
+    // PopScope must rebuild before the programmatic pop.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) return;
+    final exited = await Navigator.of(context).maybePop();
+    if (!exited && mounted) {
+      setState(() {
+        _exiting = false;
+        _allowPop = false;
+      });
+      if (_foreground) await _openCamera();
+    }
+  }
+
+  void _record() {
+    if (_exiting || !_foreground || _reviewOpen) return;
+    if (_video.state == VideoRecordingState.recording) {
+      unawaited(
+        _video.stop().then((_) async {
+          // A failed stop leaves plugin state uncertain: recycle before retry.
+          if (_video.error == VideoRecordingError.finalize && mounted) {
+            await _releaseCamera();
+            if (mounted && _foreground && !_exiting) await _openCamera();
+          }
+        }),
+      );
+    } else {
+      final controller = _controller;
+      unawaited(
+        _video.start(
+          controller == null ? null : CameraVideoRecorder(controller),
+        ),
+      );
+    }
+  }
+
+  CaptureMode _mode = CaptureMode.photo;
   final CaptureSession _session = CaptureSession();
   final CaptureWizardModel _wizard = CaptureWizardModel();
   StreamSubscription<AccelerometerEvent>? _gravitySubscription;
@@ -38,6 +135,7 @@ class _CameraScreenState extends State<CameraScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _video.addListener(_videoChanged);
     _openCamera();
     _startSensors();
   }
@@ -116,6 +214,14 @@ class _CameraScreenState extends State<CameraScreen>
 
   Future<void> _openCamera() async {
     final generation = ++_generation;
+    await _cameraRelease;
+    if (!mounted ||
+        !_foreground ||
+        _exiting ||
+        _reviewOpen ||
+        generation != _generation) {
+      return;
+    }
     final previous = _controller;
     setState(() {
       _controller = null;
@@ -125,17 +231,21 @@ class _CameraScreenState extends State<CameraScreen>
 
     CameraController? controller;
     try {
-      final cameras = await availableCameras();
-      if (cameras.isEmpty) throw StateError('No camera found');
-      final camera = cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.back,
-        orElse: () => cameras.first,
-      );
-      controller = CameraController(
-        camera,
-        ResolutionPreset.high,
-        enableAudio: false,
-      );
+      if (widget.cameraFactory != null) {
+        controller = await widget.cameraFactory!();
+      } else {
+        final cameras = await availableCameras();
+        if (cameras.isEmpty) throw StateError('No camera found');
+        final camera = cameras.firstWhere(
+          (camera) => camera.lensDirection == CameraLensDirection.back,
+          orElse: () => cameras.first,
+        );
+        controller = CameraController(
+          camera,
+          ResolutionPreset.high,
+          enableAudio: false,
+        );
+      }
       await controller.initialize();
       if (!mounted || generation != _generation) {
         await controller.dispose();
@@ -155,21 +265,27 @@ class _CameraScreenState extends State<CameraScreen>
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
-      ++_generation;
-      final controller = _controller;
-      _controller = null;
-      controller?.dispose();
+      _foreground = false;
+      unawaited(_releaseCamera());
       _stopSensors();
       if (mounted) setState(() {});
-    } else if (state == AppLifecycleState.resumed && _controller == null) {
-      _openCamera();
-      _startSensors();
+    } else if (state == AppLifecycleState.resumed) {
+      _foreground = true;
+      if (!_exiting && !_reviewOpen) {
+        _openCamera();
+        _startSensors();
+      }
     }
   }
 
   Future<void> _capture() async {
     final controller = _controller;
-    if (controller == null || !controller.value.isInitialized || _capturing) {
+    if (_exiting ||
+        !_foreground ||
+        _video.busy ||
+        controller == null ||
+        !controller.value.isInitialized ||
+        _capturing) {
       return;
     }
     setState(() => _capturing = true);
@@ -195,27 +311,42 @@ class _CameraScreenState extends State<CameraScreen>
     }
   }
 
-  Future<void> _openReview() async {
-    if (!_session.canReview || _reviewOpen) return;
-    _reviewOpen = true;
-    ++_generation;
-    final controller = _controller;
-    setState(() => _controller = null);
+  Future<void> _openReview() =>
+      _showReview(CaptureReviewScreen(session: _session), video: false);
+
+  Future<void> _openVideoReview() => _showReview(
+    VideoPreviewScreen(
+      session: _video.videoSession,
+      playbackFactory: widget.previewPlaybackFactory,
+    ),
+    video: true,
+  );
+
+  Future<void> _showReview(Widget review, {required bool video}) async {
+    if (_reviewOpen || _exiting || !_foreground || _capturing || _video.busy) {
+      return;
+    }
+    if (video) {
+      if (_mode != CaptureMode.video || !_video.videoSession.canReview) return;
+    } else if (!_session.canReview) {
+      return;
+    }
+    // Install navigation guard before any release or plugin awaits.
+    setState(() => _reviewOpen = true);
     _stopSensors();
-    await controller?.dispose();
-    if (!mounted) return;
     try {
-      await Navigator.of(context).push<void>(
-        MaterialPageRoute(
-          builder: (context) => CaptureReviewScreen(session: _session),
-        ),
-      );
+      await _releaseCamera();
+      if (!mounted || !_foreground || _exiting) return;
+      await Navigator.of(context)
+          .push<void>(MaterialPageRoute(builder: (_) => review));
     } finally {
       _reviewOpen = false;
       if (mounted) {
         setState(() {});
-        _openCamera();
-        _startSensors();
+        if (_foreground && !_exiting) {
+          await _openCamera();
+          if (mounted && _foreground && !_exiting) _startSensors();
+        }
       }
     }
   }
@@ -226,21 +357,57 @@ class _CameraScreenState extends State<CameraScreen>
     ++_generation;
     _feedbackTimer?.cancel();
     _stopSensors();
-    _controller?.dispose();
+    unawaited(_releaseCamera());
+    _video.removeListener(_videoChanged);
+    _video.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return CameraView(
-      controller: _controller,
-      capturedPhotos: _session.capturedPhotos,
-      wizardState: _wizard.stateAt(DateTime.now()),
-      capturing: _capturing,
-      cameraFailed: _cameraFailed,
-      onCapture: _capture,
-      onRetry: _openCamera,
-      onDone: _session.canReview ? _openReview : null,
+    final capture = PopScope(
+      canPop: _allowPop,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) unawaited(_exit());
+      },
+      child: CameraView(
+        onBack: () => unawaited(_exit()),
+        videoState: _video.state,
+        videoElapsed: _video.elapsed,
+        hasVideo: _video.videoSession.hasVideo,
+        onVideoReview:
+            _mode == CaptureMode.video &&
+                _video.videoSession.canReview &&
+                !_video.busy &&
+                !_reviewOpen &&
+                !_capturing &&
+                !_exiting &&
+                _foreground
+            ? _openVideoReview
+            : null,
+        onVideoRecord:
+            !_exiting &&
+                !_reviewOpen &&
+                _foreground &&
+                !_capturing &&
+                (_controller?.value.isInitialized ?? false) &&
+                (_video.state == VideoRecordingState.recording || !_video.busy)
+            ? _record
+            : null,
+        mode: _mode,
+        onModeChanged: _capturing || _video.busy || _exiting || _reviewOpen
+            ? null
+            : (mode) => setState(() => _mode = mode),
+        controller: _controller,
+        capturedPhotos: _session.capturedPhotos,
+        wizardState: _wizard.stateAt(DateTime.now()),
+        capturing: _capturing,
+        cameraFailed: _cameraFailed,
+        onCapture: _capture,
+        onRetry: _openCamera,
+        onDone: _session.canReview ? _openReview : null,
+      ),
     );
+    return widget.developmentWrapper?.call(context, _video, capture) ?? capture;
   }
 }

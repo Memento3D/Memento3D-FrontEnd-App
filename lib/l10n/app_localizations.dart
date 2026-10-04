@@ -200,24 +200,6 @@ abstract class AppLocalizations {
   /// **'Next step'**
   String get nextStep;
 
-  /// No description provided for @restorationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Wabi-Sabi restoration'**
-  String get restorationTitle;
-
-  /// No description provided for @restorationBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Preserve every detail of your object\'s story.'**
-  String get restorationBody;
-
-  /// No description provided for @automatic.
-  ///
-  /// In en, this message translates to:
-  /// **'Automatic'**
-  String get automatic;
-
   /// No description provided for @cameraUnavailable.
   ///
   /// In en, this message translates to:
@@ -643,6 +625,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @captureLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get captureLibrary;
+
+  /// No description provided for @captureCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get captureCollection;
+
+  /// No description provided for @capturePrints.
+  ///
+  /// In en, this message translates to:
+  /// **'Prints'**
+  String get capturePrints;
+
+  /// No description provided for @captureStudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Creation Studio'**
+  String get captureStudio;
+
+  /// No description provided for @captureSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get captureSettings;
+
+  /// No description provided for @captureCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get captureCamera;
+
+  /// No description provided for @recordVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Record video'**
+  String get recordVideo;
+
+  /// No description provided for @stopVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop recording'**
+  String get stopVideo;
+
+  /// No description provided for @videoStartError.
+  ///
+  /// In en, this message translates to:
+  /// **'Video recording could not start. Try again.'**
+  String get videoStartError;
+
+  /// No description provided for @videoFinalizeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Video could not be finalized. Try recording again.'**
+  String get videoFinalizeError;
+
+  /// No description provided for @recordedVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded video'**
+  String get recordedVideo;
+
+  /// No description provided for @videoUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Video unavailable'**
+  String get videoUnavailable;
+
+  /// No description provided for @videoFileChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'File has changed since recording. Size shown is from finalization.'**
+  String get videoFileChanged;
+
+  /// No description provided for @videoPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video preview'**
+  String get videoPreviewTitle;
+
+  /// No description provided for @videoFinalizedSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Size at capture'**
+  String get videoFinalizedSize;
+
+  /// No description provided for @videoNotSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No video selected'**
+  String get videoNotSelected;
+
+  /// No description provided for @videoLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading video...'**
+  String get videoLoading;
+
+  /// No description provided for @videoPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get videoPlay;
+
+  /// No description provided for @videoPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get videoPause;
+
+  /// No description provided for @videoDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {duration}'**
+  String videoDuration(String duration);
+
+  /// No description provided for @videoTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Video must be at least {seconds} seconds long.'**
+  String videoTooShort(int seconds);
+
+  /// No description provided for @videoDurationSatisfied.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum duration met.'**
+  String get videoDurationSatisfied;
+
+  /// No description provided for @videoPlaybackError.
+  ///
+  /// In en, this message translates to:
+  /// **'This video couldn’t be played. Try recording another video.'**
+  String get videoPlaybackError;
 }
 
 class _AppLocalizationsDelegate
