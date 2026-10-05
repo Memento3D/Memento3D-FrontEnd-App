@@ -10,6 +10,141 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get resetPasswordInvalidTitle => 'Liên kết đã hết hạn';
+
+  @override
+  String get resetPasswordInvalidBody =>
+      'Không thể sử dụng liên kết đặt lại mật khẩu này. Vui lòng yêu cầu liên kết mới để tiếp tục.';
+
+  @override
+  String get resetPasswordRequestNewLink => 'Yêu cầu liên kết mới';
+
+  @override
+  String get resetPasswordBackToLogin => 'Quay lại đăng nhập';
+
+  @override
+  String get resetPasswordSuccessTitle => 'Đặt lại mật khẩu thành công';
+
+  @override
+  String get resetPasswordSuccessBody =>
+      'Mật khẩu của bạn đã được đặt lại. Hãy đăng nhập bằng mật khẩu mới.';
+
+  @override
+  String get resetPasswordHeader => 'Đặt lại mật khẩu';
+
+  @override
+  String get resetPasswordTitle => 'Tạo mật khẩu mới';
+
+  @override
+  String get resetPasswordSupport => 'Tạo mật khẩu mới cho tài khoản của bạn.';
+
+  @override
+  String get resetPasswordNewPassword => 'Mật khẩu mới';
+
+  @override
+  String get resetPasswordConfirmPassword => 'Xác nhận mật khẩu';
+
+  @override
+  String get resetPasswordShowPassword => 'Hiện mật khẩu';
+
+  @override
+  String get resetPasswordHidePassword => 'Ẩn mật khẩu';
+
+  @override
+  String get resetPasswordNewRequired => 'Vui lòng nhập mật khẩu mới.';
+
+  @override
+  String get resetPasswordConfirmRequired => 'Vui lòng xác nhận mật khẩu.';
+
+  @override
+  String get resetPasswordMismatch => 'Mật khẩu xác nhận không khớp.';
+
+  @override
+  String get resetPasswordSubmit => 'Đặt lại mật khẩu';
+
+  @override
+  String get resetPasswordSubmitting => 'Đang đặt lại mật khẩu…';
+
+  @override
+  String get resetPasswordTechnicalFailure =>
+      'Không thể đặt lại mật khẩu lúc này. Vui lòng thử lại.';
+
+  @override
+  String get resetPasswordRetry => 'Thử lại';
+
+  @override
+  String get resetPasswordCancel => 'Hủy';
+
+  @override
+  String get forgotPasswordSubmitting => 'Đang gửi yêu cầu…';
+
+  @override
+  String get forgotPasswordSentTitle => 'Kiểm tra email của bạn';
+
+  @override
+  String get forgotPasswordSentBody =>
+      'Nếu email tồn tại, bạn sẽ nhận được hướng dẫn đặt lại mật khẩu.';
+
+  @override
+  String get forgotPasswordSentSupport =>
+      'Vui lòng kiểm tra hộp thư đến và làm theo liên kết trong email để tiếp tục.';
+
+  @override
+  String get forgotPasswordGuidanceTitle => 'Chưa thấy email?';
+
+  @override
+  String get forgotPasswordSpamGuidance => 'Kiểm tra thư mục Spam / Thư rác.';
+
+  @override
+  String get forgotPasswordDeliveryGuidance =>
+      'Email có thể mất vài phút để đến.';
+
+  @override
+  String get forgotPasswordResend => 'Gửi lại hướng dẫn';
+
+  @override
+  String get forgotPasswordResending => 'Đang gửi lại hướng dẫn…';
+
+  @override
+  String get forgotPasswordTechnicalFailure =>
+      'Không thể gửi yêu cầu lúc này. Vui lòng thử lại.';
+
+  @override
+  String get forgotPasswordRetry => 'Thử lại';
+
+  @override
+  String get forgotPasswordHeader => 'Quên mật khẩu';
+
+  @override
+  String get forgotPasswordTitle => 'Quên mật khẩu?';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Đừng lo, chúng mình sẽ giúp bạn lấy lại quyền truy cập.';
+
+  @override
+  String get forgotPasswordEmailLabel => 'Email';
+
+  @override
+  String get forgotPasswordEmailHint => 'Nhập địa chỉ email của bạn';
+
+  @override
+  String get forgotPasswordEmailHelper =>
+      'Nhập email bạn đã dùng để đăng ký tài khoản.';
+
+  @override
+  String get forgotPasswordSubmit => 'Gửi hướng dẫn đặt lại';
+
+  @override
+  String get forgotPasswordCancel => 'Hủy';
+
+  @override
+  String get forgotPasswordBackToLogin => 'Quay lại đăng nhập';
+
+  @override
+  String get forgotPasswordEmailRequired => 'Vui lòng nhập địa chỉ email.';
+
+  @override
   String get captureTitle => 'Chụp';
 
   @override

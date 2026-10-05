@@ -98,6 +98,258 @@ abstract class AppLocalizations {
     Locale('vi'),
   ];
 
+  /// No description provided for @resetPasswordInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Link expired'**
+  String get resetPasswordInvalidTitle;
+
+  /// No description provided for @resetPasswordInvalidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This password reset link cannot be used. Request a new link to continue.'**
+  String get resetPasswordInvalidBody;
+
+  /// No description provided for @resetPasswordRequestNewLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Request a new link'**
+  String get resetPasswordRequestNewLink;
+
+  /// No description provided for @resetPasswordBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login'**
+  String get resetPasswordBackToLogin;
+
+  /// No description provided for @resetPasswordSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset successful'**
+  String get resetPasswordSuccessTitle;
+
+  /// No description provided for @resetPasswordSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password has been reset. Log in with your new password.'**
+  String get resetPasswordSuccessBody;
+
+  /// No description provided for @resetPasswordHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPasswordHeader;
+
+  /// No description provided for @resetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new password'**
+  String get resetPasswordTitle;
+
+  /// No description provided for @resetPasswordSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new password for your account.'**
+  String get resetPasswordSupport;
+
+  /// No description provided for @resetPasswordNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get resetPasswordNewPassword;
+
+  /// No description provided for @resetPasswordConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get resetPasswordConfirmPassword;
+
+  /// No description provided for @resetPasswordShowPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get resetPasswordShowPassword;
+
+  /// No description provided for @resetPasswordHidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get resetPasswordHidePassword;
+
+  /// No description provided for @resetPasswordNewRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a new password.'**
+  String get resetPasswordNewRequired;
+
+  /// No description provided for @resetPasswordConfirmRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password.'**
+  String get resetPasswordConfirmRequired;
+
+  /// No description provided for @resetPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The confirmation password does not match.'**
+  String get resetPasswordMismatch;
+
+  /// No description provided for @resetPasswordSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPasswordSubmit;
+
+  /// No description provided for @resetPasswordSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Resetting password…'**
+  String get resetPasswordSubmitting;
+
+  /// No description provided for @resetPasswordTechnicalFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to reset your password right now. Please try again.'**
+  String get resetPasswordTechnicalFailure;
+
+  /// No description provided for @resetPasswordRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get resetPasswordRetry;
+
+  /// No description provided for @resetPasswordCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get resetPasswordCancel;
+
+  /// No description provided for @forgotPasswordSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending request…'**
+  String get forgotPasswordSubmitting;
+
+  /// No description provided for @forgotPasswordSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email'**
+  String get forgotPasswordSentTitle;
+
+  /// No description provided for @forgotPasswordSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If the email exists, you will receive instructions to reset your password.'**
+  String get forgotPasswordSentBody;
+
+  /// No description provided for @forgotPasswordSentSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your inbox and follow the link in the email to continue.'**
+  String get forgotPasswordSentSupport;
+
+  /// No description provided for @forgotPasswordGuidanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No email yet?'**
+  String get forgotPasswordGuidanceTitle;
+
+  /// No description provided for @forgotPasswordSpamGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your Spam / Junk folder.'**
+  String get forgotPasswordSpamGuidance;
+
+  /// No description provided for @forgotPasswordDeliveryGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery may take a few minutes.'**
+  String get forgotPasswordDeliveryGuidance;
+
+  /// No description provided for @forgotPasswordResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend instructions'**
+  String get forgotPasswordResend;
+
+  /// No description provided for @forgotPasswordResending.
+  ///
+  /// In en, this message translates to:
+  /// **'Resending instructions…'**
+  String get forgotPasswordResending;
+
+  /// No description provided for @forgotPasswordTechnicalFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to send the request right now. Please try again.'**
+  String get forgotPasswordTechnicalFailure;
+
+  /// No description provided for @forgotPasswordRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get forgotPasswordRetry;
+
+  /// No description provided for @forgotPasswordHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password'**
+  String get forgotPasswordHeader;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t worry, we\'ll help you regain access.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @forgotPasswordEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get forgotPasswordEmailLabel;
+
+  /// No description provided for @forgotPasswordEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address'**
+  String get forgotPasswordEmailHint;
+
+  /// No description provided for @forgotPasswordEmailHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the email you used to create your account.'**
+  String get forgotPasswordEmailHelper;
+
+  /// No description provided for @forgotPasswordSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset instructions'**
+  String get forgotPasswordSubmit;
+
+  /// No description provided for @forgotPasswordCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get forgotPasswordCancel;
+
+  /// No description provided for @forgotPasswordBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login'**
+  String get forgotPasswordBackToLogin;
+
+  /// No description provided for @forgotPasswordEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email address.'**
+  String get forgotPasswordEmailRequired;
+
   /// No description provided for @captureTitle.
   ///
   /// In en, this message translates to:
