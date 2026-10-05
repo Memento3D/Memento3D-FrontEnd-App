@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'forgot_password_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/screens/register_screen.dart';
@@ -22,12 +23,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
+  bool _forgotRouteActive = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _openForgot() async {
+    if (!mounted || _forgotRouteActive) return;
+    _forgotRouteActive = true;
+    try {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(builder: (_) => const ForgotPasswordScreen()),
+      );
+    } finally {
+      // No setState or context access is needed when the route returns.
+      _forgotRouteActive = false;
+    }
   }
 
   Future<void> _handleLogin() async {
@@ -255,14 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Chức năng quên mật khẩu sẽ được bổ sung.'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              },
+              onTap: _openForgot,
               child: Text(
                 'Forgot password?',
                 style: GoogleFonts.plusJakartaSans(

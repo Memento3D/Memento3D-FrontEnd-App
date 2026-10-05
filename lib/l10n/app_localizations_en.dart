@@ -10,6 +10,142 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get resetPasswordInvalidTitle => 'Link expired';
+
+  @override
+  String get resetPasswordInvalidBody =>
+      'This password reset link cannot be used. Request a new link to continue.';
+
+  @override
+  String get resetPasswordRequestNewLink => 'Request a new link';
+
+  @override
+  String get resetPasswordBackToLogin => 'Back to login';
+
+  @override
+  String get resetPasswordSuccessTitle => 'Password reset successful';
+
+  @override
+  String get resetPasswordSuccessBody =>
+      'Your password has been reset. Log in with your new password.';
+
+  @override
+  String get resetPasswordHeader => 'Reset password';
+
+  @override
+  String get resetPasswordTitle => 'Create a new password';
+
+  @override
+  String get resetPasswordSupport => 'Create a new password for your account.';
+
+  @override
+  String get resetPasswordNewPassword => 'New password';
+
+  @override
+  String get resetPasswordConfirmPassword => 'Confirm password';
+
+  @override
+  String get resetPasswordShowPassword => 'Show password';
+
+  @override
+  String get resetPasswordHidePassword => 'Hide password';
+
+  @override
+  String get resetPasswordNewRequired => 'Please enter a new password.';
+
+  @override
+  String get resetPasswordConfirmRequired => 'Please confirm your password.';
+
+  @override
+  String get resetPasswordMismatch =>
+      'The confirmation password does not match.';
+
+  @override
+  String get resetPasswordSubmit => 'Reset password';
+
+  @override
+  String get resetPasswordSubmitting => 'Resetting password…';
+
+  @override
+  String get resetPasswordTechnicalFailure =>
+      'Unable to reset your password right now. Please try again.';
+
+  @override
+  String get resetPasswordRetry => 'Try again';
+
+  @override
+  String get resetPasswordCancel => 'Cancel';
+
+  @override
+  String get forgotPasswordSubmitting => 'Sending request…';
+
+  @override
+  String get forgotPasswordSentTitle => 'Check your email';
+
+  @override
+  String get forgotPasswordSentBody =>
+      'If the email exists, you will receive instructions to reset your password.';
+
+  @override
+  String get forgotPasswordSentSupport =>
+      'Please check your inbox and follow the link in the email to continue.';
+
+  @override
+  String get forgotPasswordGuidanceTitle => 'No email yet?';
+
+  @override
+  String get forgotPasswordSpamGuidance => 'Check your Spam / Junk folder.';
+
+  @override
+  String get forgotPasswordDeliveryGuidance =>
+      'Delivery may take a few minutes.';
+
+  @override
+  String get forgotPasswordResend => 'Resend instructions';
+
+  @override
+  String get forgotPasswordResending => 'Resending instructions…';
+
+  @override
+  String get forgotPasswordTechnicalFailure =>
+      'Unable to send the request right now. Please try again.';
+
+  @override
+  String get forgotPasswordRetry => 'Try again';
+
+  @override
+  String get forgotPasswordHeader => 'Forgot password';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot password?';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Don\'t worry, we\'ll help you regain access.';
+
+  @override
+  String get forgotPasswordEmailLabel => 'Email';
+
+  @override
+  String get forgotPasswordEmailHint => 'Enter your email address';
+
+  @override
+  String get forgotPasswordEmailHelper =>
+      'Enter the email you used to create your account.';
+
+  @override
+  String get forgotPasswordSubmit => 'Send reset instructions';
+
+  @override
+  String get forgotPasswordCancel => 'Cancel';
+
+  @override
+  String get forgotPasswordBackToLogin => 'Back to login';
+
+  @override
+  String get forgotPasswordEmailRequired => 'Please enter your email address.';
+
+  @override
   String get captureTitle => 'Capture';
 
   @override
