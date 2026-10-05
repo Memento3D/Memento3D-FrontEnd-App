@@ -64,16 +64,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get nextStep => 'Bước tiếp';
 
   @override
-  String get restorationTitle => 'Phục dựng Wabi-Sabi';
-
-  @override
-  String get restorationBody =>
-      'Lưu giữ từng chi tiết trong câu chuyện của vật thể.';
-
-  @override
-  String get automatic => 'Tự động';
-
-  @override
   String get cameraUnavailable => 'Không tìm thấy camera trên thiết bị.';
 
   @override
@@ -302,4 +292,106 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get captureLibrary => 'Thư viện';
+
+  @override
+  String get captureCollection => 'Bộ sưu tập';
+
+  @override
+  String get capturePrints => 'Bản in';
+
+  @override
+  String get captureStudio => 'Xưởng tạo';
+
+  @override
+  String get captureSettings => 'Cài đặt';
+
+  @override
+  String get captureCamera => 'Camera';
+
+  @override
+  String get recordVideo => 'Quay video';
+
+  @override
+  String get stopVideo => 'Dừng quay';
+
+  @override
+  String get videoStartError =>
+      'Không thể bắt đầu quay video. Vui lòng thử lại.';
+
+  @override
+  String get videoFinalizeError =>
+      'Không thể hoàn tất video. Vui lòng quay lại.';
+
+  @override
+  String get recordedVideo => 'Video đã quay';
+
+  @override
+  String get videoUnavailable => 'Không thể mở video';
+
+  @override
+  String get videoFileChanged =>
+      'Tệp đã thay đổi sau khi quay. Dung lượng hiển thị là khi hoàn tất quay.';
+
+  @override
+  String get videoPreviewTitle => 'Bản xem video';
+
+  @override
+  String get videoFinalizedSize => 'Dung lượng khi quay';
+
+  @override
+  String get videoNotSelected => 'Chưa chọn video';
+
+  @override
+  String get videoLoading => 'Đang tải video...';
+
+  @override
+  String get videoPlay => 'Phát';
+
+  @override
+  String get videoPause => 'Tạm dừng';
+
+  @override
+  String videoDuration(String duration) {
+    return 'Thời lượng: $duration';
+  }
+
+  @override
+  String videoTooShort(int seconds) {
+    return 'Video cần dài ít nhất $seconds giây.';
+  }
+
+  @override
+  String get videoDurationSatisfied => 'Đã đạt thời lượng tối thiểu.';
+
+  @override
+  String get videoPlaybackError =>
+      'Không thể phát video này. Vui lòng thử quay video khác.';
+
+  @override
+  String get importedVideo => 'Video từ thư viện';
+
+  @override
+  String get videoReplaceFromLibrary => 'Thay từ thư viện';
+
+  @override
+  String get videoImportFormatError =>
+      'Chọn video định dạng MP4, MOV hoặc AVI.';
+
+  @override
+  String get videoImportSizeError => 'Video đã chọn vượt quá giới hạn 2 GB.';
+
+  @override
+  String get videoImportValidationError =>
+      'Không thể xác minh dung lượng video đã chọn.';
+
+  @override
+  String get videoImportError =>
+      'Không thể chọn video từ thư viện. Vui lòng thử lại.';
+
+  @override
+  String get videoImportStorageError =>
+      'Không thể chuẩn bị video đã chọn. Vui lòng thử lại.';
 }

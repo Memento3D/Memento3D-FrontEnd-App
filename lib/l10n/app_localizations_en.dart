@@ -64,16 +64,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextStep => 'Next step';
 
   @override
-  String get restorationTitle => 'Wabi-Sabi restoration';
-
-  @override
-  String get restorationBody =>
-      'Preserve every detail of your object\'s story.';
-
-  @override
-  String get automatic => 'Automatic';
-
-  @override
   String get cameraUnavailable => 'No camera found on this device.';
 
   @override
@@ -303,4 +293,105 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get captureLibrary => 'Library';
+
+  @override
+  String get captureCollection => 'Collection';
+
+  @override
+  String get capturePrints => 'Prints';
+
+  @override
+  String get captureStudio => 'Creation Studio';
+
+  @override
+  String get captureSettings => 'Settings';
+
+  @override
+  String get captureCamera => 'Camera';
+
+  @override
+  String get recordVideo => 'Record video';
+
+  @override
+  String get stopVideo => 'Stop recording';
+
+  @override
+  String get videoStartError => 'Video recording could not start. Try again.';
+
+  @override
+  String get videoFinalizeError =>
+      'Video could not be finalized. Try recording again.';
+
+  @override
+  String get recordedVideo => 'Recorded video';
+
+  @override
+  String get videoUnavailable => 'Video unavailable';
+
+  @override
+  String get videoFileChanged =>
+      'File has changed since recording. Size shown is from finalization.';
+
+  @override
+  String get videoPreviewTitle => 'Video preview';
+
+  @override
+  String get videoFinalizedSize => 'Size at capture';
+
+  @override
+  String get videoNotSelected => 'No video selected';
+
+  @override
+  String get videoLoading => 'Loading video...';
+
+  @override
+  String get videoPlay => 'Play';
+
+  @override
+  String get videoPause => 'Pause';
+
+  @override
+  String videoDuration(String duration) {
+    return 'Duration: $duration';
+  }
+
+  @override
+  String videoTooShort(int seconds) {
+    return 'Video must be at least $seconds seconds long.';
+  }
+
+  @override
+  String get videoDurationSatisfied => 'Minimum duration met.';
+
+  @override
+  String get videoPlaybackError =>
+      'This video couldn’t be played. Try recording another video.';
+
+  @override
+  String get importedVideo => 'Imported video';
+
+  @override
+  String get videoReplaceFromLibrary => 'Replace from library';
+
+  @override
+  String get videoImportFormatError => 'Select an MP4, MOV, or AVI video.';
+
+  @override
+  String get videoImportSizeError =>
+      'The selected video exceeds the 2 GB limit.';
+
+  @override
+  String get videoImportValidationError =>
+      'Unable to validate the selected video size.';
+
+  @override
+  String get videoImportError =>
+      'Unable to select a video from the library. Please try again.';
+
+  @override
+  String get videoImportStorageError =>
+      'Unable to prepare the selected video. Please try again.';
 }

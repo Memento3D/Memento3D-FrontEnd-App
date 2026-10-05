@@ -7,7 +7,13 @@
   "moveSlowly": "✨ Di chuyển chậm quanh vật thể 🌸",
   "keepStill": "Giữ vật thể đứng yên và duy trì khoảng cách ổn định.",
   "capturedPhotos": "Đã chụp {count} ảnh",
-  "@capturedPhotos": {"placeholders": {"count": {"type": "int"}}},
+  "@capturedPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "orbitLabel": "Quỹ đạo 360°",
   "distanceGood": "Khoảng cách tốt",
   "balanceGood": "Cân bằng",
@@ -18,9 +24,6 @@
   "preview": "Bản xem",
   "done": "Xong",
   "nextStep": "Bước tiếp",
-  "restorationTitle": "Phục dựng Wabi-Sabi",
-  "restorationBody": "Lưu giữ từng chi tiết trong câu chuyện của vật thể.",
-  "automatic": "Tự động",
   "cameraUnavailable": "Không tìm thấy camera trên thiết bị.",
   "cameraError": "Không thể mở camera.",
   "captureError": "Không thể chụp ảnh.",
@@ -44,14 +47,32 @@
   "sizeCalculating": "Đang tính",
   "sizeIncomplete": "Một số tệp không khả dụng",
   "fileSizeKb": "{value} KB",
-  "@fileSizeKb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeKb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "fileSizeMb": "{value} MB",
-  "@fileSizeMb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeMb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "capturedPhotoSection": "Ảnh đã chụp",
   "addAngle": "Thêm góc",
   "addAngleHint": "Chụp thêm góc nhìn",
   "photoNumber": "Ảnh {number}",
-  "@photoNumber": {"placeholders": {"number": {"type": "int"}}},
+  "@photoNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "imageUnavailable": "Không thể mở ảnh",
   "deletePhoto": "Xóa khỏi phiên",
   "retakePhoto": "Chụp lại",
@@ -69,7 +90,13 @@
   "processingLocal": "Phiên chụp trên thiết bị",
   "processingCloudUnavailable": "Chưa kết nối dịch vụ đám mây",
   "processingPhotoCount": "Đã chụp {count} ảnh",
-  "@processingPhotoCount": {"placeholders": {"count": {"type": "int"}}},
+  "@processingPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "processingReadyTitle": "Sẵn sàng tải lên",
   "processingReadyBody": "Ảnh đang được lưu trên thiết bị. Chức năng xử lý sẽ khả dụng khi kết nối dịch vụ.",
   "processingWaiting": "Đang chờ dịch vụ xử lý",
@@ -95,5 +122,49 @@
   "processingCloudConnected": "Đã kết nối dịch vụ xử lý",
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
-  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi.",
+  "captureLibrary": "Thư viện",
+  "captureCollection": "Bộ sưu tập",
+  "capturePrints": "Bản in",
+  "captureStudio": "Xưởng tạo",
+  "captureSettings": "Cài đặt",
+  "captureCamera": "Camera",
+  "recordVideo": "Quay video",
+  "stopVideo": "Dừng quay",
+  "videoStartError": "Không thể bắt đầu quay video. Vui lòng thử lại.",
+  "videoFinalizeError": "Không thể hoàn tất video. Vui lòng quay lại.",
+  "recordedVideo": "Video đã quay",
+  "videoUnavailable": "Không thể mở video",
+  "videoFileChanged": "Tệp đã thay đổi sau khi quay. Dung lượng hiển thị là khi hoàn tất quay.",
+  "videoPreviewTitle": "Bản xem video",
+  "videoFinalizedSize": "Dung lượng khi quay",
+  "videoNotSelected": "Chưa chọn video",
+  "videoLoading": "Đang tải video...",
+  "videoPlay": "Phát",
+  "videoPause": "Tạm dừng",
+  "videoDuration": "Thời lượng: {duration}",
+  "videoTooShort": "Video cần dài ít nhất {seconds} giây.",
+  "videoDurationSatisfied": "Đã đạt thời lượng tối thiểu.",
+  "videoPlaybackError": "Không thể phát video này. Vui lòng thử quay video khác.",
+  "@videoDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "@videoTooShort": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "importedVideo": "Video từ thư viện",
+  "videoReplaceFromLibrary": "Thay từ thư viện",
+  "videoImportFormatError": "Chọn video định dạng MP4, MOV hoặc AVI.",
+  "videoImportSizeError": "Video đã chọn vượt quá giới hạn 2 GB.",
+  "videoImportValidationError": "Không thể xác minh dung lượng video đã chọn.",
+  "videoImportError": "Không thể chọn video từ thư viện. Vui lòng thử lại.",
+  "videoImportStorageError": "Không thể chuẩn bị video đã chọn. Vui lòng thử lại."
 }

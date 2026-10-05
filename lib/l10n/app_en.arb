@@ -7,7 +7,13 @@
   "moveSlowly": "✨ Move slowly around the object 🌸",
   "keepStill": "Keep the object still and maintain a steady distance.",
   "capturedPhotos": "{count} photos captured",
-  "@capturedPhotos": {"placeholders": {"count": {"type": "int"}}},
+  "@capturedPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "orbitLabel": "360° Orbit",
   "distanceGood": "Distance good",
   "balanceGood": "Balanced",
@@ -18,9 +24,6 @@
   "preview": "Preview",
   "done": "Done",
   "nextStep": "Next step",
-  "restorationTitle": "Wabi-Sabi restoration",
-  "restorationBody": "Preserve every detail of your object's story.",
-  "automatic": "Automatic",
   "cameraUnavailable": "No camera found on this device.",
   "cameraError": "Could not open camera.",
   "captureError": "Could not capture photo.",
@@ -44,14 +47,32 @@
   "sizeCalculating": "Calculating",
   "sizeIncomplete": "Some files unavailable",
   "fileSizeKb": "{value} KB",
-  "@fileSizeKb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeKb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "fileSizeMb": "{value} MB",
-  "@fileSizeMb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeMb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "capturedPhotoSection": "Captured photos",
   "addAngle": "Add angle",
   "addAngleHint": "Capture another view",
   "photoNumber": "Photo {number}",
-  "@photoNumber": {"placeholders": {"number": {"type": "int"}}},
+  "@photoNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "imageUnavailable": "Image unavailable",
   "deletePhoto": "Remove photo",
   "retakePhoto": "Retake",
@@ -69,7 +90,13 @@
   "processingLocal": "Local capture session",
   "processingCloudUnavailable": "Cloud service not connected",
   "processingPhotoCount": "{count} photos captured",
-  "@processingPhotoCount": {"placeholders": {"count": {"type": "int"}}},
+  "@processingPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "processingReadyTitle": "Ready to upload",
   "processingReadyBody": "Your photos are prepared locally. Processing will be available when a service is connected.",
   "processingWaiting": "Waiting for processing service",
@@ -95,5 +122,49 @@
   "processingCloudConnected": "Processing service connected",
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
-  "processingFailedBody": "The processing service reported a problem."
+  "processingFailedBody": "The processing service reported a problem.",
+  "captureLibrary": "Library",
+  "captureCollection": "Collection",
+  "capturePrints": "Prints",
+  "captureStudio": "Creation Studio",
+  "captureSettings": "Settings",
+  "captureCamera": "Camera",
+  "recordVideo": "Record video",
+  "stopVideo": "Stop recording",
+  "videoStartError": "Video recording could not start. Try again.",
+  "videoFinalizeError": "Video could not be finalized. Try recording again.",
+  "recordedVideo": "Recorded video",
+  "videoUnavailable": "Video unavailable",
+  "videoFileChanged": "File has changed since recording. Size shown is from finalization.",
+  "videoPreviewTitle": "Video preview",
+  "videoFinalizedSize": "Size at capture",
+  "videoNotSelected": "No video selected",
+  "videoLoading": "Loading video...",
+  "videoPlay": "Play",
+  "videoPause": "Pause",
+  "videoDuration": "Duration: {duration}",
+  "videoTooShort": "Video must be at least {seconds} seconds long.",
+  "videoDurationSatisfied": "Minimum duration met.",
+  "videoPlaybackError": "This video couldn’t be played. Try recording another video.",
+  "@videoDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "@videoTooShort": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "importedVideo": "Imported video",
+  "videoReplaceFromLibrary": "Replace from library",
+  "videoImportFormatError": "Select an MP4, MOV, or AVI video.",
+  "videoImportSizeError": "The selected video exceeds the 2 GB limit.",
+  "videoImportValidationError": "Unable to validate the selected video size.",
+  "videoImportError": "Unable to select a video from the library. Please try again.",
+  "videoImportStorageError": "Unable to prepare the selected video. Please try again."
 }
