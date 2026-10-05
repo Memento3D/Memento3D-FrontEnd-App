@@ -8,6 +8,8 @@ import 'capture_size_format.dart';
 import 'video_capture_session.dart';
 import 'video_duration_policy.dart';
 import 'video_playback.dart';
+import 'video_import_coordinator.dart';
+import 'video_import_feedback.dart';
 
 /// Local single-video preview; player ownership never enters capture/session state.
 class VideoPreviewScreen extends StatefulWidget {
@@ -15,9 +17,11 @@ class VideoPreviewScreen extends StatefulWidget {
     super.key,
     required this.session,
     this.playbackFactory,
+    this.importCoordinator,
   });
   final VideoCaptureSession session;
   final VideoPlaybackFactory? playbackFactory;
+  final VideoImportCoordinator? importCoordinator;
   @override
   State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
 }
@@ -37,8 +41,27 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
       _foreground = true,
       _commandBusy = false;
   int _generation = 0;
+  bool _importing = false;
   Future<void> _commands = Future.value();
   Future<void> _release = Future.value();
+
+  Future<void> _queueCommand(Future<void> Function() command) {
+    final operation = _commands.then((_) => command());
+    // Preserve the operation's error for its caller, but keep scheduling usable.
+    _commands = operation.then<void>(
+      (_) {},
+      onError: (Object error, StackTrace stackTrace) {},
+    );
+    return operation;
+  }
+
+  Future<void> _drainCommands(Future<void> commands) async {
+    try {
+      await commands;
+    } catch (_) {
+      // A prior command failure must not prevent best-effort disposal.
+    }
+  }
 
   @override
   void initState() {
@@ -58,13 +81,15 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
     if ((_player?.value.hasError ?? false) && !_failed) {
       _failed = true;
       final player = _player;
-      _commands = _commands.then((_) async {
-        try {
-          if (player == _player) await player?.pause();
-        } catch (_) {
-          /* Error already displayed. */
-        }
-      });
+      unawaited(
+        _queueCommand(() async {
+          try {
+            if (player == _player) await player?.pause();
+          } catch (_) {
+            /* Error already displayed. */
+          }
+        }),
+      );
     }
     setState(() {});
   }
@@ -83,7 +108,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
       ++_pendingBrokenCleanups;
       unawaited(() async {
         try {
-          await commands;
+          await _drainCommands(commands);
           await player.dispose();
         } catch (_) {
           /* Best-effort cleanup of an unavailable player. */
@@ -96,7 +121,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
     }
     // Drain in-flight play/pause before disposal so a late Play cannot escape.
     _release = _release.then((_) async {
-      await commands;
+      await _drainCommands(commands);
       try {
         await player.dispose();
       } catch (_) {
@@ -178,17 +203,22 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
 
   Future<void> _retry() async {
     // The callback may be invoked twice before the disabled button rebuilds.
-    if (_loading) return;
+    if (_loading || _importing) return;
     await _load();
   }
 
   Future<void> _toggle() async {
     final player = _player;
-    if (player == null || _loading || _failed || !_foreground || _commandBusy) {
+    if (player == null ||
+        _loading ||
+        _failed ||
+        !_foreground ||
+        _commandBusy ||
+        _importing) {
       return;
     }
     setState(() => _commandBusy = true);
-    _commands = _commands.then((_) async {
+    await _queueCommand(() async {
       if (!mounted || player != _player || !_foreground) return;
       try {
         if (player.value.isPlaying) {
@@ -204,8 +234,47 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
         if (mounted && player == _player) setState(() => _failed = true);
       }
     });
-    await _commands;
     if (mounted) setState(() => _commandBusy = false);
+  }
+
+  Future<void> _replaceFromLibrary() async {
+    final coordinator = widget.importCoordinator;
+    if (coordinator == null ||
+        coordinator.busy ||
+        _importing ||
+        !_foreground ||
+        _loading ||
+        _commandBusy ||
+        _pendingBrokenCleanups >= _maximumPendingBrokenCleanups) {
+      return;
+    }
+    setState(() => _importing = true);
+    try {
+      final player = _player;
+      await _queueCommand(() async {
+        if (mounted && player == _player) await player?.pause();
+      });
+      if (!mounted) return;
+      final result = await coordinator.importVideo(
+        isCurrent: () => mounted && (ModalRoute.of(context)?.isCurrent ?? true),
+      );
+      if (!mounted) return;
+      if (result.replaced) {
+        await _load(); // Session isn't observable; explicitly release/reload.
+      } else if (result.error case final error?) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              videoImportMessage(AppLocalizations.of(context)!, error),
+            ),
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) setState(() => _failed = true);
+    } finally {
+      if (mounted) setState(() => _importing = false);
+    }
   }
 
   @override
@@ -213,29 +282,34 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
     if (state == AppLifecycleState.resumed) {
       setState(() => _foreground = true);
       final player = _player;
-      _commands = _commands.then((_) async {
-        try {
-          if (player != null && player == _player) await player.pause();
-        } catch (_) {
-          if (mounted) setState(() => _failed = true);
-        }
-      });
+      unawaited(
+        _queueCommand(() async {
+          try {
+            if (player != null && player == _player) await player.pause();
+          } catch (_) {
+            if (mounted) setState(() => _failed = true);
+          }
+        }),
+      );
     } else {
       _foreground = false;
       final player = _player;
-      _commands = _commands.then((_) async {
-        try {
-          if (player != null && player == _player) await player.pause();
-        } catch (_) {
-          if (mounted) setState(() => _failed = true);
-        }
-      });
+      unawaited(
+        _queueCommand(() async {
+          try {
+            if (player != null && player == _player) await player.pause();
+          } catch (_) {
+            if (mounted) setState(() => _failed = true);
+          }
+        }),
+      );
       setState(() {});
     }
   }
 
   @override
   void dispose() {
+    if (_importing) widget.importCoordinator?.invalidate();
     WidgetsBinding.instance.removeObserver(this);
     ++_generation;
     unawaited(_releasePlayer());
@@ -309,7 +383,9 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
         const SizedBox(height: 12),
         FilledButton.icon(
           key: const Key('video-play-pause'),
-          onPressed: _foreground && !_commandBusy ? _toggle : null,
+          onPressed: _foreground && !_commandBusy && !_importing
+              ? _toggle
+              : null,
           icon: Icon(value.isPlaying ? Icons.pause : Icons.play_arrow),
           label: Text(value.isPlaying ? strings.videoPause : strings.videoPlay),
         ),
@@ -365,7 +441,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
                       _preview(strings),
                       const SizedBox(height: 16),
                       Text(
-                        video.file.name.replaceAll('\\', '/').split('/').last,
+                        video.filename,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -383,7 +459,27 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(strings.recordedVideo),
+                      Text(
+                        video.source == LocalVideoSource.imported
+                            ? strings.importedVideo
+                            : strings.recordedVideo,
+                      ),
+                      if (widget.importCoordinator != null)
+                        TextButton.icon(
+                          key: const Key('video-replace-library'),
+                          onPressed:
+                              !_importing &&
+                                  !_loading &&
+                                  !_commandBusy &&
+                                  _foreground &&
+                                  !(widget.importCoordinator?.busy ?? false) &&
+                                  _pendingBrokenCleanups <
+                                      _maximumPendingBrokenCleanups
+                              ? _replaceFromLibrary
+                              : null,
+                          icon: const Icon(Icons.video_library_outlined),
+                          label: Text(strings.videoReplaceFromLibrary),
+                        ),
                       if (_missing)
                         Padding(
                           padding: const EdgeInsets.only(top: 12),
@@ -400,6 +496,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen>
                         TextButton(
                           onPressed:
                               _loading ||
+                                  _importing ||
                                   _pendingBrokenCleanups >=
                                       _maximumPendingBrokenCleanups
                               ? null

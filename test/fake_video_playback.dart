@@ -12,6 +12,7 @@ class FakeVideoPlayback implements VideoPlayback {
   Size size = const Size(1920, 1080);
   Completer<void>? initializeGate, playGate, disposeGate;
   bool failDispose = false;
+  bool failNextPause = false;
   final List<VoidCallback> registeredListeners = [];
   bool failInitialization = false, failPlay = false, disposed = false;
   int initializes = 0, plays = 0, pauses = 0, disposals = 0;
@@ -51,6 +52,10 @@ class FakeVideoPlayback implements VideoPlayback {
   @override
   Future<void> pause() async {
     pauses++;
+    if (failNextPause) {
+      failNextPause = false;
+      throw StateError('Pause failure');
+    }
     if (!disposed) update(value.copyWith(isPlaying: false));
   }
 

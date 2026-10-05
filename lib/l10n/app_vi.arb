@@ -159,5 +159,12 @@
         "type": "int"
       }
     }
-  }
+  },
+  "importedVideo": "Video từ thư viện",
+  "videoReplaceFromLibrary": "Thay từ thư viện",
+  "videoImportFormatError": "Chọn video định dạng MP4, MOV hoặc AVI.",
+  "videoImportSizeError": "Video đã chọn vượt quá giới hạn 2 GB.",
+  "videoImportValidationError": "Không thể xác minh dung lượng video đã chọn.",
+  "videoImportError": "Không thể chọn video từ thư viện. Vui lòng thử lại.",
+  "videoImportStorageError": "Không thể chuẩn bị video đã chọn. Vui lòng thử lại."
 }

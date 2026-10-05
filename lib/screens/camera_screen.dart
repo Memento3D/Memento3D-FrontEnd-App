@@ -13,6 +13,12 @@ import 'video_preview_screen.dart';
 import 'video_playback.dart';
 import 'capture_session.dart';
 import 'capture_wizard.dart';
+import 'file_picker_video_picker.dart';
+import 'video_picker.dart';
+import 'video_file_probe.dart';
+import 'video_import_storage.dart';
+import 'video_import_coordinator.dart';
+import 'video_import_feedback.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({
@@ -20,11 +26,17 @@ class CameraScreen extends StatefulWidget {
     this.developmentWrapper,
     this.cameraFactory,
     this.previewPlaybackFactory,
+    this.videoPicker,
+    this.videoFileProbe,
+    this.videoImportStorage,
   });
 
   /// Hardware-free integration tests; controller ownership stays in this screen.
   final Future<CameraController> Function()? cameraFactory;
   final VideoPlaybackFactory? previewPlaybackFactory;
+  final VideoPicker? videoPicker;
+  final VideoFileProbe? videoFileProbe;
+  final VideoImportStorage? videoImportStorage;
 
   /// Optional device-harness decoration; absent from production capture routes.
   final Widget Function(BuildContext, VideoRecordingDiagnostics, Widget)?
@@ -38,10 +50,38 @@ class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _controller;
   final VideoRecordingCoordinator _video = VideoRecordingCoordinator();
+  late final VideoImportCoordinator _import;
   Future<void> _cameraRelease = Future.value();
   bool _foreground = true;
   bool _exiting = false;
   bool _allowPop = false;
+
+  void _importChanged() {
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _importVideo() async {
+    if (_reviewOpen || !_foreground || _capturing) return;
+    final result = await _import.importVideo(
+      isCurrent: () =>
+          mounted &&
+          !_exiting &&
+          !_video.busy &&
+          _mode == CaptureMode.video &&
+          (ModalRoute.of(context)?.isCurrent ?? true) &&
+          !_reviewOpen,
+    );
+    if (!mounted || _exiting) return;
+    if (result.error case final error?) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            videoImportMessage(AppLocalizations.of(context)!, error),
+          ),
+        ),
+      );
+    }
+  }
 
   void _videoChanged() {
     if (!mounted) return;
@@ -77,6 +117,7 @@ class _CameraScreenState extends State<CameraScreen>
   Future<void> _exit() async {
     if (_exiting) return;
     _exiting = true;
+    _import.invalidate();
     setState(() {});
     await _releaseCamera();
     if (!mounted) return;
@@ -95,7 +136,7 @@ class _CameraScreenState extends State<CameraScreen>
   }
 
   void _record() {
-    if (_exiting || !_foreground || _reviewOpen) return;
+    if (_exiting || !_foreground || _reviewOpen || _import.busy) return;
     if (_video.state == VideoRecordingState.recording) {
       unawaited(
         _video.stop().then((_) async {
@@ -136,6 +177,12 @@ class _CameraScreenState extends State<CameraScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _video.addListener(_videoChanged);
+    _import = VideoImportCoordinator(
+      session: _video.videoSession,
+      picker: widget.videoPicker ?? FilePickerVideoPicker(),
+      probe: widget.videoFileProbe ?? LocalVideoFileProbe(),
+      storage: widget.videoImportStorage ?? LocalVideoImportStorage(),
+    )..addListener(_importChanged);
     _openCamera();
     _startSensors();
   }
@@ -282,6 +329,7 @@ class _CameraScreenState extends State<CameraScreen>
     final controller = _controller;
     if (_exiting ||
         !_foreground ||
+        _import.busy ||
         _video.busy ||
         controller == null ||
         !controller.value.isInitialized ||
@@ -318,12 +366,18 @@ class _CameraScreenState extends State<CameraScreen>
     VideoPreviewScreen(
       session: _video.videoSession,
       playbackFactory: widget.previewPlaybackFactory,
+      importCoordinator: _import,
     ),
     video: true,
   );
 
   Future<void> _showReview(Widget review, {required bool video}) async {
-    if (_reviewOpen || _exiting || !_foreground || _capturing || _video.busy) {
+    if (_reviewOpen ||
+        _exiting ||
+        !_foreground ||
+        _capturing ||
+        _video.busy ||
+        _import.busy) {
       return;
     }
     if (video) {
@@ -359,6 +413,8 @@ class _CameraScreenState extends State<CameraScreen>
     _stopSensors();
     unawaited(_releaseCamera());
     _video.removeListener(_videoChanged);
+    _import.removeListener(_importChanged);
+    _import.dispose();
     _video.dispose();
     super.dispose();
   }
@@ -375,10 +431,21 @@ class _CameraScreenState extends State<CameraScreen>
         videoState: _video.state,
         videoElapsed: _video.elapsed,
         hasVideo: _video.videoSession.hasVideo,
+        onVideoLibrary:
+            _mode == CaptureMode.video &&
+                !_video.busy &&
+                !_import.busy &&
+                !_reviewOpen &&
+                !_capturing &&
+                !_exiting &&
+                _foreground
+            ? _importVideo
+            : null,
         onVideoReview:
             _mode == CaptureMode.video &&
                 _video.videoSession.canReview &&
                 !_video.busy &&
+                !_import.busy &&
                 !_reviewOpen &&
                 !_capturing &&
                 !_exiting &&
@@ -387,6 +454,7 @@ class _CameraScreenState extends State<CameraScreen>
             : null,
         onVideoRecord:
             !_exiting &&
+                !_import.busy &&
                 !_reviewOpen &&
                 _foreground &&
                 !_capturing &&
@@ -395,9 +463,14 @@ class _CameraScreenState extends State<CameraScreen>
             ? _record
             : null,
         mode: _mode,
-        onModeChanged: _capturing || _video.busy || _exiting || _reviewOpen
+        onModeChanged:
+            _capturing || _video.busy || _import.busy || _exiting || _reviewOpen
             ? null
-            : (mode) => setState(() => _mode = mode),
+            : (mode) {
+                if (_import.busy) return;
+                _import.invalidate();
+                setState(() => _mode = mode);
+              },
         controller: _controller,
         capturedPhotos: _session.capturedPhotos,
         wizardState: _wizard.stateAt(DateTime.now()),

@@ -37,6 +37,7 @@ class CameraView extends StatelessWidget {
     this.videoElapsed = Duration.zero,
     this.hasVideo = false,
     this.onVideoReview,
+    this.onVideoLibrary,
     this.onVideoRecord,
     this.onBack,
   });
@@ -45,6 +46,7 @@ class CameraView extends StatelessWidget {
   final Duration videoElapsed;
   final bool hasVideo;
   final VoidCallback? onVideoReview;
+  final VoidCallback? onVideoLibrary;
   final VoidCallback? onVideoRecord;
   final VoidCallback? onBack;
   final CaptureMode mode;
@@ -397,6 +399,7 @@ class CameraView extends StatelessWidget {
                   state: videoState,
                   hasVideo: hasVideo,
                   onReview: onVideoReview,
+                  onLibrary: onVideoLibrary,
                   onRecord: onVideoRecord,
                 ),
               const SizedBox(height: 14),

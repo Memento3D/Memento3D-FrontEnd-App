@@ -369,4 +369,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get videoPlaybackError =>
       'This video couldn’t be played. Try recording another video.';
+
+  @override
+  String get importedVideo => 'Imported video';
+
+  @override
+  String get videoReplaceFromLibrary => 'Replace from library';
+
+  @override
+  String get videoImportFormatError => 'Select an MP4, MOV, or AVI video.';
+
+  @override
+  String get videoImportSizeError =>
+      'The selected video exceeds the 2 GB limit.';
+
+  @override
+  String get videoImportValidationError =>
+      'Unable to validate the selected video size.';
+
+  @override
+  String get videoImportError =>
+      'Unable to select a video from the library. Please try again.';
+
+  @override
+  String get videoImportStorageError =>
+      'Unable to prepare the selected video. Please try again.';
 }

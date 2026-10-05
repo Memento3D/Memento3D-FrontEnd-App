@@ -159,5 +159,12 @@
         "type": "int"
       }
     }
-  }
+  },
+  "importedVideo": "Imported video",
+  "videoReplaceFromLibrary": "Replace from library",
+  "videoImportFormatError": "Select an MP4, MOV, or AVI video.",
+  "videoImportSizeError": "The selected video exceeds the 2 GB limit.",
+  "videoImportValidationError": "Unable to validate the selected video size.",
+  "videoImportError": "Unable to select a video from the library. Please try again.",
+  "videoImportStorageError": "Unable to prepare the selected video. Please try again."
 }

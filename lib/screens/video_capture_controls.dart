@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'video_recording.dart';
 
-/// Shared capture footprint; library and next remain unavailable in Phase B.
+/// Shared three-column footprint; next remains unavailable.
 class VideoCaptureControls extends StatelessWidget {
   const VideoCaptureControls({
     super.key,
@@ -11,11 +11,13 @@ class VideoCaptureControls extends StatelessWidget {
     this.onRecord,
     this.hasVideo = false,
     this.onReview,
+    this.onLibrary,
   });
   final VideoRecordingState state;
   final VoidCallback? onRecord;
   final bool hasVideo;
   final VoidCallback? onReview;
+  final VoidCallback? onLibrary;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +33,9 @@ class VideoCaptureControls extends StatelessWidget {
               child: _DisabledControl(
                 controlKey: Key(!hasVideo ? 'video-library' : 'video-preview'),
                 onTap:
-                    hasVideo &&
-                        (state == VideoRecordingState.idle ||
-                            state == VideoRecordingState.error)
-                    ? onReview
+                    (state == VideoRecordingState.idle ||
+                        state == VideoRecordingState.error)
+                    ? (hasVideo ? onReview : onLibrary)
                     : null,
                 label: !hasVideo ? strings.captureLibrary : strings.preview,
                 child: Column(

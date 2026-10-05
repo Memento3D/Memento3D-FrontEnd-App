@@ -763,6 +763,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This video couldn’t be played. Try recording another video.'**
   String get videoPlaybackError;
+
+  /// No description provided for @importedVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported video'**
+  String get importedVideo;
+
+  /// No description provided for @videoReplaceFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace from library'**
+  String get videoReplaceFromLibrary;
+
+  /// No description provided for @videoImportFormatError.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an MP4, MOV, or AVI video.'**
+  String get videoImportFormatError;
+
+  /// No description provided for @videoImportSizeError.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected video exceeds the 2 GB limit.'**
+  String get videoImportSizeError;
+
+  /// No description provided for @videoImportValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to validate the selected video size.'**
+  String get videoImportValidationError;
+
+  /// No description provided for @videoImportError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to select a video from the library. Please try again.'**
+  String get videoImportError;
+
+  /// No description provided for @videoImportStorageError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to prepare the selected video. Please try again.'**
+  String get videoImportStorageError;
 }
 
 class _AppLocalizationsDelegate

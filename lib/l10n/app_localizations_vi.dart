@@ -369,4 +369,29 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get videoPlaybackError =>
       'Không thể phát video này. Vui lòng thử quay video khác.';
+
+  @override
+  String get importedVideo => 'Video từ thư viện';
+
+  @override
+  String get videoReplaceFromLibrary => 'Thay từ thư viện';
+
+  @override
+  String get videoImportFormatError =>
+      'Chọn video định dạng MP4, MOV hoặc AVI.';
+
+  @override
+  String get videoImportSizeError => 'Video đã chọn vượt quá giới hạn 2 GB.';
+
+  @override
+  String get videoImportValidationError =>
+      'Không thể xác minh dung lượng video đã chọn.';
+
+  @override
+  String get videoImportError =>
+      'Không thể chọn video từ thư viện. Vui lòng thử lại.';
+
+  @override
+  String get videoImportStorageError =>
+      'Không thể chuẩn bị video đã chọn. Vui lòng thử lại.';
 }

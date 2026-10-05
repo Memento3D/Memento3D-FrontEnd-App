@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'fake_video_playback.dart';
+import 'fake_video_import.dart';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -342,7 +343,12 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      _app(CameraScreen(cameraFactory: () async => _Camera(first))),
+      _app(
+        CameraScreen(
+          cameraFactory: () async => _Camera(first),
+          videoPicker: FakeVideoPicker(),
+        ),
+      ),
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('capture-mode-video')));
