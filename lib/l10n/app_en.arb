@@ -95,5 +95,57 @@
   "processingCloudConnected": "Processing service connected",
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
-  "processingFailedBody": "The processing service reported a problem."
+  "processingFailedBody": "The processing service reported a problem.",
+  "qualityReportTitle": "Quality Report",
+  "qualityReportScanQuality": "Scan quality",
+  "qualityReportScore": "Score: {score} out of 100",
+  "qualityReportCategoryGreen": "Good",
+  "qualityReportCategoryAmber": "Warning",
+  "qualityReportCategoryRed": "Poor",
+  "qualityReportEligible": "Eligible",
+  "qualityReportPhotosChecked": "{count} photos checked",
+  "qualityReportPass": "Pass",
+  "qualityReportWarn": "Warning",
+  "qualityReportFail": "Fail",
+  "qualityReportSuggestionTitle": "Suggestions for improvement",
+  "@qualityReportScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "@qualityReportPhotosChecked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportPhotoQuality": "Photo quality",
+  "qualityReportAttentionPhotos": "Photos needing attention",
+  "qualityReportAttentionPhotoCount": "{count, plural, one{1 photo} other{{count} photos}}",
+  "qualityReportViewAllPhotos": "{count, plural, one{View all 1 photo} other{View all {count} photos}}",
+  "qualityReportCollapsePhotos": "Collapse",
+  "@qualityReportAttentionPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@qualityReportViewAllPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportAllPhotos": "All photos",
+  "qualityReportStartReconstruction": "Start reconstruction",
+  "qualityReportRecoverPhotos": "Retake / Remove problem photos",
+  "qualityReportViewDetails": "View details",
+  "qualityReportViewWarningDetails": "View warning details",
+  "qualityReportViewErrorDetails": "View error details",
+  "qualityReportDetailsTitle": "Quality details"
 }

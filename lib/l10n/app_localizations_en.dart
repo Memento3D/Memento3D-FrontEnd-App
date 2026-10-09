@@ -303,4 +303,96 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get qualityReportTitle => 'Quality Report';
+
+  @override
+  String get qualityReportScanQuality => 'Scan quality';
+
+  @override
+  String qualityReportScore(String score) {
+    return 'Score: $score out of 100';
+  }
+
+  @override
+  String get qualityReportCategoryGreen => 'Good';
+
+  @override
+  String get qualityReportCategoryAmber => 'Warning';
+
+  @override
+  String get qualityReportCategoryRed => 'Poor';
+
+  @override
+  String get qualityReportEligible => 'Eligible';
+
+  @override
+  String qualityReportPhotosChecked(int count) {
+    return '$count photos checked';
+  }
+
+  @override
+  String get qualityReportPass => 'Pass';
+
+  @override
+  String get qualityReportWarn => 'Warning';
+
+  @override
+  String get qualityReportFail => 'Fail';
+
+  @override
+  String get qualityReportSuggestionTitle => 'Suggestions for improvement';
+
+  @override
+  String get qualityReportPhotoQuality => 'Photo quality';
+
+  @override
+  String get qualityReportAttentionPhotos => 'Photos needing attention';
+
+  @override
+  String qualityReportAttentionPhotoCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String qualityReportViewAllPhotos(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'View all $count photos',
+      one: 'View all 1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get qualityReportCollapsePhotos => 'Collapse';
+
+  @override
+  String get qualityReportAllPhotos => 'All photos';
+
+  @override
+  String get qualityReportStartReconstruction => 'Start reconstruction';
+
+  @override
+  String get qualityReportRecoverPhotos => 'Retake / Remove problem photos';
+
+  @override
+  String get qualityReportViewDetails => 'View details';
+
+  @override
+  String get qualityReportViewWarningDetails => 'View warning details';
+
+  @override
+  String get qualityReportViewErrorDetails => 'View error details';
+
+  @override
+  String get qualityReportDetailsTitle => 'Quality details';
 }

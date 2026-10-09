@@ -302,4 +302,84 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get qualityReportTitle => 'Báo Cáo Chất Lượng';
+
+  @override
+  String get qualityReportScanQuality => 'Chất lượng bản quét';
+
+  @override
+  String qualityReportScore(String score) {
+    return 'Điểm: $score trên 100';
+  }
+
+  @override
+  String get qualityReportCategoryGreen => 'Tốt';
+
+  @override
+  String get qualityReportCategoryAmber => 'Cảnh báo';
+
+  @override
+  String get qualityReportCategoryRed => 'Không đạt';
+
+  @override
+  String get qualityReportEligible => 'Đủ điều kiện';
+
+  @override
+  String qualityReportPhotosChecked(int count) {
+    return '$count ảnh đã được kiểm tra';
+  }
+
+  @override
+  String get qualityReportPass => 'Đạt';
+
+  @override
+  String get qualityReportWarn => 'Cảnh báo';
+
+  @override
+  String get qualityReportFail => 'Lỗi';
+
+  @override
+  String get qualityReportSuggestionTitle => 'Gợi ý cải thiện';
+
+  @override
+  String get qualityReportPhotoQuality => 'Chất lượng từng ảnh';
+
+  @override
+  String get qualityReportAttentionPhotos => 'Ảnh cần chú ý';
+
+  @override
+  String qualityReportAttentionPhotoCount(int count) {
+    return '$count ảnh';
+  }
+
+  @override
+  String qualityReportViewAllPhotos(int count) {
+    return 'Xem tất cả $count ảnh';
+  }
+
+  @override
+  String get qualityReportCollapsePhotos => 'Thu gọn';
+
+  @override
+  String get qualityReportAllPhotos => 'Tất cả ảnh';
+
+  @override
+  String get qualityReportStartReconstruction => 'Bắt đầu tái tạo';
+
+  @override
+  String get qualityReportRecoverPhotos => 'Chụp bù / Xoá ảnh lỗi';
+
+  @override
+  String get qualityReportViewDetails => 'Xem chi tiết';
+
+  @override
+  String get qualityReportViewWarningDetails => 'Xem chi tiết cảnh báo';
+
+  @override
+  String get qualityReportViewErrorDetails => 'Xem chi tiết lỗi';
+
+  @override
+  String get qualityReportDetailsTitle => 'Chi tiết chất lượng';
 }

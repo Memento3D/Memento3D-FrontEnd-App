@@ -95,5 +95,57 @@
   "processingCloudConnected": "Đã kết nối dịch vụ xử lý",
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
-  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi.",
+  "qualityReportTitle": "Báo Cáo Chất Lượng",
+  "qualityReportScanQuality": "Chất lượng bản quét",
+  "qualityReportScore": "Điểm: {score} trên 100",
+  "qualityReportCategoryGreen": "Tốt",
+  "qualityReportCategoryAmber": "Cảnh báo",
+  "qualityReportCategoryRed": "Không đạt",
+  "qualityReportEligible": "Đủ điều kiện",
+  "qualityReportPhotosChecked": "{count} ảnh đã được kiểm tra",
+  "qualityReportPass": "Đạt",
+  "qualityReportWarn": "Cảnh báo",
+  "qualityReportFail": "Lỗi",
+  "qualityReportSuggestionTitle": "Gợi ý cải thiện",
+  "@qualityReportScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "@qualityReportPhotosChecked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportPhotoQuality": "Chất lượng từng ảnh",
+  "qualityReportAttentionPhotos": "Ảnh cần chú ý",
+  "qualityReportAttentionPhotoCount": "{count} ảnh",
+  "qualityReportViewAllPhotos": "Xem tất cả {count} ảnh",
+  "qualityReportCollapsePhotos": "Thu gọn",
+  "@qualityReportAttentionPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@qualityReportViewAllPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportAllPhotos": "Tất cả ảnh",
+  "qualityReportStartReconstruction": "Bắt đầu tái tạo",
+  "qualityReportRecoverPhotos": "Chụp bù / Xoá ảnh lỗi",
+  "qualityReportViewDetails": "Xem chi tiết",
+  "qualityReportViewWarningDetails": "Xem chi tiết cảnh báo",
+  "qualityReportViewErrorDetails": "Xem chi tiết lỗi",
+  "qualityReportDetailsTitle": "Chi tiết chất lượng"
 }
