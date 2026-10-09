@@ -643,6 +643,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @qualityReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality Report'**
+  String get qualityReportTitle;
+
+  /// No description provided for @qualityReportScanQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan quality'**
+  String get qualityReportScanQuality;
+
+  /// No description provided for @qualityReportScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score: {score} out of 100'**
+  String qualityReportScore(String score);
+
+  /// No description provided for @qualityReportCategoryGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get qualityReportCategoryGreen;
+
+  /// No description provided for @qualityReportCategoryAmber.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get qualityReportCategoryAmber;
+
+  /// No description provided for @qualityReportCategoryRed.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get qualityReportCategoryRed;
+
+  /// No description provided for @qualityReportEligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Eligible'**
+  String get qualityReportEligible;
+
+  /// No description provided for @qualityReportPhotosChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} photos checked'**
+  String qualityReportPhotosChecked(int count);
+
+  /// No description provided for @qualityReportPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get qualityReportPass;
+
+  /// No description provided for @qualityReportWarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get qualityReportWarn;
+
+  /// No description provided for @qualityReportFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get qualityReportFail;
+
+  /// No description provided for @qualityReportSuggestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions for improvement'**
+  String get qualityReportSuggestionTitle;
+
+  /// No description provided for @qualityReportPhotoQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo quality'**
+  String get qualityReportPhotoQuality;
+
+  /// No description provided for @qualityReportAttentionPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos needing attention'**
+  String get qualityReportAttentionPhotos;
+
+  /// No description provided for @qualityReportAttentionPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 photo} other{{count} photos}}'**
+  String qualityReportAttentionPhotoCount(int count);
+
+  /// No description provided for @qualityReportViewAllPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{View all 1 photo} other{View all {count} photos}}'**
+  String qualityReportViewAllPhotos(int count);
+
+  /// No description provided for @qualityReportCollapsePhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get qualityReportCollapsePhotos;
+
+  /// No description provided for @qualityReportAllPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'All photos'**
+  String get qualityReportAllPhotos;
+
+  /// No description provided for @qualityReportStartReconstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start reconstruction'**
+  String get qualityReportStartReconstruction;
+
+  /// No description provided for @qualityReportRecoverPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake / Remove problem photos'**
+  String get qualityReportRecoverPhotos;
+
+  /// No description provided for @qualityReportViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get qualityReportViewDetails;
+
+  /// No description provided for @qualityReportViewWarningDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View warning details'**
+  String get qualityReportViewWarningDetails;
+
+  /// No description provided for @qualityReportViewErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View error details'**
+  String get qualityReportViewErrorDetails;
+
+  /// No description provided for @qualityReportDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality details'**
+  String get qualityReportDetailsTitle;
 }
 
 class _AppLocalizationsDelegate
