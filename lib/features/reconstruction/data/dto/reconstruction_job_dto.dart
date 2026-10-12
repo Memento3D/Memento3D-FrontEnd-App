@@ -1,6 +1,6 @@
 enum ReconstructionJobStatus { queued, running, done, failed, cancelled }
 
-enum ReconstructionStage {
+enum ReconstructionStageDto {
   downloading,
   preprocessing,
   shapeGeneration,
@@ -14,8 +14,8 @@ enum ReconstructionExecutionMode { real, mock }
 
 /// Wire response. Timestamp format/nullability and progress units are unspecified;
 /// timestamps are retained verbatim and progress is never treated as a percent.
-class ReconstructionJobResponse {
-  ReconstructionJobResponse.fromJson(Object? value) {
+class ReconstructionJobDto {
+  ReconstructionJobDto.fromJson(Object? value) {
     if (value is! Map<String, dynamic>) {
       throw const FormatException('Expected reconstruction job object');
     }
@@ -60,13 +60,13 @@ class ReconstructionJobResponse {
       for (final v in ReconstructionJobStatus.values) v.name: v,
     });
     stage = parse('stage', {
-      'downloading': ReconstructionStage.downloading,
-      'preprocessing': ReconstructionStage.preprocessing,
-      'shape_generation': ReconstructionStage.shapeGeneration,
-      'texturing': ReconstructionStage.texturing,
-      'validating': ReconstructionStage.validating,
-      'exporting': ReconstructionStage.exporting,
-      'uploading': ReconstructionStage.uploading,
+      'downloading': ReconstructionStageDto.downloading,
+      'preprocessing': ReconstructionStageDto.preprocessing,
+      'shape_generation': ReconstructionStageDto.shapeGeneration,
+      'texturing': ReconstructionStageDto.texturing,
+      'validating': ReconstructionStageDto.validating,
+      'exporting': ReconstructionStageDto.exporting,
+      'uploading': ReconstructionStageDto.uploading,
     });
     executionMode = parse('execution_mode', {
       for (final v in ReconstructionExecutionMode.values) v.name: v,
@@ -97,7 +97,7 @@ class ReconstructionJobResponse {
   }
 
   late final ReconstructionJobStatus status;
-  late final ReconstructionStage stage;
+  late final ReconstructionStageDto stage;
   late final ReconstructionExecutionMode executionMode;
   late final int progress;
   late final int retryCount;

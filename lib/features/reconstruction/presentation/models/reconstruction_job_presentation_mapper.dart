@@ -1,14 +1,14 @@
-import '../../presentation/models/processing_state.dart';
-import 'reconstruction_job_response.dart';
+import '../../domain/entities/reconstruction_job.dart';
+import 'processing_state.dart';
 
-ProcessingSnapshot mapReconstructionJob(ReconstructionJobResponse job) =>
+ProcessingSnapshot presentReconstructionJob(ReconstructionJob job) =>
     ProcessingSnapshot(
       status: switch (job.status) {
-        ReconstructionJobStatus.queued => ProcessingStatus.queued,
-        ReconstructionJobStatus.running => ProcessingStatus.processing,
-        ReconstructionJobStatus.done => ProcessingStatus.completed,
-        ReconstructionJobStatus.failed => ProcessingStatus.failed,
-        ReconstructionJobStatus.cancelled => ProcessingStatus.cancelled,
+        ReconstructionStatus.queued => ProcessingStatus.queued,
+        ReconstructionStatus.running => ProcessingStatus.processing,
+        ReconstructionStatus.done => ProcessingStatus.completed,
+        ReconstructionStatus.failed => ProcessingStatus.failed,
+        ReconstructionStatus.cancelled => ProcessingStatus.cancelled,
       },
       jobId: job.jobId,
       jobStage: switch (job.stage) {
@@ -22,9 +22,7 @@ ProcessingSnapshot mapReconstructionJob(ReconstructionJobResponse job) =>
         ReconstructionStage.uploading => ProcessingJobStage.uploading,
       },
       backendProgress: job.progress,
-      provenance: job.executionMode == ReconstructionExecutionMode.mock
+      provenance: job.execution == ReconstructionExecution.mock
           ? ProgressProvenance.simulated
           : ProgressProvenance.measured,
-      // Backend errors are retained in the DTO. No safe-message contract exists
-      // for displaying arbitrary backend internals in the presentation layer.
     );

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:memento3d_frontend_app/features/scans/presentation/models/processing_state.dart';
-import 'package:memento3d_frontend_app/features/scans/presentation/services/mock_processing_progress_source.dart';
+import 'package:memento3d_frontend_app/features/reconstruction/presentation/models/processing_state.dart';
+
+import '../helpers/mock_processing_progress_source.dart';
 
 void main() {
   test(

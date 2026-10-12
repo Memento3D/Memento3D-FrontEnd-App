@@ -3,10 +3,16 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../models/processing_state.dart';
+import '../../domain/reconstruction_repository.dart';
 import '../services/processing_progress_source.dart';
+import '../adapters/repository_processing_progress_source.dart';
 
 class ProcessingController extends ChangeNotifier {
-  ProcessingController(ProcessingProgressSource source)
+  ProcessingController(ReconstructionRepository repository)
+    : this.fromProgressSource(RepositoryProcessingProgressSource(repository));
+
+  /// Presentation-only seam for deterministic fixtures and legacy UI tests.
+  ProcessingController.fromProgressSource(ProcessingProgressSource source)
     : _source = source,
       _snapshot = source.current.snapshot,
       _attempt = source.current.attempt {

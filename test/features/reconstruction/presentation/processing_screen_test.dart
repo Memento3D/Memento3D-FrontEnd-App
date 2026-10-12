@@ -9,8 +9,9 @@ import 'package:memento3d_frontend_app/screens/capture_review_screen.dart';
 import 'package:memento3d_frontend_app/screens/capture_session.dart';
 import 'package:memento3d_frontend_app/screens/processing_screen.dart';
 import 'package:memento3d_frontend_app/screens/processing_state.dart';
-import 'package:memento3d_frontend_app/features/scans/presentation/controllers/processing_controller.dart';
-import 'package:memento3d_frontend_app/features/scans/presentation/services/mock_processing_progress_source.dart';
+import 'package:memento3d_frontend_app/features/reconstruction/presentation/controllers/processing_controller.dart';
+
+import '../helpers/mock_processing_progress_source.dart';
 
 void main() {
   test('initial processing state contains no invented progress', () {
@@ -87,7 +88,7 @@ void main() {
     tester,
   ) async {
     final source = MockProcessingProgressSource();
-    final controller = ProcessingController(source);
+    final controller = ProcessingController.fromProgressSource(source);
     addTearDown(controller.dispose);
     var returned = false;
     await tester.pumpWidget(
@@ -147,7 +148,7 @@ void main() {
     final source = MockProcessingProgressSource(
       scenario: MockProcessingScenario.failure,
     );
-    final controller = ProcessingController(source);
+    final controller = ProcessingController.fromProgressSource(source);
     addTearDown(controller.dispose);
     source.advance();
     source.advance();
@@ -232,7 +233,7 @@ void main() {
       final source = MockProcessingProgressSource(
         scenario: MockProcessingScenario.failure,
       );
-      final controller = ProcessingController(source);
+      final controller = ProcessingController.fromProgressSource(source);
       addTearDown(controller.dispose);
       source.advance();
       source.advance();
@@ -276,7 +277,7 @@ void main() {
       final source = MockProcessingProgressSource(
         scenario: MockProcessingScenario.failure,
       );
-      final controller = ProcessingController(source);
+      final controller = ProcessingController.fromProgressSource(source);
       addTearDown(controller.dispose);
       final session = CaptureSession();
       final states = [

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import '../models/processing_state.dart';
-import 'processing_progress_source.dart';
+import 'package:memento3d_frontend_app/features/reconstruction/presentation/models/processing_state.dart';
+import 'package:memento3d_frontend_app/features/reconstruction/presentation/services/processing_progress_source.dart';
 
 enum MockProcessingScenario { success, failure, unknown }
 
