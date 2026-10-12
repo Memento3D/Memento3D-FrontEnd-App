@@ -87,14 +87,18 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                _pill(strings.processingLocal, Icons.phone_android_outlined),
+                if (!snapshot.isBackendObservation)
+                  _pill(strings.processingLocal, Icons.phone_android_outlined),
                 _pill(
                   snapshot.provenance == ProgressProvenance.simulated
                       ? strings.processingSimulated
-                      : strings.processingCloudUnavailable,
+                      : snapshot.isBackendObservation &&
+                            snapshot.provenance == ProgressProvenance.measured
+                      ? strings.processingBackendReal
+                      : strings.processingProvenanceUnknown,
                   snapshot.provenance == ProgressProvenance.simulated
                       ? Icons.science_outlined
-                      : Icons.cloud_off_outlined,
+                      : Icons.cloud_outlined,
                 ),
               ],
             ),
@@ -114,8 +118,17 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 12),
-                  for (final stage in ProcessingStage.values)
-                    _stageRow(stage, strings),
+                  if (snapshot.isBackendObservation) ...[
+                    if (snapshot.jobStage != null)
+                      Semantics(
+                        liveRegion: true,
+                        child: Text(
+                          _backendStageLabel(snapshot.jobStage!, strings),
+                        ),
+                      ),
+                  ] else
+                    for (final stage in ProcessingStage.values)
+                      _stageRow(stage, strings),
                 ],
               ),
             ),
@@ -184,8 +197,10 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     final status = snapshot.status;
     final simulated = snapshot.provenance == ProgressProvenance.simulated;
     final title = switch (status) {
-      ProcessingStatus.queued => 'Queued',
-      ProcessingStatus.cancelled => 'Cancelled',
+      ProcessingStatus.observationLoading =>
+        strings.processingObservationLoading,
+      ProcessingStatus.queued => strings.processingQueued,
+      ProcessingStatus.cancelled => strings.processingCancelled,
       ProcessingStatus.readyToUpload => strings.processingReadyTitle,
       ProcessingStatus.uploading => strings.processingUploading,
       ProcessingStatus.processing => strings.processingRunning,
@@ -196,8 +211,10 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       ProcessingStatus.failed => strings.processingFailed,
     };
     final body = switch (status) {
-      ProcessingStatus.queued => 'Waiting for reconstruction.',
-      ProcessingStatus.cancelled => 'Reconstruction was cancelled.',
+      ProcessingStatus.observationLoading =>
+        strings.processingObservationLoadingBody,
+      ProcessingStatus.queued => strings.processingQueuedBody,
+      ProcessingStatus.cancelled => strings.processingCancelledBody,
       ProcessingStatus.readyToUpload => strings.processingReadyBody,
       ProcessingStatus.uploading ||
       ProcessingStatus.processing => strings.processingTakesTime,
@@ -244,7 +261,9 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
             ),
           const SizedBox(height: 12),
         ],
-        if (snapshot.isRunning && snapshot.observationError == null) ...[
+        if ((snapshot.isRunning ||
+                status == ProcessingStatus.observationLoading) &&
+            snapshot.observationError == null) ...[
           Center(child: CircularProgressIndicator(semanticsLabel: title)),
           const SizedBox(height: 16),
         ] else
@@ -253,6 +272,8 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
                 ? Icons.check_circle
                 : status == ProcessingStatus.failed
                 ? Icons.error_outline
+                : snapshot.isBackendObservation
+                ? Icons.info_outline
                 : Icons.cloud_upload_outlined,
             color: status == ProcessingStatus.failed
                 ? AppColors.error
@@ -273,16 +294,19 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
           ),
           const SizedBox(height: 12),
         ],
-        Semantics(
-          liveRegion: true,
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
+        if (!(status == ProcessingStatus.observationLoading &&
+            snapshot.observationError != null)) ...[
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(body, textAlign: TextAlign.center),
+          const SizedBox(height: 8),
+          Text(body, textAlign: TextAlign.center),
+        ],
         if (status == ProcessingStatus.readyToUpload) ...[
           const SizedBox(height: 8),
           Text(strings.processingWaiting, textAlign: TextAlign.center),
@@ -313,15 +337,17 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          strings.processingSelectedDetail,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
-        Text(
-          widget.session.detailLevel == ReconstructionDetailLevel.standard
-              ? strings.detailStandard
-              : strings.detailHigh,
-        ),
+        if (!snapshot.isBackendObservation) ...[
+          Text(
+            strings.processingSelectedDetail,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          Text(
+            widget.session.detailLevel == ReconstructionDetailLevel.standard
+                ? strings.detailStandard
+                : strings.detailHigh,
+          ),
+        ],
         const Divider(height: 24),
         Text(
           strings.processingFileSize,
@@ -345,6 +371,20 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       ],
     ),
   );
+
+  String _backendStageLabel(
+    ProcessingJobStage stage,
+    AppLocalizations strings,
+  ) => switch (stage) {
+    ProcessingJobStage.downloading => strings.processingBackendDownloading,
+    ProcessingJobStage.preprocessing => strings.processingBackendPreprocessing,
+    ProcessingJobStage.shapeGeneration =>
+      strings.processingBackendShapeGeneration,
+    ProcessingJobStage.texturing => strings.processingBackendTexturing,
+    ProcessingJobStage.validating => strings.processingBackendValidating,
+    ProcessingJobStage.exporting => strings.processingBackendExporting,
+    ProcessingJobStage.uploading => strings.processingBackendUploading,
+  };
 
   Widget _stageRow(ProcessingStage stage, AppLocalizations strings) {
     final stageStatus = snapshot.status == ProcessingStatus.completed

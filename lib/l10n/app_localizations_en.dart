@@ -351,4 +351,51 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingObservationExhausted =>
       'Progress updates have stopped after repeated connection problems. Retry to check again.';
+
+  @override
+  String get processingObservationLoading => 'Retrieving reconstruction status';
+
+  @override
+  String get processingObservationLoadingBody =>
+      'Please wait while we check the reconstruction job.';
+
+  @override
+  String get processingQueued => 'Queued';
+
+  @override
+  String get processingQueuedBody => 'Waiting for reconstruction.';
+
+  @override
+  String get processingCancelled => 'Cancelled';
+
+  @override
+  String get processingCancelledBody => 'Reconstruction was cancelled.';
+
+  @override
+  String get processingBackendReal => 'Backend processing';
+
+  @override
+  String get processingProvenanceUnknown => 'Processing mode not yet known';
+
+  @override
+  String get processingBackendDownloading => 'Downloading reconstruction input';
+
+  @override
+  String get processingBackendPreprocessing =>
+      'Preprocessing reconstruction input';
+
+  @override
+  String get processingBackendShapeGeneration => 'Generating shape';
+
+  @override
+  String get processingBackendTexturing => 'Applying textures';
+
+  @override
+  String get processingBackendValidating => 'Validating reconstruction';
+
+  @override
+  String get processingBackendExporting => 'Exporting reconstruction';
+
+  @override
+  String get processingBackendUploading => 'Uploading reconstruction output';
 }

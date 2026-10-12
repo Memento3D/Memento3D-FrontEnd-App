@@ -40,7 +40,7 @@ class RepositoryProcessingProgressSource
   ProcessingUpdate get current => ProcessingUpdate(
     _attempt,
     _repository.current == null
-        ? const ProcessingSnapshot.waiting()
+        ? const ProcessingSnapshot.observing()
         : presentReconstructionJob(_repository.current!),
   );
 

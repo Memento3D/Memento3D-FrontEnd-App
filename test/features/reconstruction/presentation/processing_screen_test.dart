@@ -58,7 +58,13 @@ void main() {
     expect(screen.session, same(session));
     expect(find.text('Đã chụp 1 ảnh'), findsOneWidget);
     expect(find.text('Sẵn sàng tải lên'), findsOneWidget);
-    expect(find.text('Chưa kết nối dịch vụ đám mây'), findsOneWidget);
+    expect(
+      find.text(
+        AppLocalizations.of(tester.element(find.byType(ProcessingScreen)))!
+            .processingProvenanceUnknown,
+      ),
+      findsOneWidget,
+    );
     expect(find.textContaining('%'), findsNothing);
     await tester.scrollUntilVisible(find.text('Tiêu chuẩn'), 150);
     expect(find.text('Tiêu chuẩn'), findsOneWidget);

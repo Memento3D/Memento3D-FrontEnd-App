@@ -3,6 +3,7 @@ import 'processing_state.dart';
 
 ProcessingSnapshot presentReconstructionJob(ReconstructionJob job) =>
     ProcessingSnapshot(
+      isBackendObservation: true,
       status: switch (job.status) {
         ReconstructionStatus.queued => ProcessingStatus.queued,
         ReconstructionStatus.running => ProcessingStatus.processing,

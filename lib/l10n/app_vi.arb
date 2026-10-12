@@ -108,5 +108,20 @@
   "processingObservationUnavailable": "Không thể truy cập tác vụ tái tạo này.",
   "processingObservationContract": "Không thể đọc tiến độ. Vui lòng thử lại.",
   "processingObservationTransient": "Tạm thời không thể cập nhật tiến độ. Đang tự động thử lại.",
-  "processingObservationExhausted": "Đã dừng cập nhật sau nhiều lần gặp lỗi kết nối. Nhấn thử lại để kiểm tra."
+  "processingObservationExhausted": "Đã dừng cập nhật sau nhiều lần gặp lỗi kết nối. Nhấn thử lại để kiểm tra.",
+  "processingObservationLoading": "Đang lấy trạng thái tái dựng",
+  "processingObservationLoadingBody": "Vui lòng đợi trong khi kiểm tra tác vụ tái dựng.",
+  "processingQueued": "Đang chờ",
+  "processingQueuedBody": "Đang chờ tái dựng.",
+  "processingCancelled": "Đã hủy",
+  "processingCancelledBody": "Tác vụ tái dựng đã bị hủy.",
+  "processingBackendReal": "Xử lý trên máy chủ",
+  "processingProvenanceUnknown": "Chưa xác định chế độ xử lý",
+  "processingBackendDownloading": "Đang tải dữ liệu đầu vào tái dựng",
+  "processingBackendPreprocessing": "Đang tiền xử lý dữ liệu tái dựng",
+  "processingBackendShapeGeneration": "Đang tạo hình dạng",
+  "processingBackendTexturing": "Đang tạo bề mặt",
+  "processingBackendValidating": "Đang kiểm tra kết quả tái dựng",
+  "processingBackendExporting": "Đang xuất kết quả tái dựng",
+  "processingBackendUploading": "Đang tải kết quả tái dựng lên máy chủ"
 }

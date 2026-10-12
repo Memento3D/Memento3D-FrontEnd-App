@@ -80,7 +80,9 @@ class ProcessingController extends ChangeNotifier {
     _retrying = true;
     _awaitingRetryState = true;
     _attempt++;
-    _snapshot = _snapshot.withObservationError(null);
+    _snapshot = _snapshot.isBackendObservation
+        ? const ProcessingSnapshot.observing()
+        : _snapshot.withObservationError(null);
     notifyListeners();
     try {
       await _source.retry(_attempt);

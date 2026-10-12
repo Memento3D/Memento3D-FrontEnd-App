@@ -108,5 +108,20 @@
   "processingObservationUnavailable": "This reconstruction job is unavailable.",
   "processingObservationContract": "Progress could not be read. Please try again.",
   "processingObservationTransient": "Progress is temporarily unavailable. Retrying automatically.",
-  "processingObservationExhausted": "Progress updates have stopped after repeated connection problems. Retry to check again."
+  "processingObservationExhausted": "Progress updates have stopped after repeated connection problems. Retry to check again.",
+  "processingObservationLoading": "Retrieving reconstruction status",
+  "processingObservationLoadingBody": "Please wait while we check the reconstruction job.",
+  "processingQueued": "Queued",
+  "processingQueuedBody": "Waiting for reconstruction.",
+  "processingCancelled": "Cancelled",
+  "processingCancelledBody": "Reconstruction was cancelled.",
+  "processingBackendReal": "Backend processing",
+  "processingProvenanceUnknown": "Processing mode not yet known",
+  "processingBackendDownloading": "Downloading reconstruction input",
+  "processingBackendPreprocessing": "Preprocessing reconstruction input",
+  "processingBackendShapeGeneration": "Generating shape",
+  "processingBackendTexturing": "Applying textures",
+  "processingBackendValidating": "Validating reconstruction",
+  "processingBackendExporting": "Exporting reconstruction",
+  "processingBackendUploading": "Uploading reconstruction output"
 }

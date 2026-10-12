@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../domain/reconstruction_repository.dart';
 
 enum ProcessingStatus {
+  observationLoading,
   readyToUpload,
   uploading,
   processing,
@@ -57,6 +58,7 @@ class ProcessingSnapshot {
     this.jobStage,
     this.backendProgress,
     this.observationError,
+    this.isBackendObservation = false,
   }) : assert(
          progressPercent == null ||
              (progressPercent.isFinite &&
@@ -78,8 +80,26 @@ class ProcessingSnapshot {
       canRetry = false,
       jobStage = null,
       backendProgress = null,
-      observationError = null;
+      observationError = null,
+      isBackendObservation = false;
 
+  const ProcessingSnapshot.observing()
+    : status = ProcessingStatus.observationLoading,
+      uploadedBytes = null,
+      totalUploadBytes = null,
+      jobId = null,
+      stageStatuses = const {},
+      progressPercent = null,
+      errorMessage = null,
+      provenance = ProgressProvenance.unknown,
+      failure = null,
+      canRetry = false,
+      jobStage = null,
+      backendProgress = null,
+      observationError = null,
+      isBackendObservation = true;
+
+  final bool isBackendObservation;
   final ProcessingStatus status;
   final int? uploadedBytes;
   final int? totalUploadBytes;
@@ -111,6 +131,7 @@ class ProcessingSnapshot {
     jobStage: jobStage,
     backendProgress: backendProgress,
     observationError: error,
+    isBackendObservation: isBackendObservation,
   );
 
   bool get canRetryObservation =>
@@ -134,6 +155,7 @@ class ProcessingSnapshot {
   @override
   bool operator ==(Object other) =>
       other is ProcessingSnapshot &&
+      isBackendObservation == other.isBackendObservation &&
       status == other.status &&
       uploadedBytes == other.uploadedBytes &&
       totalUploadBytes == other.totalUploadBytes &&
@@ -150,6 +172,7 @@ class ProcessingSnapshot {
 
   @override
   int get hashCode => Object.hash(
+    isBackendObservation,
     status,
     uploadedBytes,
     totalUploadBytes,

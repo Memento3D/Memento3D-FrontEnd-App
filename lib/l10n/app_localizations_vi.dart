@@ -350,4 +350,53 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get processingObservationExhausted =>
       'Đã dừng cập nhật sau nhiều lần gặp lỗi kết nối. Nhấn thử lại để kiểm tra.';
+
+  @override
+  String get processingObservationLoading => 'Đang lấy trạng thái tái dựng';
+
+  @override
+  String get processingObservationLoadingBody =>
+      'Vui lòng đợi trong khi kiểm tra tác vụ tái dựng.';
+
+  @override
+  String get processingQueued => 'Đang chờ';
+
+  @override
+  String get processingQueuedBody => 'Đang chờ tái dựng.';
+
+  @override
+  String get processingCancelled => 'Đã hủy';
+
+  @override
+  String get processingCancelledBody => 'Tác vụ tái dựng đã bị hủy.';
+
+  @override
+  String get processingBackendReal => 'Xử lý trên máy chủ';
+
+  @override
+  String get processingProvenanceUnknown => 'Chưa xác định chế độ xử lý';
+
+  @override
+  String get processingBackendDownloading =>
+      'Đang tải dữ liệu đầu vào tái dựng';
+
+  @override
+  String get processingBackendPreprocessing =>
+      'Đang tiền xử lý dữ liệu tái dựng';
+
+  @override
+  String get processingBackendShapeGeneration => 'Đang tạo hình dạng';
+
+  @override
+  String get processingBackendTexturing => 'Đang tạo bề mặt';
+
+  @override
+  String get processingBackendValidating => 'Đang kiểm tra kết quả tái dựng';
+
+  @override
+  String get processingBackendExporting => 'Đang xuất kết quả tái dựng';
+
+  @override
+  String get processingBackendUploading =>
+      'Đang tải kết quả tái dựng lên máy chủ';
 }

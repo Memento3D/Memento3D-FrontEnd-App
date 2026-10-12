@@ -34,7 +34,7 @@ void main() {
   test('controller consumes domain contract, maps state and owns disposal', () {
     final repository = FakeRepository();
     final controller = ProcessingController(repository);
-    expect(controller.snapshot.status, ProcessingStatus.readyToUpload);
+    expect(controller.snapshot.status, ProcessingStatus.observationLoading);
     repository.current = const ReconstructionJob(
       jobId: 'job',
       scanId: 'scan',

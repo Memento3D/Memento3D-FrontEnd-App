@@ -192,7 +192,7 @@ void main() {
         404 => ReconstructionObservationError.unavailable,
         _ => ReconstructionObservationError.contract,
       });
-      expect(controller.snapshot.status, ProcessingStatus.readyToUpload);
+      expect(controller.snapshot.status, ProcessingStatus.observationLoading);
       expect(controller.snapshot.errorMessage, isNull);
       await tester.pump(const Duration(minutes: 1));
       expect(calls, 1);
