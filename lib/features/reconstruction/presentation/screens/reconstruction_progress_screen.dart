@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../screens/capture_session.dart';
 import '../../../../screens/capture_size_format.dart';
 import '../models/processing_state.dart';
+import '../../domain/reconstruction_repository.dart';
 
 class ProcessingScreen extends StatefulWidget {
   const ProcessingScreen({
@@ -216,7 +217,34 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (snapshot.isRunning) ...[
+        if (snapshot.observationError != null) ...[
+          Semantics(
+            liveRegion: true,
+            child: Text(switch (snapshot.observationError!) {
+              ReconstructionObservationError.authentication =>
+                strings.processingObservationAuth,
+              ReconstructionObservationError.unavailable =>
+                strings.processingObservationUnavailable,
+              ReconstructionObservationError.contract =>
+                strings.processingObservationContract,
+              ReconstructionObservationError.transient =>
+                strings.processingObservationTransient,
+              ReconstructionObservationError.exhausted =>
+                strings.processingObservationExhausted,
+              ReconstructionObservationError.request =>
+                strings.processingSourceFailure,
+            }, textAlign: TextAlign.center),
+          ),
+          if (snapshot.canRetryObservation && widget.controller != null)
+            FilledButton(
+              onPressed: widget.controller!.isRetrying
+                  ? null
+                  : widget.controller!.retry,
+              child: Text(strings.retry),
+            ),
+          const SizedBox(height: 12),
+        ],
+        if (snapshot.isRunning && snapshot.observationError == null) ...[
           Center(child: CircularProgressIndicator(semanticsLabel: title)),
           const SizedBox(height: 16),
         ] else

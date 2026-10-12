@@ -691,6 +691,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Return'**
   String get processingReturn;
+
+  /// No description provided for @processingObservationAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has ended. Sign in again to check progress.'**
+  String get processingObservationAuth;
+
+  /// No description provided for @processingObservationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This reconstruction job is unavailable.'**
+  String get processingObservationUnavailable;
+
+  /// No description provided for @processingObservationContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress could not be read. Please try again.'**
+  String get processingObservationContract;
+
+  /// No description provided for @processingObservationTransient.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress is temporarily unavailable. Retrying automatically.'**
+  String get processingObservationTransient;
+
+  /// No description provided for @processingObservationExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress updates have stopped after repeated connection problems. Retry to check again.'**
+  String get processingObservationExhausted;
 }
 
 class _AppLocalizationsDelegate

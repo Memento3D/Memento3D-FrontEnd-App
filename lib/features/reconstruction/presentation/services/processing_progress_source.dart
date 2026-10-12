@@ -1,4 +1,17 @@
 import '../models/processing_state.dart';
+import '../../domain/reconstruction_repository.dart';
+
+class ProcessingObservationUpdate {
+  const ProcessingObservationUpdate(this.attempt, this.error);
+  final int attempt;
+  final ReconstructionObservationError error;
+}
+
+/// Optional observation channel; deterministic legacy fixtures need not use it.
+abstract interface class ObservationProcessingProgressSource {
+  Stream<ProcessingObservationUpdate> get observationErrors;
+  ProcessingObservationUpdate? get currentObservationError;
+}
 
 /// Local lifecycle token, not a backend job/event identifier.
 class ProcessingUpdate {

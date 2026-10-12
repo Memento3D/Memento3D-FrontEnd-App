@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../../domain/reconstruction_repository.dart';
+
 enum ProcessingStatus {
   readyToUpload,
   uploading,
@@ -54,6 +56,7 @@ class ProcessingSnapshot {
     this.canRetry = false,
     this.jobStage,
     this.backendProgress,
+    this.observationError,
   }) : assert(
          progressPercent == null ||
              (progressPercent.isFinite &&
@@ -74,7 +77,8 @@ class ProcessingSnapshot {
       failure = null,
       canRetry = false,
       jobStage = null,
-      backendProgress = null;
+      backendProgress = null,
+      observationError = null;
 
   final ProcessingStatus status;
   final int? uploadedBytes;
@@ -89,6 +93,31 @@ class ProcessingSnapshot {
   final bool canRetry;
   final ProcessingJobStage? jobStage;
   final int? backendProgress;
+  final ReconstructionObservationError? observationError;
+
+  ProcessingSnapshot withObservationError(
+    ReconstructionObservationError? error,
+  ) => ProcessingSnapshot(
+    status: status,
+    uploadedBytes: uploadedBytes,
+    totalUploadBytes: totalUploadBytes,
+    jobId: jobId,
+    stageStatuses: stageStatuses,
+    progressPercent: progressPercent,
+    errorMessage: errorMessage,
+    provenance: provenance,
+    failure: failure,
+    canRetry: canRetry,
+    jobStage: jobStage,
+    backendProgress: backendProgress,
+    observationError: error,
+  );
+
+  bool get canRetryObservation =>
+      !isTerminal &&
+      observationError != null &&
+      observationError != ReconstructionObservationError.transient &&
+      observationError != ReconstructionObservationError.authentication;
 
   bool get hasKnownProgress =>
       provenance != ProgressProvenance.unknown && progressPercent != null;
@@ -116,6 +145,7 @@ class ProcessingSnapshot {
       canRetry == other.canRetry &&
       jobStage == other.jobStage &&
       backendProgress == other.backendProgress &&
+      observationError == other.observationError &&
       mapEquals(stageStatuses, other.stageStatuses);
 
   @override
@@ -131,6 +161,7 @@ class ProcessingSnapshot {
     canRetry,
     jobStage,
     backendProgress,
+    observationError,
     Object.hashAllUnordered(
       stageStatuses.entries.map((e) => Object.hash(e.key, e.value)),
     ),

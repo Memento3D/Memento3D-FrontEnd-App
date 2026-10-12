@@ -21,6 +21,8 @@ class FakeRepository implements ReconstructionRepository {
   @override
   void cancel() {}
   @override
+  Future<void> retryObservation() async {}
+  @override
   void dispose() {
     disposed = true;
     unawaited(updates.close());

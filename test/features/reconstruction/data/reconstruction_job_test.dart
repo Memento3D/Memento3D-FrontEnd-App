@@ -235,10 +235,10 @@ void main() {
       expect(update.scanId, scanId);
       await Future<void>.delayed(const Duration(milliseconds: 20));
       expect(calls, 1);
-      await expectLater(
-        RepositoryProcessingProgressSource(source).retry(1),
-        throwsUnsupportedError,
-      );
+      final adapter = RepositoryProcessingProgressSource(source);
+      await adapter.retry(1);
+      expect(calls, 1); // A terminal backend job cannot be restarted by retry.
+      adapter.dispose();
     },
   );
 

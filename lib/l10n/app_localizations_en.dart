@@ -331,4 +331,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get processingReturn => 'Return';
+
+  @override
+  String get processingObservationAuth =>
+      'Your session has ended. Sign in again to check progress.';
+
+  @override
+  String get processingObservationUnavailable =>
+      'This reconstruction job is unavailable.';
+
+  @override
+  String get processingObservationContract =>
+      'Progress could not be read. Please try again.';
+
+  @override
+  String get processingObservationTransient =>
+      'Progress is temporarily unavailable. Retrying automatically.';
+
+  @override
+  String get processingObservationExhausted =>
+      'Progress updates have stopped after repeated connection problems. Retry to check again.';
 }

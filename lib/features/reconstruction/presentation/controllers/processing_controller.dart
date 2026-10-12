@@ -22,9 +22,18 @@ class ProcessingController extends ChangeNotifier {
         if (!_disposed && !_snapshot.isTerminal) _sourceFailed();
       },
     );
+    if (source is ObservationProcessingProgressSource) {
+      final observations = source as ObservationProcessingProgressSource;
+      _errorSubscription = observations.observationErrors.listen(
+        _observationFailed,
+      );
+      final initialError = observations.currentObservationError;
+      if (initialError != null) _observationFailed(initialError);
+    }
   }
   final ProcessingProgressSource _source;
   late final StreamSubscription<ProcessingUpdate> _subscription;
+  StreamSubscription<ProcessingObservationUpdate>? _errorSubscription;
   ProcessingSnapshot _snapshot;
   int _attempt;
   bool _retrying = false;
@@ -33,6 +42,12 @@ class ProcessingController extends ChangeNotifier {
   ProcessingSnapshot get snapshot => _snapshot;
   bool get isRetrying => _retrying;
   int get attempt => _attempt;
+
+  void _observationFailed(ProcessingObservationUpdate update) {
+    if (_disposed || update.attempt != _attempt || _snapshot.isTerminal) return;
+    _snapshot = _snapshot.withObservationError(update.error);
+    notifyListeners();
+  }
 
   void _accept(ProcessingUpdate update) {
     if (_disposed ||
@@ -48,16 +63,8 @@ class ProcessingController extends ChangeNotifier {
 
   void _sourceFailed() {
     _awaitingRetryState = false;
-    _snapshot = ProcessingSnapshot(
-      status: ProcessingStatus.failed,
-      stageStatuses: _snapshot.stageStatuses,
-      progressPercent: _snapshot.progressPercent,
-      provenance: _snapshot.provenance,
-      uploadedBytes: _snapshot.uploadedBytes,
-      totalUploadBytes: _snapshot.totalUploadBytes,
-      jobId: _snapshot.jobId,
-      failure: ProcessingFailure.sourceUnavailable,
-      canRetry: _snapshot.canRetry,
+    _snapshot = _snapshot.withObservationError(
+      ReconstructionObservationError.request,
     );
     notifyListeners();
   }
@@ -65,17 +72,24 @@ class ProcessingController extends ChangeNotifier {
   Future<void> retry() async {
     if (_disposed ||
         _retrying ||
-        _snapshot.status != ProcessingStatus.failed ||
-        !_snapshot.canRetry) {
+        !(_snapshot.canRetryObservation ||
+            (_snapshot.status == ProcessingStatus.failed &&
+                _snapshot.canRetry))) {
       return;
     }
     _retrying = true;
     _awaitingRetryState = true;
     _attempt++;
+    _snapshot = _snapshot.withObservationError(null);
     notifyListeners();
     try {
       await _source.retry(_attempt);
       _accept(_source.current);
+      if (_source is ObservationProcessingProgressSource) {
+        final error = (_source as ObservationProcessingProgressSource)
+            .currentObservationError;
+        if (error != null) _observationFailed(error);
+      }
     } catch (_) {
       if (!_disposed) _sourceFailed();
     } finally {
@@ -91,6 +105,7 @@ class ProcessingController extends ChangeNotifier {
     if (_disposed) return;
     _disposed = true;
     unawaited(_subscription.cancel());
+    unawaited(_errorSubscription?.cancel());
     _source.dispose();
     super.dispose();
   }

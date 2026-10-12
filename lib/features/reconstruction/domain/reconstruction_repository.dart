@@ -6,6 +6,7 @@ enum ReconstructionObservationError {
   unavailable,
   contract,
   transient,
+  exhausted,
   request,
 }
 
@@ -16,6 +17,9 @@ abstract interface class ReconstructionRepository {
   Stream<ReconstructionJob> get jobs;
   ReconstructionObservationError? get lastObservationError;
   Stream<ReconstructionObservationError> get observationErrors;
+
+  /// Starts a fresh GET observation attempt, never restarts reconstruction.
+  Future<void> retryObservation();
   void cancel();
   void dispose();
 }

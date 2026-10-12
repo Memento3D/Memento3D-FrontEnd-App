@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:memento3d_frontend_app/features/reconstruction/domain/reconstruction_repository.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memento3d_frontend_app/features/reconstruction/presentation/controllers/processing_controller.dart';
 import 'package:memento3d_frontend_app/features/reconstruction/presentation/models/processing_state.dart';
@@ -51,7 +53,10 @@ void main() {
     source.retryGate.completeError(StateError('private exception'));
     await pending;
     expect(controller.snapshot.status, ProcessingStatus.failed);
-    expect(controller.snapshot.failure, ProcessingFailure.sourceUnavailable);
+    expect(
+      controller.snapshot.observationError,
+      ReconstructionObservationError.request,
+    );
     expect(controller.snapshot.errorMessage, isNull);
     expect(controller.isRetrying, isFalse);
     expect(controller.snapshot.canRetry, isTrue);
@@ -151,7 +156,11 @@ void main() {
       ),
     );
     source.stream.addError(StateError('private transport details'));
-    expect(controller.snapshot.failure, ProcessingFailure.sourceUnavailable);
+    expect(
+      controller.snapshot.observationError,
+      ReconstructionObservationError.request,
+    );
+    expect(controller.snapshot.status, ProcessingStatus.processing);
     expect(controller.snapshot.errorMessage, isNull);
     expect(
       controller.snapshot.statusFor(ProcessingStage.texturing),

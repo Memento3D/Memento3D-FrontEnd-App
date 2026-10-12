@@ -330,4 +330,24 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingReturn => 'Quay lại';
+
+  @override
+  String get processingObservationAuth =>
+      'Phiên đăng nhập đã kết thúc. Đăng nhập lại để xem tiến độ.';
+
+  @override
+  String get processingObservationUnavailable =>
+      'Không thể truy cập tác vụ tái tạo này.';
+
+  @override
+  String get processingObservationContract =>
+      'Không thể đọc tiến độ. Vui lòng thử lại.';
+
+  @override
+  String get processingObservationTransient =>
+      'Tạm thời không thể cập nhật tiến độ. Đang tự động thử lại.';
+
+  @override
+  String get processingObservationExhausted =>
+      'Đã dừng cập nhật sau nhiều lần gặp lỗi kết nối. Nhấn thử lại để kiểm tra.';
 }
