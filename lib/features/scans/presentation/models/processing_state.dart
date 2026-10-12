@@ -6,6 +6,19 @@ enum ProcessingStatus {
   processing,
   completed,
   failed,
+  queued,
+  cancelled,
+}
+
+/// Reconstruction pipeline stages, separate from the legacy local/demo stages.
+enum ProcessingJobStage {
+  downloading,
+  preprocessing,
+  shapeGeneration,
+  texturing,
+  validating,
+  exporting,
+  uploading,
 }
 
 /// Frontend presentation stages only, never backend wire values.
@@ -39,6 +52,8 @@ class ProcessingSnapshot {
     this.provenance = ProgressProvenance.unknown,
     this.failure,
     this.canRetry = false,
+    this.jobStage,
+    this.backendProgress,
   }) : assert(
          progressPercent == null ||
              (progressPercent.isFinite &&
@@ -57,7 +72,9 @@ class ProcessingSnapshot {
       errorMessage = null,
       provenance = ProgressProvenance.unknown,
       failure = null,
-      canRetry = false;
+      canRetry = false,
+      jobStage = null,
+      backendProgress = null;
 
   final ProcessingStatus status;
   final int? uploadedBytes;
@@ -70,6 +87,8 @@ class ProcessingSnapshot {
   final ProgressProvenance provenance;
   final ProcessingFailure? failure;
   final bool canRetry;
+  final ProcessingJobStage? jobStage;
+  final int? backendProgress;
 
   bool get hasKnownProgress =>
       provenance != ProgressProvenance.unknown && progressPercent != null;
@@ -79,7 +98,9 @@ class ProcessingSnapshot {
       status == ProcessingStatus.processing ||
       status == ProcessingStatus.uploading;
   bool get isTerminal =>
-      status == ProcessingStatus.completed || status == ProcessingStatus.failed;
+      status == ProcessingStatus.completed ||
+      status == ProcessingStatus.failed ||
+      status == ProcessingStatus.cancelled;
 
   @override
   bool operator ==(Object other) =>
@@ -93,6 +114,8 @@ class ProcessingSnapshot {
       errorMessage == other.errorMessage &&
       failure == other.failure &&
       canRetry == other.canRetry &&
+      jobStage == other.jobStage &&
+      backendProgress == other.backendProgress &&
       mapEquals(stageStatuses, other.stageStatuses);
 
   @override
@@ -106,6 +129,8 @@ class ProcessingSnapshot {
     errorMessage,
     failure,
     canRetry,
+    jobStage,
+    backendProgress,
     Object.hashAllUnordered(
       stageStatuses.entries.map((e) => Object.hash(e.key, e.value)),
     ),

@@ -183,6 +183,8 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
     final status = snapshot.status;
     final simulated = snapshot.provenance == ProgressProvenance.simulated;
     final title = switch (status) {
+      ProcessingStatus.queued => 'Queued',
+      ProcessingStatus.cancelled => 'Cancelled',
       ProcessingStatus.readyToUpload => strings.processingReadyTitle,
       ProcessingStatus.uploading => strings.processingUploading,
       ProcessingStatus.processing => strings.processingRunning,
@@ -193,6 +195,8 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       ProcessingStatus.failed => strings.processingFailed,
     };
     final body = switch (status) {
+      ProcessingStatus.queued => 'Waiting for reconstruction.',
+      ProcessingStatus.cancelled => 'Reconstruction was cancelled.',
       ProcessingStatus.readyToUpload => strings.processingReadyBody,
       ProcessingStatus.uploading ||
       ProcessingStatus.processing => strings.processingTakesTime,
