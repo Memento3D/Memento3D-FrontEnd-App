@@ -303,4 +303,99 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get processingSimulated => 'Simulated progress — demo only';
+
+  @override
+  String get processingTakesTime =>
+      'Reconstruction may take some time. The current stage is shown below.';
+
+  @override
+  String get processingDemoCompleted => 'Simulation completed';
+
+  @override
+  String get processingDemoCompleteBody =>
+      'This demo has finished. No 3D model was created.';
+
+  @override
+  String get processingDemoFailure =>
+      'The simulation stopped while generating details. You can retry the demo.';
+
+  @override
+  String get processingSourceFailure =>
+      'Progress updates could not be received.';
+
+  @override
+  String get processingStoppedHere => 'Stopped at this stage';
+
+  @override
+  String get processingReturn => 'Return';
+
+  @override
+  String get processingObservationAuth =>
+      'Your session has ended. Sign in again to check progress.';
+
+  @override
+  String get processingObservationUnavailable =>
+      'This reconstruction job is unavailable.';
+
+  @override
+  String get processingObservationContract =>
+      'Progress could not be read. Please try again.';
+
+  @override
+  String get processingObservationTransient =>
+      'Progress is temporarily unavailable. Retrying automatically.';
+
+  @override
+  String get processingObservationExhausted =>
+      'Progress updates have stopped after repeated connection problems. Retry to check again.';
+
+  @override
+  String get processingObservationLoading => 'Retrieving reconstruction status';
+
+  @override
+  String get processingObservationLoadingBody =>
+      'Please wait while we check the reconstruction job.';
+
+  @override
+  String get processingQueued => 'Queued';
+
+  @override
+  String get processingQueuedBody => 'Waiting for reconstruction.';
+
+  @override
+  String get processingCancelled => 'Cancelled';
+
+  @override
+  String get processingCancelledBody => 'Reconstruction was cancelled.';
+
+  @override
+  String get processingBackendReal => 'Backend processing';
+
+  @override
+  String get processingProvenanceUnknown => 'Processing mode not yet known';
+
+  @override
+  String get processingBackendDownloading => 'Downloading reconstruction input';
+
+  @override
+  String get processingBackendPreprocessing =>
+      'Preprocessing reconstruction input';
+
+  @override
+  String get processingBackendShapeGeneration => 'Generating shape';
+
+  @override
+  String get processingBackendTexturing => 'Applying textures';
+
+  @override
+  String get processingBackendValidating => 'Validating reconstruction';
+
+  @override
+  String get processingBackendExporting => 'Exporting reconstruction';
+
+  @override
+  String get processingBackendUploading => 'Uploading reconstruction output';
 }

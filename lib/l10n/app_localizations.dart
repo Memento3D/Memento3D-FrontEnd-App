@@ -643,6 +643,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @processingSimulated.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated progress — demo only'**
+  String get processingSimulated;
+
+  /// No description provided for @processingTakesTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconstruction may take some time. The current stage is shown below.'**
+  String get processingTakesTime;
+
+  /// No description provided for @processingDemoCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation completed'**
+  String get processingDemoCompleted;
+
+  /// No description provided for @processingDemoCompleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This demo has finished. No 3D model was created.'**
+  String get processingDemoCompleteBody;
+
+  /// No description provided for @processingDemoFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'The simulation stopped while generating details. You can retry the demo.'**
+  String get processingDemoFailure;
+
+  /// No description provided for @processingSourceFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress updates could not be received.'**
+  String get processingSourceFailure;
+
+  /// No description provided for @processingStoppedHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped at this stage'**
+  String get processingStoppedHere;
+
+  /// No description provided for @processingReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get processingReturn;
+
+  /// No description provided for @processingObservationAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has ended. Sign in again to check progress.'**
+  String get processingObservationAuth;
+
+  /// No description provided for @processingObservationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This reconstruction job is unavailable.'**
+  String get processingObservationUnavailable;
+
+  /// No description provided for @processingObservationContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress could not be read. Please try again.'**
+  String get processingObservationContract;
+
+  /// No description provided for @processingObservationTransient.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress is temporarily unavailable. Retrying automatically.'**
+  String get processingObservationTransient;
+
+  /// No description provided for @processingObservationExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress updates have stopped after repeated connection problems. Retry to check again.'**
+  String get processingObservationExhausted;
+
+  /// No description provided for @processingObservationLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Retrieving reconstruction status'**
+  String get processingObservationLoading;
+
+  /// No description provided for @processingObservationLoadingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait while we check the reconstruction job.'**
+  String get processingObservationLoadingBody;
+
+  /// No description provided for @processingQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued'**
+  String get processingQueued;
+
+  /// No description provided for @processingQueuedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for reconstruction.'**
+  String get processingQueuedBody;
+
+  /// No description provided for @processingCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get processingCancelled;
+
+  /// No description provided for @processingCancelledBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconstruction was cancelled.'**
+  String get processingCancelledBody;
+
+  /// No description provided for @processingBackendReal.
+  ///
+  /// In en, this message translates to:
+  /// **'Backend processing'**
+  String get processingBackendReal;
+
+  /// No description provided for @processingProvenanceUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing mode not yet known'**
+  String get processingProvenanceUnknown;
+
+  /// No description provided for @processingBackendDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading reconstruction input'**
+  String get processingBackendDownloading;
+
+  /// No description provided for @processingBackendPreprocessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preprocessing reconstruction input'**
+  String get processingBackendPreprocessing;
+
+  /// No description provided for @processingBackendShapeGeneration.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating shape'**
+  String get processingBackendShapeGeneration;
+
+  /// No description provided for @processingBackendTexturing.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying textures'**
+  String get processingBackendTexturing;
+
+  /// No description provided for @processingBackendValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating reconstruction'**
+  String get processingBackendValidating;
+
+  /// No description provided for @processingBackendExporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting reconstruction'**
+  String get processingBackendExporting;
+
+  /// No description provided for @processingBackendUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading reconstruction output'**
+  String get processingBackendUploading;
 }
 
 class _AppLocalizationsDelegate

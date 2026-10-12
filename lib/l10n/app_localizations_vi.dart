@@ -302,4 +302,101 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get processingSimulated => 'Tiến độ mô phỏng — chỉ để xem thử';
+
+  @override
+  String get processingTakesTime =>
+      'Quá trình dựng 3D có thể mất một chút thời gian. Bước hiện tại được hiển thị bên dưới.';
+
+  @override
+  String get processingDemoCompleted => 'Đã hoàn tất mô phỏng';
+
+  @override
+  String get processingDemoCompleteBody =>
+      'Bản mô phỏng đã hoàn tất. Chưa có mô hình 3D nào được tạo.';
+
+  @override
+  String get processingDemoFailure =>
+      'Mô phỏng đã dừng ở bước tạo chi tiết. Bạn có thể thử lại bản mô phỏng.';
+
+  @override
+  String get processingSourceFailure =>
+      'Không thể nhận thông tin cập nhật tiến độ.';
+
+  @override
+  String get processingStoppedHere => 'Đã dừng tại bước này';
+
+  @override
+  String get processingReturn => 'Quay lại';
+
+  @override
+  String get processingObservationAuth =>
+      'Phiên đăng nhập đã kết thúc. Đăng nhập lại để xem tiến độ.';
+
+  @override
+  String get processingObservationUnavailable =>
+      'Không thể truy cập tác vụ tái tạo này.';
+
+  @override
+  String get processingObservationContract =>
+      'Không thể đọc tiến độ. Vui lòng thử lại.';
+
+  @override
+  String get processingObservationTransient =>
+      'Tạm thời không thể cập nhật tiến độ. Đang tự động thử lại.';
+
+  @override
+  String get processingObservationExhausted =>
+      'Đã dừng cập nhật sau nhiều lần gặp lỗi kết nối. Nhấn thử lại để kiểm tra.';
+
+  @override
+  String get processingObservationLoading => 'Đang lấy trạng thái tái dựng';
+
+  @override
+  String get processingObservationLoadingBody =>
+      'Vui lòng đợi trong khi kiểm tra tác vụ tái dựng.';
+
+  @override
+  String get processingQueued => 'Đang chờ';
+
+  @override
+  String get processingQueuedBody => 'Đang chờ tái dựng.';
+
+  @override
+  String get processingCancelled => 'Đã hủy';
+
+  @override
+  String get processingCancelledBody => 'Tác vụ tái dựng đã bị hủy.';
+
+  @override
+  String get processingBackendReal => 'Xử lý trên máy chủ';
+
+  @override
+  String get processingProvenanceUnknown => 'Chưa xác định chế độ xử lý';
+
+  @override
+  String get processingBackendDownloading =>
+      'Đang tải dữ liệu đầu vào tái dựng';
+
+  @override
+  String get processingBackendPreprocessing =>
+      'Đang tiền xử lý dữ liệu tái dựng';
+
+  @override
+  String get processingBackendShapeGeneration => 'Đang tạo hình dạng';
+
+  @override
+  String get processingBackendTexturing => 'Đang tạo bề mặt';
+
+  @override
+  String get processingBackendValidating => 'Đang kiểm tra kết quả tái dựng';
+
+  @override
+  String get processingBackendExporting => 'Đang xuất kết quả tái dựng';
+
+  @override
+  String get processingBackendUploading =>
+      'Đang tải kết quả tái dựng lên máy chủ';
 }
