@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart' as http;
+
 import '../../features/auth/data/services/auth_storage.dart';
 import 'api_config.dart';
 import 'api_exception.dart';
@@ -20,21 +22,26 @@ class ApiClient {
     String endpoint, {
     String? token,
     Map<String, String>? headers,
+    int? expectedStatusCode,
   }) async {
     final uri = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-    final mergedHeaders = await _buildHeaders(token: token, additionalHeaders: headers);
+    final mergedHeaders = await _buildHeaders(
+      token: token,
+      additionalHeaders: headers,
+    );
 
     try {
       final response = await _httpClient
           .get(uri, headers: mergedHeaders)
           .timeout(ApiConfig.timeout);
 
-      return _handleResponse(response);
+      return _handleResponse(response, expectedStatusCode: expectedStatusCode);
     } on SocketException {
       throw ApiException(
         statusCode: 0,
         errorCode: 'ERR-017',
-        message: 'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
+        message:
+            'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
       );
     } on TimeoutException {
       throw ApiException(
@@ -58,9 +65,13 @@ class ApiClient {
     dynamic body,
     String? token,
     Map<String, String>? headers,
+    int? expectedStatusCode,
   }) async {
     final uri = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-    final mergedHeaders = await _buildHeaders(token: token, additionalHeaders: headers);
+    final mergedHeaders = await _buildHeaders(
+      token: token,
+      additionalHeaders: headers,
+    );
 
     try {
       final response = await _httpClient
@@ -71,12 +82,13 @@ class ApiClient {
           )
           .timeout(ApiConfig.timeout);
 
-      return _handleResponse(response);
+      return _handleResponse(response, expectedStatusCode: expectedStatusCode);
     } on SocketException {
       throw ApiException(
         statusCode: 0,
         errorCode: 'ERR-017',
-        message: 'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
+        message:
+            'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
       );
     } on TimeoutException {
       throw ApiException(
@@ -102,7 +114,10 @@ class ApiClient {
     Map<String, String>? headers,
   }) async {
     final uri = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-    final mergedHeaders = await _buildHeaders(token: token, additionalHeaders: headers);
+    final mergedHeaders = await _buildHeaders(
+      token: token,
+      additionalHeaders: headers,
+    );
 
     try {
       final response = await _httpClient
@@ -118,7 +133,8 @@ class ApiClient {
       throw ApiException(
         statusCode: 0,
         errorCode: 'ERR-017',
-        message: 'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
+        message:
+            'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
       );
     } on TimeoutException {
       throw ApiException(
@@ -143,7 +159,10 @@ class ApiClient {
     Map<String, String>? headers,
   }) async {
     final uri = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-    final mergedHeaders = await _buildHeaders(token: token, additionalHeaders: headers);
+    final mergedHeaders = await _buildHeaders(
+      token: token,
+      additionalHeaders: headers,
+    );
 
     try {
       final response = await _httpClient
@@ -155,7 +174,8 @@ class ApiClient {
       throw ApiException(
         statusCode: 0,
         errorCode: 'ERR-017',
-        message: 'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
+        message:
+            'Không thể kết nối đến máy chủ backend (${ApiConfig.baseUrl}). Vui lòng kiểm tra lại mạng hoặc đảm bảo backend đang chạy.',
       );
     } on TimeoutException {
       throw ApiException(
@@ -196,11 +216,17 @@ class ApiClient {
   }
 
   /// Parse response or throw ApiException (with 401 Interceptor)
-  dynamic _handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response, {int? expectedStatusCode}) {
     final statusCode = response.statusCode;
     final bodyString = utf8.decode(response.bodyBytes);
 
     if (statusCode >= 200 && statusCode < 300) {
+      if (expectedStatusCode != null && statusCode != expectedStatusCode) {
+        throw ApiException(
+          statusCode: statusCode,
+          message: 'Unexpected HTTP success status',
+        );
+      }
       if (bodyString.isEmpty) {
         return null;
       }
