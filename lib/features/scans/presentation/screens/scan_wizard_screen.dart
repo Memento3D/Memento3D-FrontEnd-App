@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/scan_model.dart';
 
@@ -29,6 +32,65 @@ class _ScanWizardScreenState extends State<ScanWizardScreen> {
 
   bool get _isChecklistComplete =>
       _chkBackground && _chkLighting && _chkStaticObject && _chkDistance;
+
+  // Step 3: Captured photos from the device camera / gallery
+  final List<XFile> _capturedPhotos = [];
+  final ImagePicker _picker = ImagePicker();
+  bool _isPickingImage = false;
+
+  Future<void> _pickImage(ImageSource source) async {
+    if (_isPickingImage) return;
+    setState(() => _isPickingImage = true);
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        imageQuality: 90,
+      );
+      if (image != null && mounted) {
+        setState(() => _capturedPhotos.add(image));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Không thể mở camera/thư viện: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isPickingImage = false);
+    }
+  }
+
+  void _showCaptureOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt_outlined, color: AppColors.primary),
+              title: Text('Chụp ảnh mới', style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600)),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined, color: AppColors.primary),
+              title: Text('Chọn từ thư viện', style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600)),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -330,38 +392,118 @@ class _ScanWizardScreenState extends State<ScanWizardScreen> {
           style: GoogleFonts.plusJakartaSans(fontSize: 13, color: const Color(0xFF4B5563)),
         ),
         const SizedBox(height: 20),
-        Center(
-          child: Column(
+        if (_capturedPhotos.isEmpty)
+          Center(
+            child: GestureDetector(
+              onTap: _isPickingImage ? null : _showCaptureOptions,
+              child: Column(
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFEDE9FE),
+                      shape: BoxShape.circle,
+                    ),
+                    child: _isPickingImage
+                        ? const Padding(
+                            padding: EdgeInsets.all(22),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: AppColors.primary,
+                            ),
+                          )
+                        : const Icon(Icons.camera_alt_outlined, size: 36, color: AppColors.primary),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Chưa có ảnh nào được tải vào phiên',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF111827),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Nhấn để mở máy ảnh hoặc chọn tệp .jpg/.png từ thư viện',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 12.5,
+                      color: const Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 72,
-                height: 72,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEDE9FE),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.camera_alt_outlined, size: 36, color: AppColors.primary),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${_capturedPhotos.length} ảnh đã chụp',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF111827),
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: _isPickingImage ? null : _showCaptureOptions,
+                    icon: const Icon(Icons.add_a_photo_outlined, size: 16),
+                    label: Text(
+                      'Thêm ảnh',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12.5,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                'Chưa có ảnh nào được tải vào phiên',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF111827),
+              const SizedBox(height: 10),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Mở máy ảnh hoặc chọn tệp .jpg/.png từ thư viện',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12.5,
-                  color: const Color(0xFF6B7280),
-                ),
+                itemCount: _capturedPhotos.length,
+                itemBuilder: (context, index) {
+                  final photo = _capturedPhotos[index];
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(File(photo.path), fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        top: 4,
+                        right: 4,
+                        child: GestureDetector(
+                          onTap: () => setState(() => _capturedPhotos.removeAt(index)),
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: const BoxDecoration(
+                              color: Colors.black54,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.close_rounded, size: 14, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),
-        ),
       ],
     );
   }
