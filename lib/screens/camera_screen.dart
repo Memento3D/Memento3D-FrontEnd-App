@@ -11,7 +11,15 @@ import 'capture_session.dart';
 import 'capture_wizard.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  CameraScreen({super.key, required this.session, this.onUpload}) {
+    if (session.scanId == null) {
+      throw ArgumentError('CameraScreen requires a persisted scan session');
+    }
+  }
+
+  /// The caller owns the scan identity and the session shared with review.
+  final CaptureSession session;
+  final Future<void> Function(BuildContext, CaptureSession)? onUpload;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -20,7 +28,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _controller;
-  final CaptureSession _session = CaptureSession();
+  CaptureSession get _session => widget.session;
   final CaptureWizardModel _wizard = CaptureWizardModel();
   StreamSubscription<AccelerometerEvent>? _gravitySubscription;
   StreamSubscription<UserAccelerometerEvent>? _accelerationSubscription;
@@ -207,7 +215,8 @@ class _CameraScreenState extends State<CameraScreen>
     try {
       await Navigator.of(context).push<void>(
         MaterialPageRoute(
-          builder: (context) => CaptureReviewScreen(session: _session),
+          builder: (context) =>
+              CaptureReviewScreen(session: _session, onUpload: widget.onUpload),
         ),
       );
     } finally {

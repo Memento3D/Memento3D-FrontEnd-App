@@ -473,7 +473,8 @@ class _ScanWizardScreenState extends State<ScanWizardScreen> {
                       if (_currentStep < 3) {
                         setState(() => _currentStep += 1);
                       } else {
-                        Navigator.of(context).pop();
+                        // Application composition owns the next route.
+                        Navigator.of(context).pop<String>(widget.scanId);
                       }
                     }
                   : null,

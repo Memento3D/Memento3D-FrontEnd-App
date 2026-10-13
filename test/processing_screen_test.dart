@@ -26,37 +26,37 @@ void main() {
   testWidgets('Review CTA requires photos and passes the same session', (
     tester,
   ) async {
-    final session = CaptureSession();
+    final session = CaptureSession(scanId: 'persisted-scan');
+    CaptureSession? submitted;
+    Future<void> upload(BuildContext context, CaptureSession value) async {
+      submitted = value;
+    }
+
     await tester.pumpWidget(
-      _localizedApp(CaptureReviewScreen(session: session)),
+      _localizedApp(CaptureReviewScreen(session: session, onUpload: upload)),
     );
-    await tester.scrollUntilVisible(find.text('Xem trạng thái xử lý'), 150);
-    await tester.ensureVisible(find.text('Xem trạng thái xử lý'));
+    await tester.scrollUntilVisible(find.text('Tải ảnh lên'), 150);
+    await tester.ensureVisible(find.text('Tải ảnh lên'));
     await tester.pumpAndSettle();
     final disabled = tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Xem trạng thái xử lý'),
+      find.widgetWithText(FilledButton, 'Tải ảnh lên'),
     );
     expect(disabled.onPressed, isNull);
 
     session.addPhoto(XFile('missing_processing_photo.jpg'));
     session.detailLevel = ReconstructionDetailLevel.standard;
     await tester.pumpWidget(
-      _localizedApp(CaptureReviewScreen(session: session)),
+      _localizedApp(CaptureReviewScreen(session: session, onUpload: upload)),
     );
-    await tester.scrollUntilVisible(find.text('Xem trạng thái xử lý'), 150);
-    await tester.ensureVisible(find.text('Xem trạng thái xử lý'));
+    await tester.scrollUntilVisible(find.text('Tải ảnh lên'), 150);
+    await tester.ensureVisible(find.text('Tải ảnh lên'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Xem trạng thái xử lý'));
+    await tester.tap(find.text('Tải ảnh lên'));
     await tester.pumpAndSettle();
 
-    final screen = tester.widget<ProcessingScreen>(
-      find.byType(ProcessingScreen),
-    );
-    expect(screen.session, same(session));
-    expect(find.text('Đã chụp 1 ảnh'), findsOneWidget);
+    expect(submitted, same(session));
+    expect(find.byType(ProcessingScreen), findsNothing);
     expect(find.text('Tiêu chuẩn'), findsOneWidget);
-    expect(find.text('Sẵn sàng tải lên'), findsOneWidget);
-    expect(find.text('Chưa kết nối dịch vụ đám mây'), findsOneWidget);
     expect(find.textContaining('%'), findsNothing);
     expect(tester.takeException(), isNull);
   });

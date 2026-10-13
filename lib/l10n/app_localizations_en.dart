@@ -303,4 +303,199 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get uploadTitle => 'Uploading photos';
+
+  @override
+  String get uploadPreparing => 'Preparing upload';
+
+  @override
+  String get uploadUploading => 'Uploading';
+
+  @override
+  String get uploadWaiting => 'Waiting for connection';
+
+  @override
+  String get uploadReconciling => 'Restoring upload';
+
+  @override
+  String get uploadRetryNeeded => 'Retry needed';
+
+  @override
+  String get uploadCompleted => 'Photo upload complete';
+
+  @override
+  String get uploadMainTitle => 'Uploading your photos';
+
+  @override
+  String get uploadNetworkBanner => 'Waiting to reconnect';
+
+  @override
+  String get uploadNetworkBody =>
+      'Confirmed progress is unchanged. Uploading will continue when the connection returns.';
+
+  @override
+  String get uploadReconcilingTitle => 'Restoring your upload session';
+
+  @override
+  String get uploadReconcilingBody =>
+      'Checking the last confirmed position before continuing. Your progress stays unchanged while we check.';
+
+  @override
+  String get uploadCompletionBody => 'Moving to quality check...';
+
+  @override
+  String get uploadFailureBody =>
+      'Your confirmed progress is unchanged. Try again to continue from the last confirmed position.';
+
+  @override
+  String get uploadSourceFailureBody =>
+      'Upload updates are unavailable. Your confirmed progress is unchanged; try again to reconnect.';
+
+  @override
+  String get uploadLocalPhotos => 'Local photos';
+
+  @override
+  String get uploadSavedTitle => 'Progress is saved automatically';
+
+  @override
+  String get uploadSavedBody =>
+      'You can return to this upload after an interruption. It will continue from the last confirmed position.';
+
+  @override
+  String get uploadSessionOnlyTitle => 'Keep this session open';
+
+  @override
+  String get uploadSessionOnlyBody =>
+      'Confirmed progress remains visible in this session. Recovery after closing the app is not available yet.';
+
+  @override
+  String uploadPhotoCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String uploadPercent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String uploadSummaryProgress(String value) {
+    return '$value% uploaded';
+  }
+
+  @override
+  String uploadUnitCount(int confirmed, int total) {
+    return '$confirmed / $total';
+  }
+
+  @override
+  String uploadConfirmedParts(int confirmed, int total) {
+    return '$confirmed / $total parts uploaded';
+  }
+
+  @override
+  String get uploadProgressLabel => 'Confirmed upload progress';
+
+  @override
+  String get uploadSpeed => 'Speed';
+
+  @override
+  String uploadSpeedValue(String value) {
+    return '$value MB/s';
+  }
+
+  @override
+  String get uploadRemaining => 'Remaining';
+
+  @override
+  String uploadEtaValue(int minutes, int seconds) {
+    return '~${minutes}m ${seconds}s';
+  }
+
+  @override
+  String get uploadEtaWaiting => 'Waiting';
+
+  @override
+  String get uploadUnknownMetric => '—';
+
+  @override
+  String get uploadConfirmed => 'Uploaded';
+
+  @override
+  String get uploadPhotosTitle => 'Photos in this upload';
+
+  @override
+  String get uploadPhotoCompleted => 'Uploaded';
+
+  @override
+  String get uploadPhotoCurrent => 'Uploading';
+
+  @override
+  String get uploadPhotoPending => 'Pending';
+
+  @override
+  String get uploadPhotoPaused => 'Paused';
+
+  @override
+  String uploadPhotoDescription(String photo, String status) {
+    return '$photo. $status';
+  }
+
+  @override
+  String get uploadNextSteps => 'Next steps';
+
+  @override
+  String get uploadCloudStep => 'Upload to the cloud';
+
+  @override
+  String uploadStepProgress(String status, int confirmed, int total) {
+    return '$status ($confirmed/$total parts)';
+  }
+
+  @override
+  String get uploadQualityStep => 'Quality check & preparation';
+
+  @override
+  String get uploadQualityNextBody => 'The next step after upload';
+
+  @override
+  String get uploadNext => 'Next';
+
+  @override
+  String get photoUploadComplete =>
+      'All photos have confirmed upload results. You can return to capture.';
+
+  @override
+  String get photoUploadRetrying => 'Retrying the photo that was not submitted';
+
+  @override
+  String get photoUploadConfirm => 'Upload photos';
+
+  @override
+  String get photoUploadStopped => 'Upload stopped';
+
+  @override
+  String get photoUploadAmbiguous =>
+      'The upload result for the current photo could not be confirmed. It may already exist on the server. Upload stopped; this photo will not be sent again.';
+
+  @override
+  String get photoUploadRejected =>
+      'The server rejected this photo. Upload stopped. Previously confirmed photos are retained.';
+
+  @override
+  String get photoUploadNotSubmitted =>
+      'This photo was not submitted. Check the local file, then retry explicitly.';
+
+  @override
+  String photoUploadConfirmed(int confirmed, int total) {
+    return '$confirmed / $total photos confirmed';
+  }
 }

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'capture_size_format.dart';
 import 'capture_session.dart';
-import 'processing_screen.dart';
 
 const _purple = Color(0xFF6B4FE8);
 const _lavender = Color(0xFFF2EEFF);
@@ -14,9 +13,10 @@ const _ink = Color(0xFF29243D);
 const _border = Color(0xFFE6DFFF);
 
 class CaptureReviewScreen extends StatefulWidget {
-  const CaptureReviewScreen({super.key, required this.session});
+  const CaptureReviewScreen({super.key, required this.session, this.onUpload});
 
   final CaptureSession session;
+  final Future<void> Function(BuildContext, CaptureSession)? onUpload;
 
   @override
   State<CaptureReviewScreen> createState() => _CaptureReviewScreenState();
@@ -25,6 +25,7 @@ class CaptureReviewScreen extends StatefulWidget {
 class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
   late Future<CaptureSizeSummary> _sizeFuture;
   XFile? _selectedPhoto;
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -43,13 +44,19 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
     });
   }
 
-  void _openProcessing() {
-    if (!widget.session.canReview) return;
-    Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (context) => ProcessingScreen(session: widget.session),
-      ),
-    );
+  Future<void> _confirmUpload() async {
+    if (_submitting ||
+        !widget.session.canReview ||
+        widget.session.scanId == null ||
+        widget.onUpload == null) {
+      return;
+    }
+    setState(() => _submitting = true);
+    try {
+      await widget.onUpload!(context, widget.session);
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
   }
 
   void _openPhoto(XFile photo) {
@@ -326,11 +333,15 @@ class _CaptureReviewScreenState extends State<CaptureReviewScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton.icon(
-                        onPressed: widget.session.canReview
-                            ? _openProcessing
+                        onPressed:
+                            widget.session.canReview &&
+                                !_submitting &&
+                                widget.session.scanId != null &&
+                                widget.onUpload != null
+                            ? _confirmUpload
                             : null,
                         icon: const Icon(Icons.arrow_forward),
-                        label: Text(strings.processingCta),
+                        label: Text(strings.photoUploadConfirm),
                         style: FilledButton.styleFrom(
                           backgroundColor: _purple,
                           padding: const EdgeInsets.symmetric(vertical: 15),
