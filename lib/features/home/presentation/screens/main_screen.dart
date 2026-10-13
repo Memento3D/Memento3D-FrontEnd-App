@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../app/photo_capture_flow.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
 import 'package:memento3d_frontend_app/core/network/api_exception.dart';
@@ -29,57 +30,69 @@ class _MainScreenState extends State<MainScreen> {
     setState(() => _currentTabIndex = index);
   }
 
-  void _openCreateScanDialog() {
-    CreateScanDialog.show(
-      context,
-      onSubmit: ({
-        required String name,
-        required ScanInputMode inputMode,
-        String? description,
-        String? notes,
-      }) async {
-        try {
-          await ScanRepository.instance.createScanAsync(
-            name: name,
-            inputMode: inputMode,
-            description: description,
-            notes: notes,
-          );
-          if (mounted) {
-            setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
-                backgroundColor: AppColors.primary,
-                behavior: SnackBarBehavior.floating,
-              ),
+  bool _creationOpen = false;
+
+  Future<void> _openCreateScanDialog() async {
+    if (_creationOpen) return;
+    _creationOpen = true;
+    try {
+      final created = await CreateScanDialog.show(
+        context,
+        onSubmit: ({
+          required String name,
+          required ScanInputMode inputMode,
+          String? description,
+          String? notes,
+        }) async {
+          try {
+            final created = await ScanRepository.instance.createScanAsync(
+              name: name,
+              inputMode: inputMode,
+              description: description,
+              notes: notes,
             );
+            if (mounted) {
+              setState(() => _currentTabIndex = 0); // Switch to Dashboard to view new scan
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
+                  backgroundColor: AppColors.primary,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+            return created;
+          } on ApiException catch (e) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(e.message),
+                  backgroundColor: AppColors.error,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+            rethrow;
+          } catch (e) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Không thể tạo phiên scan: ${e.toString()}'),
+                  backgroundColor: AppColors.error,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+            rethrow;
           }
-        } on ApiException catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.message),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-          rethrow;
-        } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Không thể tạo phiên scan: ${e.toString()}'),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-          rethrow;
-        }
-      },
-    );
+        },
+      );
+      if (mounted && created != null) {
+        await openCreatedPhotoScanFlow(Navigator.of(context), created);
+      }
+    } finally {
+      _creationOpen = false;
+    }
   }
 
   void _openCreateBottomSheet() {

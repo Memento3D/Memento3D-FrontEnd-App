@@ -468,4 +468,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uploadNext => 'Next';
+
+  @override
+  String get photoUploadComplete =>
+      'All photos have confirmed upload results. You can return to capture.';
+
+  @override
+  String get photoUploadRetrying => 'Retrying the photo that was not submitted';
+
+  @override
+  String get photoUploadConfirm => 'Upload photos';
+
+  @override
+  String get photoUploadStopped => 'Upload stopped';
+
+  @override
+  String get photoUploadAmbiguous =>
+      'The upload result for the current photo could not be confirmed. It may already exist on the server. Upload stopped; this photo will not be sent again.';
+
+  @override
+  String get photoUploadRejected =>
+      'The server rejected this photo. Upload stopped. Previously confirmed photos are retained.';
+
+  @override
+  String get photoUploadNotSubmitted =>
+      'This photo was not submitted. Check the local file, then retry explicitly.';
+
+  @override
+  String photoUploadConfirmed(int confirmed, int total) {
+    return '$confirmed / $total photos confirmed';
+  }
 }

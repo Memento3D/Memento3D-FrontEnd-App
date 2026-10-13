@@ -149,5 +149,14 @@
   "@uploadStepProgress": {"placeholders": {"status": {"type": "String"}, "confirmed": {"type": "int"}, "total": {"type": "int"}}},
   "uploadQualityStep": "Quality check & preparation",
   "uploadQualityNextBody": "The next step after upload",
-  "uploadNext": "Next"
+  "uploadNext": "Next",
+  "photoUploadComplete": "All photos have confirmed upload results. You can return to capture.",
+  "photoUploadRetrying": "Retrying the photo that was not submitted",
+  "photoUploadConfirm": "Upload photos",
+  "photoUploadStopped": "Upload stopped",
+  "photoUploadAmbiguous": "The upload result for the current photo could not be confirmed. It may already exist on the server. Upload stopped; this photo will not be sent again.",
+  "photoUploadRejected": "The server rejected this photo. Upload stopped. Previously confirmed photos are retained.",
+  "photoUploadNotSubmitted": "This photo was not submitted. Check the local file, then retry explicitly.",
+  "photoUploadConfirmed": "{confirmed} / {total} photos confirmed",
+  "@photoUploadConfirmed": {"placeholders": {"confirmed": {"type": "int"}, "total": {"type": "int"}}}
 }

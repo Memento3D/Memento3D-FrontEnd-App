@@ -5,6 +5,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memento3d_frontend_app/screens/capture_session.dart';
 
 void main() {
+  test('persisted identity survives photo and detail changes', () {
+    const scanId = '11111111-2222-4333-8444-555555555555';
+    final session = CaptureSession(scanId: scanId);
+    final photo = XFile('local.jpg');
+    session.addPhoto(photo);
+    session.detailLevel = ReconstructionDetailLevel.standard;
+    session.removePhoto(photo);
+    expect(session.scanId, scanId);
+  });
+
+  test(
+    'blank persisted identities are rejected; local previews remain valid',
+    () {
+      expect(() => CaptureSession(scanId: ''), throwsArgumentError);
+      expect(() => CaptureSession(scanId: '   '), throwsArgumentError);
+      expect(CaptureSession().scanId, isNull);
+    },
+  );
+
   test('review eligibility and count follow the photo collection', () {
     final session = CaptureSession();
     expect(session.canReview, isFalse);

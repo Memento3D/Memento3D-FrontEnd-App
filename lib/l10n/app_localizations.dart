@@ -913,6 +913,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get uploadNext;
+
+  /// No description provided for @photoUploadComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'All photos have confirmed upload results. You can return to capture.'**
+  String get photoUploadComplete;
+
+  /// No description provided for @photoUploadRetrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Retrying the photo that was not submitted'**
+  String get photoUploadRetrying;
+
+  /// No description provided for @photoUploadConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload photos'**
+  String get photoUploadConfirm;
+
+  /// No description provided for @photoUploadStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload stopped'**
+  String get photoUploadStopped;
+
+  /// No description provided for @photoUploadAmbiguous.
+  ///
+  /// In en, this message translates to:
+  /// **'The upload result for the current photo could not be confirmed. It may already exist on the server. Upload stopped; this photo will not be sent again.'**
+  String get photoUploadAmbiguous;
+
+  /// No description provided for @photoUploadRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'The server rejected this photo. Upload stopped. Previously confirmed photos are retained.'**
+  String get photoUploadRejected;
+
+  /// No description provided for @photoUploadNotSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo was not submitted. Check the local file, then retry explicitly.'**
+  String get photoUploadNotSubmitted;
+
+  /// No description provided for @photoUploadConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'{confirmed} / {total} photos confirmed'**
+  String photoUploadConfirmed(int confirmed, int total);
 }
 
 class _AppLocalizationsDelegate

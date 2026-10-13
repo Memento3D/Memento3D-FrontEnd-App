@@ -149,5 +149,14 @@
   "@uploadStepProgress": {"placeholders": {"status": {"type": "String"}, "confirmed": {"type": "int"}, "total": {"type": "int"}}},
   "uploadQualityStep": "Kiểm tra chất lượng & Tiền xử lý",
   "uploadQualityNextBody": "Bước tiếp theo sau khi tải xong",
-  "uploadNext": "Tiếp theo"
+  "uploadNext": "Tiếp theo",
+  "photoUploadConfirm": "Tải ảnh lên",
+  "photoUploadStopped": "Đã dừng tải ảnh",
+  "photoUploadAmbiguous": "Chưa xác nhận được kết quả tải ảnh hiện tại. Ảnh có thể đã tồn tại trên máy chủ. Đã dừng tải; ảnh này sẽ không được gửi lại.",
+  "photoUploadRejected": "Máy chủ từ chối ảnh này. Đã dừng tải. Các ảnh đã xác nhận được giữ lại.",
+  "photoUploadNotSubmitted": "Ảnh này chưa được gửi. Kiểm tra tệp trên thiết bị rồi chủ động thử lại.",
+  "photoUploadConfirmed": "Đã xác nhận {confirmed} / {total} ảnh",
+  "photoUploadComplete": "Tất cả ảnh đã được xác nhận tải lên. Bạn có thể quay lại màn hình chụp.",
+  "photoUploadRetrying": "Đang thử lại ảnh chưa được gửi",
+  "@photoUploadConfirmed": {"placeholders": {"confirmed": {"type": "int"}, "total": {"type": "int"}}}
 }

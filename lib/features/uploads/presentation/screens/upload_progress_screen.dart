@@ -32,6 +32,7 @@ class UploadProgressScreen extends StatefulWidget {
     required this.onUploadCompleted,
     this.objectName,
     this.onBack,
+    this.photoUpload = false,
   });
 
   final UploadProgressController controller;
@@ -39,6 +40,9 @@ class UploadProgressScreen extends StatefulWidget {
   final String? objectName;
   final VoidCallback onUploadCompleted;
   final VoidCallback? onBack;
+
+  /// Real whole-photo uploads omit speculative downstream steps and byte rates.
+  final bool photoUpload;
 
   @override
   State<UploadProgressScreen> createState() => _UploadProgressScreenState();
@@ -135,7 +139,7 @@ class _UploadProgressScreenState extends State<UploadProgressScreen> {
                       const SizedBox(height: 14),
                       _detail(strings),
                       const SizedBox(height: 14),
-                      _nextSteps(strings, state),
+                      if (!widget.photoUpload) _nextSteps(strings, state),
                     ],
                   ),
                 ),
@@ -271,7 +275,14 @@ class _UploadProgressScreenState extends State<UploadProgressScreen> {
           runSpacing: 8,
           children: [
             _Tag(
-              label: _status(strings, state.status),
+              label:
+                  state.status == UploadProgressStatus.recoverableFailure &&
+                      !state.canRetry
+                  ? strings.photoUploadStopped
+                  : widget.photoUpload &&
+                        state.status == UploadProgressStatus.reconciling
+                  ? strings.photoUploadRetrying
+                  : _status(strings, state.status),
               color: _statusColor(state.status),
             ),
             _Tag(
@@ -329,9 +340,13 @@ class _UploadProgressScreenState extends State<UploadProgressScreen> {
     final completed = state.status == UploadProgressStatus.completed;
     final title = switch (state.status) {
       UploadProgressStatus.preparing => strings.uploadPreparing,
-      UploadProgressStatus.reconciling => strings.uploadReconcilingTitle,
+      UploadProgressStatus.reconciling =>
+        widget.photoUpload
+            ? strings.photoUploadRetrying
+            : strings.uploadReconcilingTitle,
       UploadProgressStatus.completed => strings.uploadCompleted,
-      UploadProgressStatus.recoverableFailure => strings.uploadRetryNeeded,
+      UploadProgressStatus.recoverableFailure =>
+        state.canRetry ? strings.uploadRetryNeeded : strings.photoUploadStopped,
       _ => strings.uploadMainTitle,
     };
     final speed = state.visibleBytesPerSecond;
@@ -383,7 +398,9 @@ class _UploadProgressScreenState extends State<UploadProgressScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            strings.uploadConfirmedParts(
+            (widget.photoUpload
+                ? strings.photoUploadConfirmed
+                : strings.uploadConfirmedParts)(
               state.confirmedUnits,
               state.totalUnits,
             ),
@@ -391,59 +408,71 @@ class _UploadProgressScreenState extends State<UploadProgressScreen> {
             style: const TextStyle(fontSize: 12, color: _secondary),
           ),
           const SizedBox(height: 16),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final stacked =
-                  constraints.maxWidth < 260 ||
-                  MediaQuery.textScalerOf(context).scale(1) > 1.4;
-              final metrics = [
-                _Metric(
-                  value: speed == null
-                      ? strings.uploadUnknownMetric
-                      : strings.uploadSpeedValue(
-                          (speed / 1000000).toStringAsFixed(1),
-                        ),
-                  label: strings.uploadSpeed,
-                ),
-                _Metric(
-                  value: eta != null
-                      ? strings.uploadEtaValue(
-                          eta.inSeconds ~/ 60,
-                          eta.inSeconds % 60,
-                        )
-                      : state.status == UploadProgressStatus.waitingForNetwork
-                      ? strings.uploadEtaWaiting
-                      : strings.uploadUnknownMetric,
-                  label: strings.uploadRemaining,
-                ),
-                _Metric(
-                  value: strings.uploadUnitCount(
-                    state.confirmedUnits,
-                    state.totalUnits,
+          if (!widget.photoUpload)
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final stacked =
+                    constraints.maxWidth < 260 ||
+                    MediaQuery.textScalerOf(context).scale(1) > 1.4;
+                final metrics = [
+                  _Metric(
+                    value: speed == null
+                        ? strings.uploadUnknownMetric
+                        : strings.uploadSpeedValue(
+                            (speed / 1000000).toStringAsFixed(1),
+                          ),
+                    label: strings.uploadSpeed,
                   ),
-                  label: strings.uploadConfirmed,
-                ),
-              ];
-              if (stacked) {
-                return Wrap(spacing: 16, runSpacing: 12, children: metrics);
-              }
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (final metric in metrics) Expanded(child: metric),
-                ],
-              );
-            },
-          ),
+                  _Metric(
+                    value: eta != null
+                        ? strings.uploadEtaValue(
+                            eta.inSeconds ~/ 60,
+                            eta.inSeconds % 60,
+                          )
+                        : state.status == UploadProgressStatus.waitingForNetwork
+                        ? strings.uploadEtaWaiting
+                        : strings.uploadUnknownMetric,
+                    label: strings.uploadRemaining,
+                  ),
+                  _Metric(
+                    value: strings.uploadUnitCount(
+                      state.confirmedUnits,
+                      state.totalUnits,
+                    ),
+                    label: strings.uploadConfirmed,
+                  ),
+                ];
+                if (stacked) {
+                  return Wrap(spacing: 16, runSpacing: 12, children: metrics);
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final metric in metrics) Expanded(child: metric),
+                  ],
+                );
+              },
+            ),
           if (state.status == UploadProgressStatus.reconciling ||
               state.status == UploadProgressStatus.completed ||
-              state.canRetry) ...[
+              state.status == UploadProgressStatus.recoverableFailure) ...[
             const SizedBox(height: 14),
             Text(
               switch (state.status) {
                 UploadProgressStatus.reconciling =>
-                  strings.uploadReconcilingBody,
-                UploadProgressStatus.completed => strings.uploadCompletionBody,
+                  widget.photoUpload
+                      ? strings.photoUploadRetrying
+                      : strings.uploadReconcilingBody,
+                UploadProgressStatus.completed =>
+                  widget.photoUpload
+                      ? strings.photoUploadComplete
+                      : strings.uploadCompletionBody,
+                _ when state.failure == UploadFailure.ambiguous =>
+                  strings.photoUploadAmbiguous,
+                _ when state.failure == UploadFailure.rejected =>
+                  strings.photoUploadRejected,
+                _ when state.failure == UploadFailure.notSubmitted =>
+                  strings.photoUploadNotSubmitted,
                 _ =>
                   state.failure == UploadFailure.sourceUnavailable
                       ? strings.uploadSourceFailureBody

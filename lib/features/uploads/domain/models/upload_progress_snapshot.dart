@@ -7,7 +7,13 @@ enum UploadProgressStatus {
   recoverableFailure,
 }
 
-enum UploadFailure { interrupted, sourceUnavailable }
+enum UploadFailure {
+  interrupted,
+  sourceUnavailable,
+  notSubmitted,
+  rejected,
+  ambiguous,
+}
 
 enum UploadPhotoStatus { completed, current, pending }
 
@@ -74,7 +80,10 @@ final class UploadProgressSnapshot {
   double get confirmedProgress =>
       totalUnits == 0 ? 0 : confirmedUnits / totalUnits;
   double get progressPercent => confirmedProgress * 100;
-  bool get canRetry => status == UploadProgressStatus.recoverableFailure;
+  bool get canRetry =>
+      status == UploadProgressStatus.recoverableFailure &&
+      failure != UploadFailure.ambiguous &&
+      failure != UploadFailure.rejected;
   double? get visibleBytesPerSecond =>
       status == UploadProgressStatus.uploading ? bytesPerSecond : null;
   Duration? get visibleRemaining =>

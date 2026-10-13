@@ -15,6 +15,51 @@ class ApiClient {
 
   ApiClient({http.Client? client}) : _httpClient = client ?? http.Client();
 
+  /// Sends once through the injected client. A timeout does not cancel or undo
+  /// the server operation; callers must not automatically replay this POST.
+  Future<dynamic> postMultipart(
+    String endpoint, {
+    required List<http.MultipartFile> files,
+    Map<String, String> fields = const {},
+    String? token,
+    Map<String, String>? headers,
+    int? expectedStatusCode,
+  }) async {
+    final request = http.MultipartRequest(
+      'POST', Uri.parse('${ApiConfig.baseUrl}$endpoint'),
+    );
+    final resolved = await _buildHeaders(token: token, additionalHeaders: headers);
+    resolved.removeWhere((key, _) => key.toLowerCase() == 'content-type');
+    request.headers.addAll(resolved);
+    request.fields.addAll(fields);
+    request.files.addAll(files);
+    request.followRedirects = false;
+    try {
+      final response = await (() async {
+        final streamed = await _httpClient.send(request);
+        return http.Response.fromStream(streamed);
+      })().timeout(ApiConfig.timeout);
+      final decoded = _handleResponse(response);
+      if (expectedStatusCode != null && response.statusCode != expectedStatusCode) {
+        throw ApiException(
+          statusCode: response.statusCode,
+          message: 'Unexpected multipart success status',
+        );
+      }
+      return decoded;
+    } on SocketException {
+      throw ApiException(statusCode: 0, errorCode: 'ERR-017',
+          message: 'Network connection failed during multipart POST');
+    } on TimeoutException {
+      throw ApiException(statusCode: 408, errorCode: 'ERR-009',
+          message: 'Multipart POST timed out; server outcome is unknown');
+    } catch (error) {
+      if (error is ApiException) rethrow;
+      throw ApiException(statusCode: -1, errorCode: 'ERR-017',
+          message: 'Multipart POST response unavailable');
+    }
+  }
+
   /// GET request
   Future<dynamic> get(
     String endpoint, {

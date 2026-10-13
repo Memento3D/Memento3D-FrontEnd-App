@@ -461,4 +461,34 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get uploadNext => 'Tiếp theo';
+
+  @override
+  String get photoUploadComplete =>
+      'Tất cả ảnh đã được xác nhận tải lên. Bạn có thể quay lại màn hình chụp.';
+
+  @override
+  String get photoUploadRetrying => 'Đang thử lại ảnh chưa được gửi';
+
+  @override
+  String get photoUploadConfirm => 'Tải ảnh lên';
+
+  @override
+  String get photoUploadStopped => 'Đã dừng tải ảnh';
+
+  @override
+  String get photoUploadAmbiguous =>
+      'Chưa xác nhận được kết quả tải ảnh hiện tại. Ảnh có thể đã tồn tại trên máy chủ. Đã dừng tải; ảnh này sẽ không được gửi lại.';
+
+  @override
+  String get photoUploadRejected =>
+      'Máy chủ từ chối ảnh này. Đã dừng tải. Các ảnh đã xác nhận được giữ lại.';
+
+  @override
+  String get photoUploadNotSubmitted =>
+      'Ảnh này chưa được gửi. Kiểm tra tệp trên thiết bị rồi chủ động thử lại.';
+
+  @override
+  String photoUploadConfirmed(int confirmed, int total) {
+    return 'Đã xác nhận $confirmed / $total ảnh';
+  }
 }
