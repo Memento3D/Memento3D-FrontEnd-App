@@ -1,4 +1,5 @@
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
+import 'package:memento3d_frontend_app/features/scans/data/models/scan_output_model.dart';
 import 'package:memento3d_frontend_app/features/scans/data/services/scan_service.dart';
 
 class StorageQuota {
@@ -238,6 +239,11 @@ class ScanRepository {
 
     _scans.removeWhere((s) => s.id == id);
     return true;
+  }
+
+  /// Get generated output files (GLB, OBJ, ...) via Backend API (GET /api/v1/scans/{id}/outputs)
+  Future<ScanOutputsResponseModel> getScanOutputsAsync(String id) {
+    return _scanService.getScanOutputs(id);
   }
 
   /// Retry a failed scan

@@ -2,6 +2,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_config.dart';
 import '../../../../core/network/api_exception.dart';
 import '../models/scan_model.dart';
+import '../models/scan_output_model.dart';
 
 /// Service for managing 3D Scan Sessions with Memento3D Backend API
 class ScanService {
@@ -158,5 +159,11 @@ class ScanService {
   /// Soft-delete a scan session (FR-035)
   Future<void> deleteScan(String id) async {
     await _apiClient.delete('${ApiConfig.scans}/$id');
+  }
+
+  /// Get generated output files (GLB, OBJ, ...) for a scan
+  Future<ScanOutputsResponseModel> getScanOutputs(String id) async {
+    final response = await _apiClient.get(ApiConfig.scanOutputs(id));
+    return ScanOutputsResponseModel.fromDynamic(response);
   }
 }

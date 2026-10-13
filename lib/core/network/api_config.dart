@@ -41,6 +41,9 @@ class ApiConfig {
   static const String logout = '/api/auth/logout';
   static const String scans = '/api/v1/scans';
 
+  /// GET /api/v1/scans/{id}/outputs — generated output files (GLB, OBJ, ...) for a scan
+  static String scanOutputs(String scanId) => '/api/v1/scans/$scanId/outputs';
+
   // Request timeout
   static const Duration timeout = Duration(seconds: 15);
 }
