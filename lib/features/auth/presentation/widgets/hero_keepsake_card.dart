@@ -145,35 +145,36 @@ class HeroKeepsakeCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Besties in 3D',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text('✈️', style: TextStyle(fontSize: 13)),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 3,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.badgePurpleBg,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              Flexible(
                 child: Text(
-                  'v1.0.atelier',
+                  'Besties in 3D ✈️',
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF6B21A8),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.badgePurpleBg,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'v1.0.atelier',
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF6B21A8),
+                    ),
                   ),
                 ),
               ),
@@ -182,34 +183,14 @@ class HeroKeepsakeCard extends StatelessWidget {
 
           const SizedBox(height: 6),
 
-          // Tag: tangible nostalgia
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 3,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.badgeGreenBg,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.star_rounded,
-                  size: 12,
-                  color: AppColors.badgeGreenText,
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  'tangible nostalgia',
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.badgeGreenText,
-                  ),
-                ),
-              ],
+          // Tagline: tangible nostalgia
+          Text(
+            "tangible nostalgia",
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 12.5,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textSecondary,
             ),
           ),
         ],

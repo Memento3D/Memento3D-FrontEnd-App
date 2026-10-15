@@ -8,7 +8,8 @@ class ScanModel {
   final String? description;
   final String? notes;
   final String inputMode; // 'image' or 'video'
-  final String status; // 'draft', 'uploaded', 'processing', 'done', 'failed', 'deleted'
+  final String
+  status; // 'draft', 'uploaded', 'processing', 'done', 'failed', 'deleted'
   final int fileCount;
   final int totalSizeBytes;
   final String? thumbnailPath;
@@ -43,24 +44,43 @@ class ScanModel {
       name: json['name']?.toString() ?? '',
       description: json['description']?.toString(),
       notes: json['notes']?.toString(),
-      inputMode: json['input_mode']?.toString() ?? json['inputMode']?.toString() ?? 'image',
+      inputMode:
+          json['input_mode']?.toString() ??
+          json['inputMode']?.toString() ??
+          'image',
       status: json['status']?.toString() ?? 'draft',
-      fileCount: (json['file_count'] ?? json['fileCount'] as num?)?.toInt() ?? 0,
-      totalSizeBytes: (json['total_size_bytes'] ?? json['totalSizeBytes'] as num?)?.toInt() ?? 0,
-      thumbnailPath: json['thumbnail_path']?.toString() ?? json['thumbnailPath']?.toString(),
+      fileCount:
+          (json['file_count'] ?? json['fileCount'] as num?)?.toInt() ?? 0,
+      totalSizeBytes:
+          (json['total_size_bytes'] ?? json['totalSizeBytes'] as num?)
+              ?.toInt() ??
+          0,
+      thumbnailPath:
+          json['thumbnail_path']?.toString() ??
+          json['thumbnailPath']?.toString(),
       deviceInfo: json['device_info'] is Map<String, dynamic>
           ? json['device_info'] as Map<String, dynamic>
-          : (json['deviceInfo'] is Map<String, dynamic> ? json['deviceInfo'] as Map<String, dynamic> : null),
-      duplicatedFrom: json['duplicated_from']?.toString() ?? json['duplicatedFrom']?.toString(),
+          : (json['deviceInfo'] is Map<String, dynamic>
+                ? json['deviceInfo'] as Map<String, dynamic>
+                : null),
+      duplicatedFrom:
+          json['duplicated_from']?.toString() ??
+          json['duplicatedFrom']?.toString(),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
-          : (json['createdAt'] != null ? DateTime.tryParse(json['createdAt'].toString())?.toLocal() : null),
+          : (json['createdAt'] != null
+                ? DateTime.tryParse(json['createdAt'].toString())?.toLocal()
+                : null),
       updatedAt: json['updated_at'] != null
           ? DateTime.tryParse(json['updated_at'].toString())?.toLocal()
-          : (json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt'].toString())?.toLocal() : null),
+          : (json['updatedAt'] != null
+                ? DateTime.tryParse(json['updatedAt'].toString())?.toLocal()
+                : null),
       deletedAt: json['deleted_at'] != null
           ? DateTime.tryParse(json['deleted_at'].toString())?.toLocal()
-          : (json['deletedAt'] != null ? DateTime.tryParse(json['deletedAt'].toString())?.toLocal() : null),
+          : (json['deletedAt'] != null
+                ? DateTime.tryParse(json['deletedAt'].toString())?.toLocal()
+                : null),
     );
   }
 
@@ -232,10 +252,7 @@ class CreateScanRequestModel {
   });
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{
-      'name': name.trim(),
-      'input_mode': inputMode,
-    };
+    final map = <String, dynamic>{'name': name.trim(), 'input_mode': inputMode};
     if (description != null && description!.trim().isNotEmpty) {
       map['description'] = description!.trim();
     }
@@ -275,10 +292,53 @@ class ScanListResponseModel {
 
     return ScanListResponseModel(
       scans: scansList,
-      totalCount: (json['total_count'] ?? json['totalCount'] as num?)?.toInt() ?? scansList.length,
+      totalCount:
+          (json['total_count'] ?? json['totalCount'] as num?)?.toInt() ??
+          scansList.length,
       page: (json['page'] as num?)?.toInt() ?? 1,
       limit: (json['limit'] as num?)?.toInt() ?? 20,
-      totalPages: (json['total_pages'] ?? json['totalPages'] as num?)?.toInt() ?? 1,
+      totalPages:
+          (json['total_pages'] ?? json['totalPages'] as num?)?.toInt() ?? 1,
+    );
+  }
+}
+
+/// Response DTO for POST /api/v1/scans/{id}/job (US-027, FR-081, FR-082, FR-199)
+///
+/// The backend returns 202 Accepted with the created (or, on a repeated
+/// request for the same scan, the already-existing) job id.
+class ReconstructionJobModel {
+  final String jobId;
+  final String scanId;
+  final String
+  status; // 'queued', 'extracting', ... (see UC-05 pipeline stages)
+  final int? queuePosition;
+  final DateTime? createdAt;
+
+  const ReconstructionJobModel({
+    required this.jobId,
+    required this.scanId,
+    this.status = 'queued',
+    this.queuePosition,
+    this.createdAt,
+  });
+
+  factory ReconstructionJobModel.fromJson(Map<String, dynamic> json) {
+    return ReconstructionJobModel(
+      jobId:
+          json['job_id']?.toString() ??
+          json['jobId']?.toString() ??
+          json['id']?.toString() ??
+          '',
+      scanId: json['scan_id']?.toString() ?? json['scanId']?.toString() ?? '',
+      status: json['status']?.toString() ?? 'queued',
+      queuePosition: (json['queue_position'] ?? json['queuePosition'] as num?)
+          ?.toInt(),
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'].toString())?.toLocal()
+          : (json['createdAt'] != null
+                ? DateTime.tryParse(json['createdAt'].toString())?.toLocal()
+                : null),
     );
   }
 }

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../data/models/scan_model.dart';
 
 class ScanStatusBadge extends StatelessWidget {
   final ScanModel scan;
 
-  const ScanStatusBadge({
-    super.key,
-    required this.scan,
-  });
+  const ScanStatusBadge({super.key, required this.scan});
 
   @override
   Widget build(BuildContext context) {

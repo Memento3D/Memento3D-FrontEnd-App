@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'scan_model.dart';
 
 /// Capture mode for a scan session
@@ -294,7 +295,9 @@ class ScanItem {
       description: description,
       notes: notes,
       inputMode: inputMode == ScanInputMode.video ? 'video' : 'image',
-      status: status == ScanItemStatus.qualityCheck ? 'quality_check' : status.name,
+      status: status == ScanItemStatus.qualityCheck
+          ? 'quality_check'
+          : status.name,
       fileCount: fileCount,
       totalSizeBytes: totalSizeBytes,
       thumbnailPath: thumbnailAsset,

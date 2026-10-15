@@ -1,5 +1,12 @@
+import 'package:memento3d_frontend_app/core/network/api_exception.dart';
+import 'package:memento3d_frontend_app/core/utils/app_messenger.dart';
+import 'package:memento3d_frontend_app/core/utils/error_mapper.dart';
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
+import 'package:memento3d_frontend_app/features/scans/data/models/scan_model.dart'
+    show ReconstructionJobModel;
+import 'package:memento3d_frontend_app/features/scans/data/models/scan_output_model.dart';
 import 'package:memento3d_frontend_app/features/scans/data/services/scan_service.dart';
+import 'package:memento3d_frontend_app/features/scans/data/services/scan_sync_manager.dart';
 
 class StorageQuota {
   final int usedBytes;
@@ -29,7 +36,7 @@ class ScanRepository {
   // Singleton pattern for state management across screens
   static final ScanRepository instance = ScanRepository._internal();
   ScanRepository._internal({ScanService? scanService})
-      : _scanService = scanService ?? ScanService();
+    : _scanService = scanService ?? ScanService();
 
   ScanService _scanService;
 
@@ -41,6 +48,7 @@ class ScanRepository {
   final List<ScanItem> _scans = [];
 
   List<ScanItem> get cachedScans => List.unmodifiable(_scans);
+  List<ScanItem> get scans => cachedScans;
 
   /// Fetch scans from backend API (GET /api/v1/scans)
   Future<List<ScanItem>> fetchScans({
@@ -52,10 +60,8 @@ class ScanRepository {
     final apiSort = ScanService.normalizeSort(sortBy);
     final apiStatus = ScanService.normalizeStatus(statusFilter);
 
-    final response = await _scanService.getScans(
+    final response = await _scanService.getAllScans(
       status: apiStatus,
-      page: 1,
-      limit: 100,
       sort: apiSort,
     );
 
@@ -77,10 +83,14 @@ class ScanRepository {
     String? searchQuery,
     String sortBy = 'newest',
   }) {
-    List<ScanItem> list = _scans.where((s) => s.status != ScanItemStatus.deleted).toList();
+    List<ScanItem> list = _scans
+        .where((s) => s.status != ScanItemStatus.deleted)
+        .toList();
 
     // 1. Status Filter
-    if (statusFilter != null && statusFilter.isNotEmpty && statusFilter != 'all') {
+    if (statusFilter != null &&
+        statusFilter.isNotEmpty &&
+        statusFilter != 'all') {
       switch (statusFilter.toLowerCase()) {
         case 'done':
           list = list.where((s) => s.status == ScanItemStatus.done).toList();
@@ -114,7 +124,9 @@ class ScanRepository {
         list.sort((a, b) => a.createdAt.compareTo(b.createdAt));
         break;
       case 'name_asc':
-        list.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        list.sort(
+          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+        );
         break;
       case 'size_desc':
         list.sort((a, b) => b.totalSizeBytes.compareTo(a.totalSizeBytes));
@@ -126,6 +138,96 @@ class ScanRepository {
     }
 
     return list;
+  }
+
+  /// Create a new scan session optimistically on client, sync to DB in background
+  ScanItem createScanOptimistic({
+    required String name,
+    required ScanInputMode inputMode,
+    String? description,
+    String? notes,
+  }) {
+    final tempId = 'temp_${DateTime.now().millisecondsSinceEpoch}';
+    final optimisticScan = ScanItem(
+      id: tempId,
+      name: name.trim(),
+      description: description?.trim().isEmpty == true
+          ? null
+          : description?.trim(),
+      notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
+      inputMode: inputMode,
+      status: ScanItemStatus.draft,
+      fileCount: 0,
+      totalSizeBytes: 0,
+      createdAt: DateTime.now(),
+    );
+
+    _scans.removeWhere((s) => s.id == optimisticScan.id);
+    _scans.insert(0, optimisticScan);
+
+    // Register sync start
+    ScanSyncManager.instance.registerSyncStart(
+      tempId,
+      onRetry: () => _syncOptimisticScanToDb(optimisticScan),
+    );
+
+    // Fire and forget background DB sync
+    _syncOptimisticScanToDb(optimisticScan);
+
+    return optimisticScan;
+  }
+
+  Future<void> _syncOptimisticScanToDb(ScanItem optimisticScan) async {
+    try {
+      final scanModel = await _scanService.createScan(
+        name: optimisticScan.name,
+        inputMode: optimisticScan.inputMode.name,
+        description: optimisticScan.description,
+        notes: optimisticScan.notes,
+      );
+
+      final realItem = ScanItem.fromScanModel(scanModel);
+      final index = _scans.indexWhere((s) => s.id == optimisticScan.id);
+      if (index != -1) {
+        _scans[index] = realItem;
+      } else {
+        _scans.removeWhere((s) => s.id == realItem.id);
+        _scans.insert(0, realItem);
+      }
+
+      ScanSyncManager.instance.registerSyncSuccess(
+        tempId: optimisticScan.id,
+        realId: realItem.id,
+      );
+    } on ApiException catch (e) {
+      _handleOptimisticSyncFailure(optimisticScan, e.message, e.statusCode);
+    } catch (e) {
+      final mappedMessage = ErrorMapper.map(rawMessage: e.toString());
+      _handleOptimisticSyncFailure(optimisticScan, mappedMessage, null);
+    }
+  }
+
+  void _handleOptimisticSyncFailure(
+    ScanItem optimisticScan,
+    String errorMsg,
+    int? statusCode,
+  ) {
+    _scans.removeWhere((s) => s.id == optimisticScan.id);
+
+    ScanSyncManager.instance.registerSyncFailure(
+      tempId: optimisticScan.id,
+      errorMessage: errorMsg,
+      statusCode: statusCode,
+    );
+
+    if (statusCode == 403) {
+      AppMessenger.showQuotaExceededDialog();
+    } else {
+      AppMessenger.showError(
+        'Không thể lưu phiên scan "${optimisticScan.name}" lên máy chủ: $errorMsg. Đã hoàn tác phiên scan.',
+        onRetry: () => _syncOptimisticScanToDb(optimisticScan),
+      );
+    }
   }
 
   /// Create a new scan session via Backend API (POST /api/v1/scans)
@@ -159,7 +261,9 @@ class ScanRepository {
     final newScan = ScanItem(
       id: newId,
       name: name.trim(),
-      description: description?.trim().isEmpty == true ? null : description?.trim(),
+      description: description?.trim().isEmpty == true
+          ? null
+          : description?.trim(),
       notes: notes?.trim().isEmpty == true ? null : notes?.trim(),
       inputMode: inputMode,
       status: ScanItemStatus.draft,
@@ -224,6 +328,22 @@ class ScanRepository {
     return updated;
   }
 
+  /// Submit reconstruction job for a scan via Backend API (POST /api/v1/scans/{id}/job)
+  /// (US-027, FR-081, FR-082, FR-199). Marks the cached scan as "processing" on success
+  /// so the dashboard reflects the new state without an extra round-trip.
+  Future<ReconstructionJobModel> submitReconstructionJobAsync(
+    String scanId,
+  ) async {
+    final job = await _scanService.createReconstructionJob(scanId);
+
+    final index = _scans.indexWhere((s) => s.id == scanId);
+    if (index != -1) {
+      _scans[index] = _scans[index].copyWith(status: ScanItemStatus.processing);
+    }
+
+    return job;
+  }
+
   /// Delete scan via Backend API (DELETE /api/v1/scans/{id})
   Future<bool> deleteScanAsync(String id) async {
     await _scanService.deleteScan(id);
@@ -238,6 +358,11 @@ class ScanRepository {
 
     _scans.removeWhere((s) => s.id == id);
     return true;
+  }
+
+  /// Get generated output files (GLB, OBJ, ...) via Backend API (GET /api/v1/scans/{id}/outputs)
+  Future<ScanOutputsResponseModel> getScanOutputsAsync(String id) {
+    return _scanService.getScanOutputs(id);
   }
 
   /// Retry a failed scan
@@ -257,8 +382,13 @@ class ScanRepository {
 
   /// Get storage quota metrics
   StorageQuota getStorageQuota() {
-    final activeScans = _scans.where((s) => s.status != ScanItemStatus.deleted).toList();
-    final totalUsed = activeScans.fold<int>(0, (sum, item) => sum + item.totalSizeBytes);
+    final activeScans = _scans
+        .where((s) => s.status != ScanItemStatus.deleted)
+        .toList();
+    final totalUsed = activeScans.fold<int>(
+      0,
+      (sum, item) => sum + item.totalSizeBytes,
+    );
     const maxQuota = 10 * 1024 * 1024 * 1024; // 10 GB
 
     return StorageQuota(
@@ -270,7 +400,9 @@ class ScanRepository {
 
   /// Get scan summary metrics
   Map<String, int> getSummaryMetrics() {
-    final activeScans = _scans.where((s) => s.status != ScanItemStatus.deleted).toList();
+    final activeScans = _scans
+        .where((s) => s.status != ScanItemStatus.deleted)
+        .toList();
     int doneCount = 0;
     int processingCount = 0;
     int failedCount = 0;

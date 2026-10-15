@@ -1,5 +1,80 @@
 {
+  "resetPasswordInvalidTitle": "Liên kết đã hết hạn",
+  "resetPasswordInvalidBody": "Không thể sử dụng liên kết đặt lại mật khẩu này. Vui lòng yêu cầu liên kết mới để tiếp tục.",
+  "resetPasswordRequestNewLink": "Yêu cầu liên kết mới",
+  "resetPasswordBackToLogin": "Quay lại đăng nhập",
+  "resetPasswordSuccessTitle": "Đặt lại mật khẩu thành công",
+  "resetPasswordSuccessBody": "Mật khẩu của bạn đã được đặt lại. Hãy đăng nhập bằng mật khẩu mới.",
+  "resetPasswordHeader": "Đặt lại mật khẩu",
+  "resetPasswordTitle": "Tạo mật khẩu mới",
+  "resetPasswordSupport": "Tạo mật khẩu mới cho tài khoản của bạn.",
+  "resetPasswordNewPassword": "Mật khẩu mới",
+  "resetPasswordConfirmPassword": "Xác nhận mật khẩu",
+  "resetPasswordShowPassword": "Hiện mật khẩu",
+  "resetPasswordHidePassword": "Ẩn mật khẩu",
+  "resetPasswordNewRequired": "Vui lòng nhập mật khẩu mới.",
+  "resetPasswordConfirmRequired": "Vui lòng xác nhận mật khẩu.",
+  "resetPasswordMismatch": "Mật khẩu xác nhận không khớp.",
+  "resetPasswordSubmit": "Đặt lại mật khẩu",
+  "resetPasswordSubmitting": "Đang đặt lại mật khẩu…",
+  "resetPasswordTechnicalFailure": "Không thể đặt lại mật khẩu lúc này. Vui lòng thử lại.",
+  "resetPasswordRetry": "Thử lại",
+  "resetPasswordCancel": "Hủy",
+  "forgotPasswordSubmitting": "Đang gửi yêu cầu…",
+  "forgotPasswordSentTitle": "Kiểm tra email của bạn",
+  "forgotPasswordSentBody": "Nếu email tồn tại, bạn sẽ nhận được hướng dẫn đặt lại mật khẩu.",
+  "forgotPasswordSentSupport": "Vui lòng kiểm tra hộp thư đến và làm theo liên kết trong email để tiếp tục.",
+  "forgotPasswordGuidanceTitle": "Chưa thấy email?",
+  "forgotPasswordSpamGuidance": "Kiểm tra thư mục Spam / Thư rác.",
+  "forgotPasswordDeliveryGuidance": "Email có thể mất vài phút để đến.",
+  "forgotPasswordResend": "Gửi lại hướng dẫn",
+  "forgotPasswordResending": "Đang gửi lại hướng dẫn…",
+  "forgotPasswordTechnicalFailure": "Không thể gửi yêu cầu lúc này. Vui lòng thử lại.",
+  "forgotPasswordRetry": "Thử lại",
+  "forgotPasswordHeader": "Quên mật khẩu",
+  "forgotPasswordTitle": "Quên mật khẩu?",
+  "forgotPasswordSubtitle": "Đừng lo, chúng mình sẽ giúp bạn lấy lại quyền truy cập.",
+  "forgotPasswordEmailLabel": "Email",
+  "forgotPasswordEmailHint": "Nhập địa chỉ email của bạn",
+  "forgotPasswordEmailHelper": "Nhập email bạn đã dùng để đăng ký tài khoản.",
+  "forgotPasswordSubmit": "Gửi hướng dẫn đặt lại",
+  "forgotPasswordCancel": "Hủy",
+  "forgotPasswordBackToLogin": "Quay lại đăng nhập",
+  "forgotPasswordEmailRequired": "Vui lòng nhập địa chỉ email.",
   "@@locale": "vi",
+  "emailVerificationAddressHint": "Kiểm tra địa chỉ email ở trên đã chính xác chưa.",
+  "emailVerificationDeliveryHint": "Email có thể mất một chút thời gian để đến hộp thư.",
+  "emailVerificationVerifyingHint": "Vui lòng chờ trong khi liên kết xác thực được kiểm tra.",
+  "emailVerificationTitle": "Xác thực Email",
+  "emailVerificationHeading": "Kiểm tra email của bạn",
+  "emailVerificationSentBody": "Liên kết xác thực đã được gửi đến:",
+  "emailVerificationInstruction": "Mở liên kết xác thực trong email để xác nhận địa chỉ của bạn.",
+  "emailVerificationWaiting": "Đang chờ xác thực...",
+  "emailVerificationWaitingBody": "Hãy mở liên kết trong email để xác thực. Bạn có thể tiếp tục sau khi việc xác thực được xác nhận.",
+  "emailVerificationResendTitle": "Chưa thấy email?",
+  "emailVerificationSpamHint": "Kiểm tra thư mục Spam/Thư rác, hoặc yêu cầu gửi lại email xác thực.",
+  "emailVerificationResend": "Gửi lại email xác thực",
+  "emailVerificationSending": "Đang gửi...",
+  "emailVerificationResendSuccess": "Email xác thực mới đã được gửi. Hãy kiểm tra hộp thư của bạn.",
+  "emailVerificationResendFailure": "Chưa thể gửi email. Vui lòng thử lại.",
+  "emailVerificationRetryAfter": "Gửi lại sau {seconds} giây",
+  "emailVerificationVerifying": "Đang xác thực email...",
+  "emailVerificationVerifyingBody": "Vui lòng đợi trong khi liên kết xác thực được kiểm tra.",
+  "emailVerificationSuccessTitle": "Email đã được xác thực!",
+  "emailVerificationSuccessBody": "Địa chỉ email của bạn đã được xác nhận. Bạn có thể tiếp tục bước tiếp theo.",
+  "emailVerificationContinue": "Tiếp tục",
+  "emailVerificationInvalidTitle": "Liên kết không còn hiệu lực",
+  "emailVerificationInvalidBody": "Liên kết xác thực có thể đã hết hạn hoặc không hợp lệ. Hãy yêu cầu email mới để thử lại.",
+  "emailVerificationResendNew": "Gửi email xác thực mới",
+  "emailVerificationFailure": "Chưa thể kiểm tra liên kết. Vui lòng thử lại khi kết nối khả dụng.",
+  "emailVerificationUnknownEmail": "Chưa có địa chỉ email. Quay lại đăng ký để yêu cầu email xác thực mới.",
+  "@emailVerificationRetryAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "captureTitle": "Chụp",
   "back": "Quay lại",
   "moreOptions": "Tùy chọn khác",
@@ -7,7 +82,13 @@
   "moveSlowly": "✨ Di chuyển chậm quanh vật thể 🌸",
   "keepStill": "Giữ vật thể đứng yên và duy trì khoảng cách ổn định.",
   "capturedPhotos": "Đã chụp {count} ảnh",
-  "@capturedPhotos": {"placeholders": {"count": {"type": "int"}}},
+  "@capturedPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "orbitLabel": "Quỹ đạo 360°",
   "distanceGood": "Khoảng cách tốt",
   "balanceGood": "Cân bằng",
@@ -18,9 +99,6 @@
   "preview": "Bản xem",
   "done": "Xong",
   "nextStep": "Bước tiếp",
-  "restorationTitle": "Phục dựng Wabi-Sabi",
-  "restorationBody": "Lưu giữ từng chi tiết trong câu chuyện của vật thể.",
-  "automatic": "Tự động",
   "cameraUnavailable": "Không tìm thấy camera trên thiết bị.",
   "cameraError": "Không thể mở camera.",
   "captureError": "Không thể chụp ảnh.",
@@ -44,14 +122,32 @@
   "sizeCalculating": "Đang tính",
   "sizeIncomplete": "Một số tệp không khả dụng",
   "fileSizeKb": "{value} KB",
-  "@fileSizeKb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeKb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "fileSizeMb": "{value} MB",
-  "@fileSizeMb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeMb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "capturedPhotoSection": "Ảnh đã chụp",
   "addAngle": "Thêm góc",
   "addAngleHint": "Chụp thêm góc nhìn",
   "photoNumber": "Ảnh {number}",
-  "@photoNumber": {"placeholders": {"number": {"type": "int"}}},
+  "@photoNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "imageUnavailable": "Không thể mở ảnh",
   "deletePhoto": "Xóa khỏi phiên",
   "retakePhoto": "Chụp lại",
@@ -69,7 +165,13 @@
   "processingLocal": "Phiên chụp trên thiết bị",
   "processingCloudUnavailable": "Chưa kết nối dịch vụ đám mây",
   "processingPhotoCount": "Đã chụp {count} ảnh",
-  "@processingPhotoCount": {"placeholders": {"count": {"type": "int"}}},
+  "@processingPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "processingReadyTitle": "Sẵn sàng tải lên",
   "processingReadyBody": "Ảnh đang được lưu trên thiết bị. Chức năng xử lý sẽ khả dụng khi kết nối dịch vụ.",
   "processingWaiting": "Đang chờ dịch vụ xử lý",
@@ -95,5 +197,530 @@
   "processingCloudConnected": "Đã kết nối dịch vụ xử lý",
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
-  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi.",
+  "captureLibrary": "Thư viện",
+  "captureCollection": "Bộ sưu tập",
+  "capturePrints": "Bản in",
+  "captureStudio": "Xưởng tạo",
+  "captureSettings": "Cài đặt",
+  "captureCamera": "Camera",
+  "recordVideo": "Quay video",
+  "stopVideo": "Dừng quay",
+  "videoStartError": "Không thể bắt đầu quay video. Vui lòng thử lại.",
+  "videoFinalizeError": "Không thể hoàn tất video. Vui lòng quay lại.",
+  "recordedVideo": "Video đã quay",
+  "videoUnavailable": "Không thể mở video",
+  "videoFileChanged": "Tệp đã thay đổi sau khi quay. Dung lượng hiển thị là khi hoàn tất quay.",
+  "videoPreviewTitle": "Bản xem video",
+  "videoFinalizedSize": "Dung lượng khi quay",
+  "videoNotSelected": "Chưa chọn video",
+  "videoLoading": "Đang tải video...",
+  "videoPlay": "Phát",
+  "videoPause": "Tạm dừng",
+  "videoDuration": "Thời lượng: {duration}",
+  "videoTooShort": "Video cần dài ít nhất {seconds} giây.",
+  "videoDurationSatisfied": "Đã đạt thời lượng tối thiểu.",
+  "videoPlaybackError": "Không thể phát video này. Vui lòng thử quay video khác.",
+  "@videoDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "@videoTooShort": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "importedVideo": "Video từ thư viện",
+  "videoReplaceFromLibrary": "Thay từ thư viện",
+  "videoImportFormatError": "Chọn video định dạng MP4, MOV hoặc AVI.",
+  "videoImportSizeError": "Video đã chọn vượt quá giới hạn 2 GB.",
+  "videoImportValidationError": "Không thể xác minh dung lượng video đã chọn.",
+  "videoImportError": "Không thể chọn video từ thư viện. Vui lòng thử lại.",
+  "videoImportStorageError": "Không thể chuẩn bị video đã chọn. Vui lòng thử lại.",
+  "restorationTitle": "Phục dựng Wabi-Sabi",
+  "restorationBody": "Lưu giữ từng chi tiết trong câu chuyện của vật thể.",
+  "automatic": "Tự động",
+  "uploadTitle": "Đang tải ảnh",
+  "uploadPreparing": "Đang chuẩn bị tải lên",
+  "uploadUploading": "Đang tải lên",
+  "uploadWaiting": "Đang chờ kết nối",
+  "uploadReconciling": "Đang khôi phục",
+  "uploadRetryNeeded": "Cần thử lại",
+  "uploadCompleted": "Tải ảnh lên hoàn tất",
+  "uploadMainTitle": "Đang tải bộ ảnh lên",
+  "uploadNetworkBanner": "Đang chờ kết nối lại",
+  "uploadNetworkBody": "Tiến trình đã xác nhận được giữ nguyên. Quá trình tải sẽ tiếp tục khi có kết nối trở lại.",
+  "uploadReconcilingTitle": "Đang khôi phục phiên tải",
+  "uploadReconcilingBody": "Đang kiểm tra vị trí đã xác nhận trước khi tiếp tục. Tiến trình được giữ nguyên trong lúc kiểm tra.",
+  "uploadCompletionBody": "Đang chuyển sang kiểm tra chất lượng...",
+  "uploadFailureBody": "Tiến trình đã xác nhận được giữ nguyên. Thử lại để tiếp tục từ vị trí đã xác nhận gần nhất.",
+  "uploadSourceFailureBody": "Chưa thể cập nhật tiến trình tải. Tiến trình đã xác nhận được giữ nguyên; hãy thử kết nối lại.",
+  "uploadLocalPhotos": "Ảnh trên thiết bị",
+  "uploadSavedTitle": "Tiến trình được lưu tự động",
+  "uploadSavedBody": "Bạn có thể quay lại phiên tải sau khi gián đoạn. Quá trình tải sẽ tiếp tục từ vị trí đã xác nhận gần nhất.",
+  "uploadSessionOnlyTitle": "Giữ phiên tải này mở",
+  "uploadSessionOnlyBody": "Tiến trình đã xác nhận vẫn hiển thị trong phiên này. Chưa hỗ trợ khôi phục sau khi đóng ứng dụng.",
+  "uploadPhotoCount": "{count} ảnh",
+  "@uploadPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadPercent": "{value}%",
+  "@uploadPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadSummaryProgress": "Đã tải lên {value}%",
+  "@uploadSummaryProgress": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadUnitCount": "{confirmed} / {total}",
+  "@uploadUnitCount": {
+    "placeholders": {
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadConfirmedParts": "{confirmed} / {total} phần đã tải lên",
+  "@uploadConfirmedParts": {
+    "placeholders": {
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadProgressLabel": "Tiến trình tải đã xác nhận",
+  "uploadSpeed": "Tốc độ",
+  "uploadSpeedValue": "{value} MB/s",
+  "@uploadSpeedValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadRemaining": "Còn lại",
+  "uploadEtaValue": "~{minutes} phút {seconds} giây",
+  "@uploadEtaValue": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadEtaWaiting": "Đang chờ",
+  "uploadUnknownMetric": "—",
+  "uploadConfirmed": "Đã tải",
+  "uploadPhotosTitle": "Ảnh đang tải",
+  "uploadPhotoCompleted": "Đã tải",
+  "uploadPhotoCurrent": "Đang tải",
+  "uploadPhotoPending": "Chờ tải",
+  "uploadPhotoPaused": "Tạm dừng",
+  "uploadPhotoDescription": "{photo}. {status}",
+  "@uploadPhotoDescription": {
+    "placeholders": {
+      "photo": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadNextSteps": "Các bước tiếp theo",
+  "uploadCloudStep": "Tải dữ liệu lên đám mây",
+  "uploadStepProgress": "{status} ({confirmed}/{total} phần)",
+  "@uploadStepProgress": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadQualityStep": "Kiểm tra chất lượng & Tiền xử lý",
+  "uploadQualityNextBody": "Bước tiếp theo sau khi tải xong",
+  "uploadNext": "Tiếp theo",
+  "photoUploadConfirm": "Tải ảnh lên",
+  "photoUploadStopped": "Đã dừng tải ảnh",
+  "photoUploadAmbiguous": "Chưa xác nhận được kết quả tải ảnh hiện tại. Ảnh có thể đã tồn tại trên máy chủ. Đã dừng tải; ảnh này sẽ không được gửi lại.",
+  "photoUploadRejected": "Máy chủ từ chối ảnh này. Đã dừng tải. Các ảnh đã xác nhận được giữ lại.",
+  "photoUploadNotSubmitted": "Ảnh này chưa được gửi. Kiểm tra tệp trên thiết bị rồi chủ động thử lại.",
+  "photoUploadConfirmed": "Đã xác nhận {confirmed} / {total} ảnh",
+  "photoUploadComplete": "Tất cả ảnh đã được xác nhận tải lên. Bạn có thể quay lại màn hình chụp.",
+  "photoUploadRetrying": "Đang thử lại ảnh chưa được gửi",
+  "@photoUploadConfirmed": {
+    "placeholders": {
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportTitle": "Báo Cáo Chất Lượng",
+  "qualityReportScanQuality": "Chất lượng bản quét",
+  "qualityReportScore": "Điểm: {score} trên 100",
+  "qualityReportCategoryGreen": "Tốt",
+  "qualityReportCategoryAmber": "Cảnh báo",
+  "qualityReportCategoryRed": "Không đạt",
+  "qualityReportEligible": "Đủ điều kiện",
+  "qualityReportPhotosChecked": "{count} ảnh đã được kiểm tra",
+  "qualityReportPass": "Đạt",
+  "qualityReportWarn": "Cảnh báo",
+  "qualityReportFail": "Lỗi",
+  "qualityReportSuggestionTitle": "Gợi ý cải thiện",
+  "@qualityReportScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "@qualityReportPhotosChecked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportPhotoQuality": "Chất lượng từng ảnh",
+  "qualityReportAttentionPhotos": "Ảnh cần chú ý",
+  "qualityReportAttentionPhotoCount": "{count} ảnh",
+  "qualityReportViewAllPhotos": "Xem tất cả {count} ảnh",
+  "qualityReportCollapsePhotos": "Thu gọn",
+  "@qualityReportAttentionPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@qualityReportViewAllPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportAllPhotos": "Tất cả ảnh",
+  "qualityReportStartReconstruction": "Bắt đầu tái tạo",
+  "qualityReportRecoverPhotos": "Chụp bù / Xoá ảnh lỗi",
+  "qualityReportViewDetails": "Xem chi tiết",
+  "qualityReportViewWarningDetails": "Xem chi tiết cảnh báo",
+  "qualityReportViewErrorDetails": "Xem chi tiết lỗi",
+  "qualityReportDetailsTitle": "Chi tiết chất lượng",
+  "qualityRiskTitle": "Xác nhận rủi ro",
+  "qualityNeedsConfirmation": "CẦN XÁC NHẬN",
+  "qualityHeroTitle": "Chất lượng ảnh chưa hoàn toàn tối ưu",
+  "qualityHeroBody": "Bạn vẫn có thể dựng mô hình, nhưng một số ảnh có thể ảnh hưởng đến độ chính xác của mô hình 3D.",
+  "qualitySummaryTitle": "Tóm tắt chất lượng ảnh",
+  "qualityQualified": "Đạt chuẩn",
+  "qualityNeedsAttention": "Cần lưu ý",
+  "qualityOverallScore": "Chất lượng tổng thể",
+  "qualityPercentage": "{value}%",
+  "@qualityPercentage": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "qualityReviewImages": "{count, plural, =0{Xem cảnh báo chất lượng} other{{count} ảnh cần được xem xét}}",
+  "@qualityReviewImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityViewDetails": "Xem chi tiết cảnh báo & mức độ ảnh hưởng",
+  "qualityRiskDetailsTitle": "Kiểm tra trước khi tiếp tục",
+  "qualityRiskDetailsSubtitle": "{count, plural, =0{Xem cảnh báo chất lượng trước khi quyết định.} other{Xem ảnh hưởng có thể có của {count} ảnh trước khi quyết định.}}",
+  "@qualityRiskDetailsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityAffectedImages": "Ảnh cần lưu ý",
+  "qualityAdditionalAffectedImages": "Còn {count} ảnh cần lưu ý",
+  "@qualityAdditionalAffectedImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityNoAffectedImages": "Không có ảnh cần lưu ý để xem trước.",
+  "qualityImpactTitle": "Điều này có thể ảnh hưởng gì?",
+  "qualitySurfaceRisk": "Chi tiết bề mặt có thể kém sắc nét ở một số vùng.",
+  "qualityGeometryRisk": "Độ chính xác hình học có thể giảm nhẹ ở những vùng chụp chưa tốt.",
+  "qualityReassurance": "Bạn có thể tiếp tục với bộ ảnh hiện tại hoặc quay lại cải thiện ảnh chụp để có kết quả tốt hơn.",
+  "qualityAcknowledgement": "Tôi hiểu rủi ro và vẫn muốn tiếp tục",
+  "qualityAcknowledgementHint": "Cảnh báo chất lượng có thể ảnh hưởng đến kết quả 3D cuối cùng. Chỉ xác nhận khi bạn sẵn sàng chấp nhận những rủi ro này.",
+  "qualityCloseDetails": "Đóng chi tiết rủi ro",
+  "qualityContextChanged": "Báo cáo chất lượng đã thay đổi. Đóng bảng này và xem báo cáo hiện tại.",
+  "qualityContinue": "Xác nhận và tiếp tục",
+  "qualitySubmitting": "Đang xác nhận...",
+  "qualityBackToImages": "Quay lại kiểm tra ảnh",
+  "qualityBackToReport": "Quay lại báo cáo chất lượng",
+  "qualityBlockedStatus": "CHƯA THỂ TIẾP TỤC",
+  "qualityRejectedTitle": "Không thể tiếp tục với bộ ảnh này",
+  "qualityRejectedBody": "Chất lượng ảnh hiện chưa phù hợp để tiếp tục. Vui lòng quay lại kiểm tra ảnh.",
+  "qualityIneligibleStatus": "CẦN KIỂM TRA LẠI",
+  "qualityIneligibleTitle": "Vui lòng quay lại báo cáo chất lượng",
+  "qualityIneligibleBody": "Xác nhận rủi ro không khả dụng cho báo cáo này. Quay lại kiểm tra chất lượng ảnh hiện tại.",
+  "qualityRecoverableFailure": "Chưa thể xác nhận yêu cầu. Lựa chọn xác nhận rủi ro của bạn đã được giữ lại; vui lòng thử lại.",
+  "qualityRetry": "Thử xác nhận lại",
+  "qualityConfirmedStatus": "ĐÃ XÁC NHẬN",
+  "qualityConfirmedTitle": "Đã xác nhận rủi ro",
+  "qualityConfirmedBody": "Xác nhận của bạn đã được chấp nhận.",
+  "reconstructionConfirmationTitle": "Xác nhận tái tạo",
+  "reconstructionConfirmationHero": "Sẵn sàng tạo mô hình 3D? ✨",
+  "reconstructionConfirmationSubtitle": "Kiểm tra lại thông tin trước khi bắt đầu tái tạo.",
+  "reconstructionQualifiedCount": "{count}",
+  "@reconstructionQualifiedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reconstructionQualifiedImages": "Ảnh đạt yêu cầu",
+  "reconstructionQualityScore": "{score}%",
+  "@reconstructionQualityScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "reconstructionQualityLabel": "Chất lượng tổng thể",
+  "reconstructionQualityGreen": "Tốt",
+  "reconstructionQualityAmber": "Còn hạn chế",
+  "reconstructionEstimatedMinutes": "~{minutes} phút",
+  "@reconstructionEstimatedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "reconstructionEstimatedTime": "Thời gian dự kiến",
+  "reconstructionProcessTitle": "Điều gì sẽ xảy ra?",
+  "reconstructionProcessImages": "Ảnh đã chọn",
+  "reconstructionProcessCloud": "Xử lý trên đám mây",
+  "reconstructionProcessModel": "Mô hình 3D",
+  "reconstructionProcessBody": "Các ảnh đạt yêu cầu sẽ được sử dụng để tạo mô hình 3D.",
+  "reconstructionResourceTitle": "Trước khi bắt đầu",
+  "reconstructionResourceBody": "Tái tạo 3D sử dụng tài nguyên xử lý và có thể mất vài phút. Sau khi bắt đầu, quá trình không dễ hủy. Đây là thời điểm dễ dàng nhất để quay lại kiểm tra ảnh.",
+  "reconstructionAmberReminderTitle": "Cảnh báo đã được xác nhận",
+  "reconstructionAmberReminderBody": "Bạn đã xác nhận cảnh báo chất lượng trước đó. Bộ ảnh vẫn còn một số hạn chế nên mô hình có thể mất một số chi tiết.",
+  "reconstructionStart": "Bắt đầu tái tạo",
+  "reconstructionBackToReview": "Quay lại kiểm tra ảnh",
+  "reconstructionSubmitting": "Đang gửi…",
+  "reconstructionSubmitted": "Đã gửi",
+  "reconstructionSubmissionError": "Chưa thể gửi yêu cầu. Vui lòng thử bắt đầu tái tạo lại.",
+  "modelConfirmationTitle": "Tạo Mô hình 3D từ Ảnh",
+  "modelConfirmationAiTooltip": "Trợ lý AI 3D Forge",
+  "modelConfirmationOriginalPhoto": "Ảnh gốc",
+  "modelConfirmationKeepsakePhoto": "Búp bê kỷ niệm",
+  "modelConfirmationConsentBadge": "100% Đã đồng ý",
+  "modelConfirmationAllPhotos": "Tất cả ảnh chụp",
+  "modelConfirmationHeader": "Tạo mô hình 3D từ ảnh ✨",
+  "modelConfirmationSubtitle": "Chúng tôi đã tiếp nhận {count} ảnh để tạo hình ảnh 3D sinh động.",
+  "@modelConfirmationSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modelConfirmationInfo": "Tự động chuyển đổi từ ảnh sang Model 3D hoàn chỉnh chỉ sau vài chạm",
+  "modelConfirmationUploadedTitle": "Ảnh đã tải lên",
+  "modelConfirmationUploadedValue": "{count, plural, =0{Chưa có ảnh nét} other{{count} ảnh nét}}",
+  "@modelConfirmationUploadedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modelConfirmationGeneratedTitle": "Mô hình 3D tạo ra",
+  "modelConfirmationGeneratedValue": "Mô hình 3D sắc nét",
+  "modelConfirmationGenerating": "Đang xử lý",
+  "modelConfirmationFormatTitle": "Định dạng file",
+  "modelConfirmationFormatValue": ".GLB / sẵn sàng 3D (.STL)",
+  "modelConfirmationFormatBadge": "Chuẩn 3D",
+  "modelConfirmationWarning": "Chưa có ảnh nào sẵn sàng. Vui lòng quay lại và chụp ít nhất một bức ảnh trước khi tạo mô hình 3D.",
+  "modelConfirmationCta": "Tạo Mô hình 3D ngay",
+  "modelConfirmationSubmitting": "Đang tạo mô hình...",
+  "modelConfirmationEstimate": "Thời gian ước tính: 1–2 phút",
+  "modelConfirmationError": "Không thể tạo mô hình 3D. Vui lòng thử lại.",
+  "processingSimulated": "Tiến độ mô phỏng — chỉ để xem thử",
+  "processingTakesTime": "Quá trình dựng 3D có thể mất một chút thời gian. Bước hiện tại được hiển thị bên dưới.",
+  "processingDemoCompleted": "Đã hoàn tất mô phỏng",
+  "processingDemoCompleteBody": "Bản mô phỏng đã hoàn tất. Chưa có mô hình 3D nào được tạo.",
+  "processingDemoFailure": "Mô phỏng đã dừng ở bước tạo chi tiết. Bạn có thể thử lại bản mô phỏng.",
+  "processingSourceFailure": "Không thể nhận thông tin cập nhật tiến độ.",
+  "processingStoppedHere": "Đã dừng tại bước này",
+  "processingReturn": "Quay lại",
+  "processingObservationAuth": "Phiên đăng nhập đã kết thúc. Đăng nhập lại để xem tiến độ.",
+  "processingObservationUnavailable": "Không thể truy cập tác vụ tái tạo này.",
+  "processingObservationContract": "Không thể đọc tiến độ. Vui lòng thử lại.",
+  "processingObservationTransient": "Tạm thời không thể cập nhật tiến độ. Đang tự động thử lại.",
+  "processingObservationExhausted": "Đã dừng cập nhật sau nhiều lần gặp lỗi kết nối. Nhấn thử lại để kiểm tra.",
+  "processingObservationLoading": "Đang lấy trạng thái tái dựng",
+  "processingObservationLoadingBody": "Vui lòng đợi trong khi kiểm tra tác vụ tái dựng.",
+  "processingQueued": "Đang chờ",
+  "processingQueuedBody": "Đang chờ tái dựng.",
+  "processingCancelled": "Đã hủy",
+  "processingCancelledBody": "Tác vụ tái dựng đã bị hủy.",
+  "processingBackendReal": "Xử lý trên máy chủ",
+  "processingProvenanceUnknown": "Chưa xác định chế độ xử lý",
+  "processingBackendDownloading": "Đang tải dữ liệu đầu vào tái dựng",
+  "processingBackendPreprocessing": "Đang tiền xử lý dữ liệu tái dựng",
+  "processingBackendShapeGeneration": "Đang tạo hình dạng",
+  "processingBackendTexturing": "Đang tạo bề mặt",
+  "processingBackendValidating": "Đang kiểm tra kết quả tái dựng",
+  "processingBackendExporting": "Đang xuất kết quả tái dựng",
+  "processingBackendUploading": "Đang tải kết quả tái dựng lên máy chủ",
+  "processingProgressTitle": "Đang tạo mô hình 3D...",
+  "processingProgressSubtitle": "AI đang phân tích cấu trúc góc cạnh và các chi tiết của vật thể để tạo ra bản 3D sống động.",
+  "processingProgressLabel": "TIẾN TRÌNH",
+  "processingHistoryTitle": "NHẬT KÝ TẠO MÔ HÌNH",
+  "processingTipTitle": "Mẹo nhỏ từ Memento3D",
+  "processingTipBody": "Bạn có thể chụp thêm góc ảnh để mô hình 3D chính xác hơn.",
+  "processingRunInBackground": "Chạy dưới nền & Nhận thông báo",
+  "processingBackgroundAck": "Bạn sẽ nhận thông báo khi quá trình hoàn tất.",
+  "processingReconnecting": "Đang kết nối lại...",
+  "processingEtaUnknown": "Đang ước tính thời gian...",
+  "processingEtaShort": "gần hoàn tất",
+  "processingEtaMinutes": "còn khoảng {minutes} phút",
+  "@processingEtaMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "jobStageQueued": "Chờ trong hàng đợi",
+  "jobStageDownloading": "Đang tải ảnh đầu vào",
+  "jobStagePreprocessing": "Xử lý trước dữ liệu",
+  "jobStageShapeGeneration": "Dựng hình 3D",
+  "jobStageTexturing": "Tạo texture",
+  "jobStageValidating": "Kiểm tra chất lượng",
+  "jobStageExporting": "Xuất mô hình",
+  "jobStageUploading": "Tải mô hình lên",
+  "jobStageDone": "Hoàn tất",
+  "processingPhaseStep": "Bước {step}/{total}: {label}",
+  "@processingPhaseStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "processingPhaseAnalyzing": "Phân tích ảnh đầu vào",
+  "processingPhaseModeling": "Dựng khối & kết cấu",
+  "processingPhaseFinishing": "Phối màu & chuẩn hóa mô hình",
+  "jobFailedHeaderTitle": "Tạo Mô Hình 3D",
+  "jobFailedStatusBadge": "Trạng thái: Thất bại",
+  "jobFailedTitle": "Chưa thể tạo mô hình 3D",
+  "jobFailedSubtitle": "Một số bước tái tạo 3D gặp sự cố. Đừng lo, ảnh chụp của bạn vẫn được lưu an toàn.",
+  "jobFailedCardTitle": "Điều gì đã xảy ra?",
+  "jobRetry": "Thử lại tạo 3D",
+  "jobRetrying": "Đang thử lại...",
+  "jobDashboard": "Quay về Dashboard",
+  "jobRetryLimit": "Bạn đã vượt quá số lần thử lại cho phép. Vui lòng liên hệ hỗ trợ hoặc tạo một lượt quét mới.",
+  "jobRetryFailedHint": "Không thể thử lại lúc này. Vui lòng kiểm tra kết nối và thử lại.",
+  "jobFailedIllustrationTag": "3D AI Engine",
+  "modelViewerTitle": "Mô hình 3D",
+  "modelViewerModelReady": "Mô hình đã sẵn sàng",
+  "modelViewerReadyExplanation": "Mô hình đã sẵn sàng để khám phá. Xoay mô hình để quan sát từ mọi góc độ.",
+  "modelViewerPendingExplanation": "Mô hình đang được chuẩn bị. Bạn có thể khám phá khi mô hình sẵn sàng.",
+  "modelViewerUnavailableExplanation": "Hiện chưa có mô hình cho mục này.",
+  "modelViewerReference": "Mã tham chiếu · {code}",
+  "@modelViewerReference": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "modelViewerFormat": "Định dạng",
+  "modelViewerFormatGlb": "GLB",
+  "modelViewerStatus": "Trạng thái",
+  "modelViewerDetail": "Độ chi tiết",
+  "modelViewerDetailHigh": "Cao",
+  "modelViewerPercentage": "{value}%",
+  "@modelViewerPercentage": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "modelViewerContinue": "Tiếp tục",
+  "modelViewerPreviewName": "Robot nhỏ · Bản xem thử",
+  "modelViewerPreviewAction": "Chỉ là bản xem thử — chưa kết nối màn hình tiếp theo.",
+  "modelViewerPreviewTitle": "Xem thử trình xem 3D",
+  "modelViewerInitializing": "Đang khởi động trình xem 3D…",
+  "modelViewerReady": "Trình xem 3D đã sẵn sàng",
+  "modelViewerShaded": "Khối",
+  "modelViewerWireframe": "Lưới",
+  "modelViewerGrid": "Lưới nền",
+  "modelViewerReset": "Đặt lại góc nhìn",
+  "modelViewerInteractionHint": "Xoay • Thu phóng • Di chuyển",
+  "modelViewerLoading": "Đang tải mô hình 3D…",
+  "modelViewerLoaded": "Đã tải mô hình 3D",
+  "modelViewerLoadError": "Không thể tải mô hình 3D.",
+  "modelViewerInitializationError": "Không thể khởi động trình xem 3D. Hãy đóng màn hình này và thử lại.",
+  "modelViewerScreenTitle": "Trình xem mô hình 3D",
+  "modelViewerFetchingOutputs": "Đang tải thông tin mô hình…",
+  "modelViewerDownloading": "Đang tải mô hình 3D…",
+  "modelViewerNoPrimaryGlb": "Không có mô hình GLB chính cho bản scan này.",
+  "modelViewerRetry": "Thử lại",
+  "checkPrintabilityCta": "Kiểm tra khả năng in",
+  "rateAndShareCta": "Đánh giá & Chia sẻ",
+  "orderPhysicalPrintCta": "Đặt in 3D vật lý"
 }

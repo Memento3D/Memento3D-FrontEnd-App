@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/scan_model.dart';
 import 'scan_status_badge.dart';
@@ -56,8 +57,14 @@ class ScanCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: scan.isImageMode
-                              ? [const Color(0xFFEDE9FE), const Color(0xFFDDD6FE)]
-                              : [const Color(0xFFE0F2FE), const Color(0xFFBAE6FD)],
+                              ? [
+                                  const Color(0xFFEDE9FE),
+                                  const Color(0xFFDDD6FE),
+                                ]
+                              : [
+                                  const Color(0xFFE0F2FE),
+                                  const Color(0xFFBAE6FD),
+                                ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -127,7 +134,11 @@ class ScanCard extends StatelessWidget {
                           value: 'edit',
                           child: Row(
                             children: [
-                              const Icon(Icons.edit_outlined, size: 18, color: Color(0xFF4B5563)),
+                              const Icon(
+                                Icons.edit_outlined,
+                                size: 18,
+                                color: Color(0xFF4B5563),
+                              ),
                               const SizedBox(width: 10),
                               Text(
                                 'Chỉnh sửa thông tin',
@@ -143,7 +154,11 @@ class ScanCard extends StatelessWidget {
                           value: 'delete',
                           child: Row(
                             children: [
-                              const Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.error),
+                              const Icon(
+                                Icons.delete_outline_rounded,
+                                size: 18,
+                                color: AppColors.error,
+                              ),
                               const SizedBox(width: 10),
                               Text(
                                 'Xóa phiên scan',
@@ -162,7 +177,8 @@ class ScanCard extends StatelessWidget {
                 ),
 
                 // Description (if present)
-                if (scan.description != null && scan.description!.trim().isNotEmpty) ...[
+                if (scan.description != null &&
+                    scan.description!.trim().isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(
                     scan.description!.trim(),
@@ -188,7 +204,10 @@ class ScanCard extends StatelessWidget {
 
                     // Input Mode Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3.5,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF3F4F6),
                         borderRadius: BorderRadius.circular(8),
@@ -197,7 +216,9 @@ class ScanCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            scan.isImageMode ? Icons.image_outlined : Icons.videocam_outlined,
+                            scan.isImageMode
+                                ? Icons.image_outlined
+                                : Icons.videocam_outlined,
                             size: 13,
                             color: const Color(0xFF4B5563),
                           ),
@@ -216,7 +237,10 @@ class ScanCard extends StatelessWidget {
 
                     // File Count Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3.5,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF3F4F6),
                         borderRadius: BorderRadius.circular(8),

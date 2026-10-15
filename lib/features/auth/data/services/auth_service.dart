@@ -1,6 +1,7 @@
 import 'package:memento3d_frontend_app/core/network/api_client.dart';
 import 'package:memento3d_frontend_app/core/network/api_config.dart';
 import 'package:memento3d_frontend_app/core/network/api_exception.dart';
+
 import '../models/user_model.dart';
 import 'auth_storage.dart';
 
@@ -17,16 +18,16 @@ class AuthService {
   }) async {
     final response = await _apiClient.post(
       ApiConfig.login,
-      body: {
-        'email': email.trim(),
-        'password': password,
-      },
+      body: {'email': email.trim(), 'password': password},
     );
 
-    final authResponse = AuthResponseModel.fromJson(response as Map<String, dynamic>);
+    final authResponse = AuthResponseModel.fromJson(
+      response as Map<String, dynamic>,
+    );
 
     // Persist token and user profile
     await AuthStorage.saveToken(authResponse.accessToken);
+    await AuthStorage.saveRefreshToken(authResponse.refreshToken);
     if (authResponse.user != null) {
       await AuthStorage.saveUser(authResponse.user!);
     }
@@ -34,11 +35,54 @@ class AuthService {
     return authResponse;
   }
 
+  /// Rotate the stored refresh token using the backend's real auth endpoint.
+  /// Call explicitly; mutating API requests must never be replayed implicitly.
+  Future<AuthResponseModel> refreshSession() async {
+    final token = await AuthStorage.getRefreshToken();
+    if (token == null || token.isEmpty) {
+      throw ApiException(
+        statusCode: 401,
+        message: 'No refresh token available.',
+      );
+    }
+    final response = await _apiClient.post(
+      ApiConfig.refresh,
+      body: {'refreshToken': token},
+    );
+    final session = AuthResponseModel.fromJson(
+      response as Map<String, dynamic>,
+    );
+    if (session.accessToken.isEmpty ||
+        session.refreshToken?.isNotEmpty != true) {
+      throw const FormatException('Invalid refreshed session');
+    }
+    await AuthStorage.saveToken(session.accessToken);
+    await AuthStorage.saveRefreshToken(session.refreshToken);
+    if (session.user != null) await AuthStorage.saveUser(session.user!);
+    return session;
+  }
+
+  /// Update the authenticated user's display name through the profile API.
+  Future<UserModel> updateProfile({required String fullName}) async {
+    final response = await _apiClient.patch(
+      '/api/v1/users/me',
+      body: {'fullName': fullName.trim()},
+    );
+    if (response is! Map<String, dynamic>) {
+      throw const FormatException('Invalid profile response');
+    }
+    final user = UserModel.fromJson(response);
+    if (user.id.isEmpty) throw const FormatException('Missing user ID');
+    await AuthStorage.saveUser(user);
+    return user;
+  }
+
   /// Register a new account
   Future<RegisterResponseModel> register({
     required String email,
     required String password,
     required String fullName,
+    required bool agreeTerms,
   }) async {
     final response = await _apiClient.post(
       ApiConfig.register,
@@ -46,6 +90,7 @@ class AuthService {
         'email': email.trim(),
         'password': password,
         'fullName': fullName.trim(),
+        'agreeTerms': agreeTerms,
       },
     );
 
@@ -90,6 +135,7 @@ class AuthService {
         await _apiClient.post(
           ApiConfig.logout,
           token: token,
+          body: {'refreshToken': await AuthStorage.getRefreshToken()},
         );
       } catch (_) {
         // Even if server call fails (e.g. offline), clear local session

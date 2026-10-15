@@ -13,71 +13,83 @@ import 'package:memento3d_frontend_app/screens/processing_state.dart';
 void main() {
   test('initial processing state contains no invented progress', () {
     const snapshot = ProcessingSnapshot.waiting();
-    expect(snapshot.status, ProcessingStatus.readyToUpload);
+    expect(snapshot.status, ProcessingStatus.waiting);
     expect(snapshot.hasMeasuredProgress, isFalse);
-    expect(snapshot.progressPercent, isNull);
-    expect(snapshot.uploadedBytes, isNull);
-    expect(snapshot.jobId, isNull);
-    for (final stage in ProcessingStage.values) {
+    expect(snapshot.progress, isNull);
+    expect(snapshot.etaSeconds, isNull);
+    expect(snapshot.stage, isNull);
+    for (final stage in JobStage.values) {
       expect(snapshot.statusFor(stage), ProcessingStageStatus.pending);
     }
+  });
+
+  test('stage order matches the real backend pipeline', () {
+    expect(JobStage.values.map((s) => s.name).toList(), const [
+      'queued',
+      'downloading',
+      'preprocessing',
+      'shapeGeneration',
+      'texturing',
+      'validating',
+      'exporting',
+      'uploading',
+      'done',
+    ]);
   });
 
   testWidgets('Review CTA requires photos and passes the same session', (
     tester,
   ) async {
-    final session = CaptureSession();
+    final session = CaptureSession(scanId: 'persisted-scan');
+    CaptureSession? submitted;
+    Future<void> upload(BuildContext context, CaptureSession value) async {
+      submitted = value;
+    }
+
     await tester.pumpWidget(
-      _localizedApp(CaptureReviewScreen(session: session)),
+      _localizedApp(CaptureReviewScreen(session: session, onUpload: upload)),
     );
-    await tester.scrollUntilVisible(find.text('Xem trạng thái xử lý'), 150);
-    await tester.ensureVisible(find.text('Xem trạng thái xử lý'));
+    await tester.scrollUntilVisible(find.text('Tải ảnh lên'), 150);
+    await tester.ensureVisible(find.text('Tải ảnh lên'));
     await tester.pumpAndSettle();
     final disabled = tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Xem trạng thái xử lý'),
+      find.widgetWithText(FilledButton, 'Tải ảnh lên'),
     );
     expect(disabled.onPressed, isNull);
 
     session.addPhoto(XFile('missing_processing_photo.jpg'));
     session.detailLevel = ReconstructionDetailLevel.standard;
     await tester.pumpWidget(
-      _localizedApp(CaptureReviewScreen(session: session)),
+      _localizedApp(CaptureReviewScreen(session: session, onUpload: upload)),
     );
-    await tester.scrollUntilVisible(find.text('Xem trạng thái xử lý'), 150);
-    await tester.ensureVisible(find.text('Xem trạng thái xử lý'));
+    await tester.scrollUntilVisible(find.text('Tải ảnh lên'), 150);
+    await tester.ensureVisible(find.text('Tải ảnh lên'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Xem trạng thái xử lý'));
+    await tester.tap(find.text('Tải ảnh lên'));
     await tester.pumpAndSettle();
 
-    final screen = tester.widget<ProcessingScreen>(
-      find.byType(ProcessingScreen),
-    );
-    expect(screen.session, same(session));
-    expect(find.text('Đã chụp 1 ảnh'), findsOneWidget);
+    expect(submitted, same(session));
+    expect(find.byType(ProcessingScreen), findsNothing);
     expect(find.text('Tiêu chuẩn'), findsOneWidget);
-    expect(find.text('Sẵn sàng tải lên'), findsOneWidget);
-    expect(find.text('Chưa kết nối dịch vụ đám mây'), findsOneWidget);
     expect(find.textContaining('%'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('local file size and missing image fallback are available', (
-    tester,
-  ) async {
-    final session = CaptureSession()
-      ..addPhoto(XFile.fromData(Uint8List(2048), name: 'photo.jpg'));
-    await tester.pumpWidget(_localizedApp(ProcessingScreen(session: session)));
+  testWidgets('missing image fallback is available', (tester) async {
+    final missing = CaptureSession()
+      ..addPhoto(XFile('missing_processing_image.jpg'));
+    await tester.pumpWidget(_localizedApp(ProcessingScreen(session: missing)));
     await tester.runAsync(
       () => Future<void>.delayed(const Duration(milliseconds: 100)),
     );
     await tester.pumpAndSettle();
-    expect(find.text('2.0 KB'), findsOneWidget);
-
-    final missing = CaptureSession()
-      ..addPhoto(XFile('missing_processing_image.jpg'));
-    await tester.pumpWidget(_localizedApp(ProcessingScreen(session: missing)));
-    await tester.pumpAndSettle();
     expect(tester.widget<Image>(find.byType(Image)).errorBuilder, isNotNull);
+    expect(tester.takeException(), isNull);
+
+    final session = CaptureSession()
+      ..addPhoto(XFile.fromData(Uint8List(2048), name: 'photo.jpg'));
+    await tester.pumpWidget(_localizedApp(ProcessingScreen(session: session)));
+    await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
 }

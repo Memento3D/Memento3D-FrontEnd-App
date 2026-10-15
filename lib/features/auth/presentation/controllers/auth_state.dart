@@ -98,11 +98,18 @@ class AuthState extends ChangeNotifier {
     }
   }
 
+  /// Publish the server-confirmed profile to all consumers.
+  Future<void> updateProfile(String fullName) async {
+    _currentUser = await _authService.updateProfile(fullName: fullName);
+    notifyListeners();
+  }
+
   /// Perform registration
   Future<RegisterResponseModel?> register({
     required String email,
     required String password,
     required String fullName,
+    required bool agreeTerms,
   }) async {
     _isLoading = true;
     _errorMessage = null;
@@ -113,6 +120,7 @@ class AuthState extends ChangeNotifier {
         email: email,
         password: password,
         fullName: fullName,
+        agreeTerms: agreeTerms,
       );
       _isLoading = false;
       notifyListeners();

@@ -20,10 +20,7 @@ class RenameScanDialog extends StatefulWidget {
   }) {
     return showDialog(
       context: context,
-      builder: (context) => RenameScanDialog(
-        scan: scan,
-        onRename: onRename,
-      ),
+      builder: (context) => RenameScanDialog(scan: scan, onRename: onRename),
     );
   }
 
@@ -111,9 +108,15 @@ class _RenameScanDialogState extends State<RenameScanDialog> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                    width: 1.5,
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
               ),
               validator: (val) {
                 if (val == null || val.trim().isEmpty) {

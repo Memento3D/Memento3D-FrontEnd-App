@@ -25,10 +25,7 @@ class ScanCardGridItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFFF1F0F5),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFFF1F0F5), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -47,15 +44,16 @@ class ScanCardGridItem extends StatelessWidget {
             Expanded(
               child: Stack(
                 children: [
-                  Positioned.fill(
-                    child: _buildThumbnail(),
-                  ),
+                  Positioned.fill(child: _buildThumbnail()),
                   // Top Input Mode Tag
                   Positioned(
                     top: 8,
                     left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 7,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(10),
@@ -70,7 +68,9 @@ class ScanCardGridItem extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            scan.inputMode == ScanInputMode.image ? 'Ảnh' : 'Video',
+                            scan.inputMode == ScanInputMode.image
+                                ? 'Ảnh'
+                                : 'Video',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 9.5,
                               fontWeight: FontWeight.w700,
@@ -83,11 +83,7 @@ class ScanCardGridItem extends StatelessWidget {
                   ),
 
                   // Top Right 3-dots Menu
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: _buildPopupMenu(context),
-                  ),
+                  Positioned(top: 4, right: 4, child: _buildPopupMenu(context)),
 
                   // If Processing: Overlay with ETA / Progress
                   if (scan.isProcessing && scan.progress != null)
@@ -96,7 +92,10 @@ class ScanCardGridItem extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         color: Colors.black.withValues(alpha: 0.65),
                         child: Row(
                           children: [
@@ -105,7 +104,9 @@ class ScanCardGridItem extends StatelessWidget {
                               height: 10,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 6),
@@ -135,7 +136,10 @@ class ScanCardGridItem extends StatelessWidget {
                 children: [
                   // Status Badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 7,
+                      vertical: 2.5,
+                    ),
                     decoration: BoxDecoration(
                       color: scan.status.backgroundColor,
                       borderRadius: BorderRadius.circular(8),
@@ -227,8 +231,8 @@ class ScanCardGridItem extends StatelessWidget {
           colors: scan.isFailed
               ? [const Color(0xFFFEE2E2), const Color(0xFFFECACA)]
               : scan.isProcessing
-                  ? [const Color(0xFFFEF3C7), const Color(0xFFFDE68A)]
-                  : [const Color(0xFFEDE9FE), const Color(0xFFE0E7FF)],
+              ? [const Color(0xFFFEF3C7), const Color(0xFFFDE68A)]
+              : [const Color(0xFFEDE9FE), const Color(0xFFE0E7FF)],
         ),
       ),
       child: Center(
@@ -236,14 +240,14 @@ class ScanCardGridItem extends StatelessWidget {
           scan.isFailed
               ? Icons.warning_amber_rounded
               : scan.isProcessing
-                  ? Icons.view_in_ar_rounded
-                  : Icons.view_in_ar_outlined,
+              ? Icons.view_in_ar_rounded
+              : Icons.view_in_ar_outlined,
           size: 38,
           color: scan.isFailed
               ? const Color(0xFFEF4444)
               : scan.isProcessing
-                  ? const Color(0xFFD97706)
-                  : AppColors.primary,
+              ? const Color(0xFFD97706)
+              : AppColors.primary,
         ),
       ),
     );
@@ -262,9 +266,7 @@ class ScanCardGridItem extends StatelessWidget {
           size: 18,
           color: Color(0xFF374151),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         onSelected: (value) {
           switch (value) {
             case 'details':
@@ -286,7 +288,11 @@ class ScanCardGridItem extends StatelessWidget {
             value: 'details',
             child: Row(
               children: [
-                Icon(Icons.info_outline_rounded, size: 18, color: Color(0xFF4B5563)),
+                Icon(
+                  Icons.info_outline_rounded,
+                  size: 18,
+                  color: Color(0xFF4B5563),
+                ),
                 SizedBox(width: 10),
                 Text('Xem chi tiết', style: TextStyle(fontSize: 13)),
               ],
@@ -296,7 +302,11 @@ class ScanCardGridItem extends StatelessWidget {
             value: 'rename',
             child: Row(
               children: [
-                Icon(Icons.drive_file_rename_outline_rounded, size: 18, color: Color(0xFF4B5563)),
+                Icon(
+                  Icons.drive_file_rename_outline_rounded,
+                  size: 18,
+                  color: Color(0xFF4B5563),
+                ),
                 SizedBox(width: 10),
                 Text('Đổi tên phiên scan', style: TextStyle(fontSize: 13)),
               ],
@@ -307,9 +317,16 @@ class ScanCardGridItem extends StatelessWidget {
               value: 'retry',
               child: Row(
                 children: [
-                  Icon(Icons.refresh_rounded, size: 18, color: Color(0xFFD97706)),
+                  Icon(
+                    Icons.refresh_rounded,
+                    size: 18,
+                    color: Color(0xFFD97706),
+                  ),
                   SizedBox(width: 10),
-                  Text('Thử lại (Retry)', style: TextStyle(fontSize: 13, color: Color(0xFFD97706))),
+                  Text(
+                    'Thử lại (Retry)',
+                    style: TextStyle(fontSize: 13, color: Color(0xFFD97706)),
+                  ),
                 ],
               ),
             ),
@@ -318,9 +335,16 @@ class ScanCardGridItem extends StatelessWidget {
             value: 'delete',
             child: Row(
               children: [
-                Icon(Icons.delete_outline_rounded, size: 18, color: Color(0xFFEF4444)),
+                Icon(
+                  Icons.delete_outline_rounded,
+                  size: 18,
+                  color: Color(0xFFEF4444),
+                ),
                 SizedBox(width: 10),
-                Text('Xóa phiên scan', style: TextStyle(fontSize: 13, color: Color(0xFFEF4444))),
+                Text(
+                  'Xóa phiên scan',
+                  style: TextStyle(fontSize: 13, color: Color(0xFFEF4444)),
+                ),
               ],
             ),
           ),

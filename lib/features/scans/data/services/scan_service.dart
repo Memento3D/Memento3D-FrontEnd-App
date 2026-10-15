@@ -2,12 +2,39 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_config.dart';
 import '../../../../core/network/api_exception.dart';
 import '../models/scan_model.dart';
+import '../models/scan_output_model.dart';
+import '../../../reconstruction/data/real_execution_guard.dart';
 
 /// Service for managing 3D Scan Sessions with Memento3D Backend API
 class ScanService {
   final ApiClient _apiClient;
 
   ScanService({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
+
+  /// Collect every server page before publishing dashboard totals or searches.
+  Future<ScanListResponseModel> getAllScans({
+    String? status,
+    String? sort,
+  }) async {
+    final first = await getScans(status: status, sort: sort, limit: 100);
+    final scans = [...first.scans];
+    for (var page = 2; page <= first.totalPages; page++) {
+      final next = await getScans(
+        status: status,
+        sort: sort,
+        page: page,
+        limit: 100,
+      );
+      scans.addAll(next.scans);
+    }
+    return ScanListResponseModel(
+      scans: scans,
+      totalCount: first.totalCount,
+      page: first.page,
+      limit: first.limit,
+      totalPages: first.totalPages,
+    );
+  }
 
   /// Normalize sort field/direction for backend API
   static String? normalizeSort(String? sort) {
@@ -31,7 +58,8 @@ class ScanService {
     if (status == null || status.isEmpty || status.toLowerCase() == 'all') {
       return null;
     }
-    if (status.toLowerCase() == 'qualitycheck' || status.toLowerCase() == 'quality_check') {
+    if (status.toLowerCase() == 'qualitycheck' ||
+        status.toLowerCase() == 'quality_check') {
       return 'quality_check';
     }
     return status.toLowerCase();
@@ -96,10 +124,7 @@ class ScanService {
       inputMode: inputMode,
     ).toJson();
 
-    final response = await _apiClient.post(
-      ApiConfig.scans,
-      body: requestBody,
-    );
+    final response = await _apiClient.post(ApiConfig.scans, body: requestBody);
 
     if (response is Map<String, dynamic>) {
       return ScanModel.fromJson(response);
@@ -158,5 +183,64 @@ class ScanService {
   /// Soft-delete a scan session (FR-035)
   Future<void> deleteScan(String id) async {
     await _apiClient.delete('${ApiConfig.scans}/$id');
+  }
+
+  /// Submit a reconstruction job for a scan session (US-027, FR-081, FR-082, FR-199)
+  /// POST /api/v1/scans/{id}/job → 202 Accepted with job_id; idempotent on retry.
+  Future<ReconstructionJobModel> createReconstructionJob(String scanId) async {
+    // This endpoint requires an uploaded input image, even for legacy callers.
+    // Resolve it from the server rather than inventing a local image identifier.
+    final encodedId = Uri.encodeComponent(scanId);
+    String? inputImageId;
+    var page = 1;
+    while (inputImageId == null) {
+      final payload = await _apiClient.get(
+        '${ApiConfig.scans}/$encodedId/images?page=$page&limit=100',
+      );
+      if (payload is! Map<String, dynamic> || payload['images'] is! List) {
+        throw const FormatException('Invalid scan images response');
+      }
+      for (final image in payload['images'] as List) {
+        if (image is Map<String, dynamic> &&
+            image['upload_status'] == 'uploaded' &&
+            image['is_excluded'] != true &&
+            image['id'] is String &&
+            (image['id'] as String).isNotEmpty) {
+          inputImageId = image['id'] as String;
+          break;
+        }
+      }
+      final totalPages = (payload['total_pages'] as num?)?.toInt() ?? 1;
+      if (inputImageId != null || page >= totalPages) break;
+      page++;
+    }
+    if (inputImageId == null) {
+      throw ApiException(
+        statusCode: 400,
+        message: 'Scan has no uploaded, included input image.',
+      );
+    }
+    final response = await _apiClient.post(
+      '${ApiConfig.scans}/$encodedId/job',
+      body: {'input_image_id': inputImageId, 'profile': 'default'},
+      expectedStatusCode: 202,
+    );
+    requireRealExecution(response);
+
+    if (response is Map<String, dynamic>) {
+      return ReconstructionJobModel.fromJson(response);
+    }
+
+    throw ApiException(
+      statusCode: 500,
+      errorCode: 'ERR-017',
+      message: 'Không thể giải mã dữ liệu job dựng 3D vừa tạo.',
+    );
+  }
+
+  /// Get generated output files (GLB, OBJ, ...) for a scan
+  Future<ScanOutputsResponseModel> getScanOutputs(String id) async {
+    final response = await _apiClient.get(ApiConfig.scanOutputs(id));
+    return ScanOutputsResponseModel.fromDynamic(response);
   }
 }

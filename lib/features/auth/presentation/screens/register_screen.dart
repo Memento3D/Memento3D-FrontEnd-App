@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/core/network/api_client.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/widgets/google_sign_in_button.dart';
-import 'package:memento3d_frontend_app/features/auth/presentation/widgets/register_header.dart';
-import 'package:memento3d_frontend_app/features/auth/presentation/widgets/register_hero_card.dart';
-import 'package:memento3d_frontend_app/features/home/presentation/screens/main_screen.dart';
+import 'package:memento3d_frontend_app/core/widgets/m3_ui.dart';
+
+import 'verification_entry_screen.dart';
 
 import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
 
@@ -24,8 +25,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _agreeToTerms = true;
+  bool _agreeToTerms = false;
   bool _isLoading = false;
+
+  Future<void> _showLegal(String kind) async {
+    final title = kind == 'terms'
+        ? 'Điều khoản sử dụng'
+        : 'Chính sách quyền riêng tư';
+    try {
+      final response = await ApiClient().get('/api/v1/legal/$kind/current');
+      if (response is! Map || response['content'] is! String) {
+        throw const FormatException('Invalid legal document');
+      }
+      if (!mounted) return;
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(response['title']?.toString() ?? title),
+          content: SingleChildScrollView(
+            child: SelectableText(response['content'] as String),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Đóng'),
+            ),
+          ],
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Không thể tải $title. Vui lòng thử lại.')),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -64,46 +98,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         password: password,
         fullName: fullName,
+        agreeTerms: _agreeToTerms,
       );
 
       if (!mounted) return;
 
       if (registerResponse != null) {
-        // Auto-login after successful registration
-        final loginSuccess = await AuthState.instance.login(email, password);
-
-        if (!mounted) return;
         setState(() => _isLoading = false);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              registerResponse.message.isNotEmpty
-                  ? registerResponse.message
-                  : 'Đăng ký tài khoản thành công! 🎉',
-            ),
-            backgroundColor: const Color(0xFF10B981),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => VerificationEntryScreen(email: email),
           ),
         );
-
-        if (loginSuccess) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => MainScreen(userName: fullName),
-            ),
-            (route) => false,
-          );
-        } else {
-          // If auto login fails for any reason, pop back to login
-          Navigator.of(context).maybePop();
-        }
       } else {
         setState(() => _isLoading = false);
-        final error = AuthState.instance.errorMessage ?? 'Đăng ký không thành công';
+        final error =
+            AuthState.instance.errorMessage ?? 'Đăng ký không thành công';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error),
@@ -131,24 +141,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Top Header: Back Button + Memento3D + Preview Badge
-                RegisterHeader(
-                  onBackPressed: () => Navigator.of(context).maybePop(),
+                // 1. Top Header: Back tile + Welcome pill
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).maybePop(),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.tint,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.chevron_left_rounded,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    const M3Pill(
+                      "Welcome",
+                      color: AppColors.textSecondary,
+                      background: AppColors.tint,
+                    ),
+                  ],
                 ),
 
-                const SizedBox(height: 16),
-
-                // 2. Hero Keepsake Card with Peach Tab
-                const RegisterHeroCard(),
-
-                const SizedBox(height: 20),
-
-                // 3. Category Chip: < Start Crafting
-                _buildCategoryChip(),
-
-                const SizedBox(height: 12),
-
-                const SizedBox(height: 20),
+                const SizedBox(height: 22),
 
                 // 4. Form Fields: Full Name, Email, Password, Confirm Password
                 _buildFullNameField(),
@@ -188,7 +208,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Tính năng đăng ký qua Google sẽ được tích hợp sau.'),
+                        content: Text(
+                          'Tính năng đăng ký qua Google sẽ được tích hợp sau.',
+                        ),
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -205,36 +227,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  /// 3. Category Chip: < Start Crafting
-  Widget _buildCategoryChip() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: AppColors.badgePurpleBg,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.chevron_left_rounded,
-            size: 16,
-            color: AppColors.badgePurpleText,
-          ),
-          const SizedBox(width: 2),
-          Text(
-            'Start Crafting',
-            style: GoogleFonts.plusJakartaSans(
-              fontSize: 11.5,
-              fontWeight: FontWeight.w700,
-              color: AppColors.badgePurpleText,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -262,7 +254,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
-            hintText: 'Nguyễn Văn ',
+            hintText: 'Avery Morgan',
             hintStyle: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               color: AppColors.textMuted,
@@ -270,7 +262,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             prefixIcon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Icon(
-                Icons.sentiment_satisfied_alt_outlined,
+                Icons.person_outline_rounded,
                 size: 20,
                 color: Color(0xFF4B5563),
               ),
@@ -286,26 +278,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.inputBorder),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.cardBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.inputFocusBorder,
                 width: 1.6,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.6,
-              ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.6),
             ),
           ),
           validator: (value) {
@@ -342,7 +331,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
-            hintText: 'name@example.com',
+            hintText: 'avery.morgan@example.com',
             hintStyle: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               color: AppColors.textMuted,
@@ -366,33 +355,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
               vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.inputBorder),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.cardBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.inputFocusBorder,
                 width: 1.6,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.6,
-              ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.6),
             ),
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
               return 'Vui lòng nhập địa chỉ email';
             }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
+            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                .hasMatch(value.trim())) {
               return 'Địa chỉ email không đúng định dạng';
             }
             return null;
@@ -425,7 +412,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
-            hintText: 'At least 8 characters',
+            hintText: 'Use 8 or more characters',
             hintStyle: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               color: AppColors.textMuted,
@@ -461,26 +448,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.inputBorder),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.cardBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.inputFocusBorder,
                 width: 1.6,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.6,
-              ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.6),
             ),
           ),
           validator: (value) {
@@ -529,7 +513,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
-            hintText: 'Re-enter password',
+            hintText: 'Repeat your password',
             hintStyle: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               color: AppColors.textMuted,
@@ -537,7 +521,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             prefixIcon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Icon(
-                Icons.replay_rounded,
+                Icons.verified_user_outlined,
                 size: 20,
                 color: Color(0xFF4B5563),
               ),
@@ -555,7 +539,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: AppColors.textMuted,
               ),
               onPressed: () {
-                setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
+                setState(
+                  () => _obscureConfirmPassword = !_obscureConfirmPassword,
+                );
               },
             ),
             filled: true,
@@ -565,26 +551,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.inputBorder),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.cardBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.inputFocusBorder,
                 width: 1.6,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.6,
-              ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.6),
             ),
           ),
           validator: (value) {
@@ -603,112 +586,102 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   /// 5. Checkbox: I'm ready to turn moments into keepsakes ✨
   Widget _buildTermsCheckbox() {
-    return InkWell(
-      onTap: () => setState(() => _agreeToTerms = !_agreeToTerms),
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                color: _agreeToTerms ? AppColors.primary : Colors.white,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: _agreeToTerms ? AppColors.primary : AppColors.inputBorder,
-                  width: 1.5,
+    final bodyStyle = m3Text(12.5, color: const Color(0xFF374151));
+    final linkStyle = m3Text(
+      12.5,
+      weight: FontWeight.w700,
+      color: AppColors.primary,
+    );
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => setState(() => _agreeToTerms = !_agreeToTerms),
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: _agreeToTerms ? AppColors.primary : AppColors.tint,
+                    borderRadius: BorderRadius.circular(11),
+                    border: Border.all(
+                      color: _agreeToTerms
+                          ? AppColors.primary
+                          : AppColors.inputBorder,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: _agreeToTerms
+                      ? const Center(
+                          child: Icon(
+                            Icons.check_rounded,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                        )
+                      : null,
                 ),
-              ),
-              child: _agreeToTerms
-                  ? const Center(
-                      child: Icon(
-                        Icons.check_rounded,
-                        size: 16,
-                        color: Colors.white,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text('Tôi đồng ý với ', style: bodyStyle),
+                      GestureDetector(
+                        onTap: () => _showLegal('terms'),
+                        child: Text('Điều khoản sử dụng', style: linkStyle),
                       ),
-                    )
-                  : null,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                "I'm ready to turn moments into keepsakes",
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF374151),
+                      Text(' và ', style: bodyStyle),
+                      GestureDetector(
+                        onTap: () => _showLegal('privacy'),
+                        child: Text(
+                          'Chính sách quyền riêng tư',
+                          style: linkStyle,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
   /// 6. Primary Action Button: Create My Account 🚀
   Widget _buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : _handleRegister,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: EdgeInsets.zero,
-        ),
-        child: _isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2.5,
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Create My Account',
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-      ),
+    return M3Button(
+      label: 'Join Memento3D',
+      leading: Icons.person_add_alt_1_outlined,
+      loading: _isLoading,
+      onPressed: _handleRegister,
     );
   }
 
   /// 8. Divider: or continue with
   Widget _buildDivider() {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          'or continue with',
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF6B7280),
+    return Row(
+      children: [
+        const Expanded(child: Divider(color: AppColors.cardBorder)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            'OR CONTINUE WITH',
+            style: m3Text(
+              11,
+              weight: FontWeight.w600,
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
-      ),
+        const Expanded(child: Divider(color: AppColors.cardBorder)),
+      ],
     );
   }
 

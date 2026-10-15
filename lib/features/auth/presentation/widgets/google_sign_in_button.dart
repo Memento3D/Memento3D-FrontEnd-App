@@ -23,9 +23,9 @@ class GoogleSignInButton extends StatelessWidget {
           backgroundColor: Colors.white,
           foregroundColor: const Color(0xFF1F2937),
           elevation: 0,
-          side: const BorderSide(color: AppColors.inputBorder, width: 1.2),
+          side: const BorderSide(color: AppColors.cardBorder, width: 1.2),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
           ),
         ),
         child: Row(
@@ -56,9 +56,7 @@ class _GoogleLogo extends StatelessWidget {
     return SizedBox(
       width: 20,
       height: 20,
-      child: CustomPaint(
-        painter: _GoogleLogoPainter(),
-      ),
+      child: CustomPaint(painter: _GoogleLogoPainter()),
     );
   }
 }

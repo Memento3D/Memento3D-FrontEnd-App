@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
+import 'forgot_password_screen.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
+import 'package:memento3d_frontend_app/core/widgets/m3_ui.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/widgets/google_sign_in_button.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/widgets/hero_keepsake_card.dart';
@@ -22,12 +26,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
+  bool _forgotRouteActive = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _openForgot() async {
+    if (!mounted || _forgotRouteActive) return;
+    _forgotRouteActive = true;
+    try {
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(builder: (_) => const ForgotPasswordScreen()),
+      );
+    } finally {
+      // No setState or context access is needed when the route returns.
+      _forgotRouteActive = false;
+    }
   }
 
   Future<void> _handleLogin() async {
@@ -55,9 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Chào mừng trở lại, $userName!',
-            ),
+            content: Text('Chào mừng trở lại, $userName!'),
             backgroundColor: const Color(0xFF10B981),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -66,12 +82,11 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => MainScreen(userName: userName),
-          ),
+          MaterialPageRoute(builder: (_) => MainScreen(userName: userName)),
         );
       } else {
-        final error = AuthState.instance.errorMessage ?? 'Đăng nhập không thành công';
+        final error =
+            AuthState.instance.errorMessage ?? 'Đăng nhập không thành công';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error),
@@ -109,38 +124,37 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 16),
 
-                // 3. Form Fields: Email & Password
-                _buildEmailField(),
-
-                const SizedBox(height: 16),
-
-                _buildPasswordField(),
-
-                const SizedBox(height: 22),
-
-                // 5. Let's Get In Primary Action Button
-                _buildSubmitButton(),
-
-                const SizedBox(height: 18),
-
-                // 6. Divider: or continue with
-                _buildDivider(),
-
-                const SizedBox(height: 16),
-
-                // 7. Google Sign-In Button
-                GoogleSignInButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Tính năng Google Sign-In sẽ được tích hợp sau.'),
-                        duration: Duration(seconds: 2),
+                // 3. Form card: Email, Password, CTA, Google
+                M3Card(
+                  radius: 24,
+                  padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+                  child: Column(
+                    children: [
+                      _buildEmailField(),
+                      const SizedBox(height: 16),
+                      _buildPasswordField(),
+                      const SizedBox(height: 20),
+                      _buildSubmitButton(),
+                      const SizedBox(height: 16),
+                      _buildDivider(),
+                      const SizedBox(height: 14),
+                      GoogleSignInButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Tính năng Google Sign-In sẽ được tích hợp sau.',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 22),
 
                 // 8. Footer: New here? Create an account ->
                 _buildFooter(),
@@ -153,7 +167,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
   /// 4a. Email Address Input Field
   Widget _buildEmailField() {
@@ -186,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
             prefixIcon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Icon(
-                Icons.alternate_email_rounded,
+                Icons.mail_outline_rounded,
                 size: 19,
                 color: Color(0xFF4B5563),
               ),
@@ -202,33 +215,31 @@ class _LoginScreenState extends State<LoginScreen> {
               vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.inputBorder),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.cardBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.inputFocusBorder,
                 width: 1.6,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.6,
-              ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.6),
             ),
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
               return 'Vui lòng nhập địa chỉ email';
             }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
+            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                .hasMatch(value.trim())) {
               return 'Địa chỉ email không đúng định dạng';
             }
             return null;
@@ -255,14 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Chức năng quên mật khẩu sẽ được bổ sung.'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              },
+              onTap: _openForgot,
               child: Text(
                 'Forgot password?',
                 style: GoogleFonts.plusJakartaSans(
@@ -321,26 +325,23 @@ class _LoginScreenState extends State<LoginScreen> {
               vertical: 14,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.inputBorder),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.cardBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(
                 color: AppColors.inputFocusBorder,
                 width: 1.6,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.6,
-              ),
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.6),
             ),
           ),
           validator: (value) {
@@ -359,49 +360,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// 5. Let's Get In Primary Button
   Widget _buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : _handleLogin,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: EdgeInsets.zero,
-        ),
-        child: _isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2.5,
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Let's Get In",
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Icon(
-                    Icons.chevron_right_rounded,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-      ),
+    return M3Button(
+      label: "Let's Get In",
+      trailing: Icons.arrow_forward_rounded,
+      loading: _isLoading,
+      onPressed: _handleLogin,
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
@@ -13,6 +14,15 @@ class AppTheme {
         surface: AppColors.surface,
       ),
       textTheme: GoogleFonts.plusJakartaSansTextTheme(),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
+          TargetPlatform.fuchsia: FadeThroughPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
+          TargetPlatform.macOS: FadeThroughPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 }

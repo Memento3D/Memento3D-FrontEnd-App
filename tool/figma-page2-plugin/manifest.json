@@ -1,0 +1,8 @@
+{
+  "name": "Memento3D — Page 2 order flow",
+  "id": "memento3d-page2-order-flow",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "networkAccess": { "allowedDomains": ["none"] }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/scan_model.dart';
 import '../controllers/scan_state.dart';
@@ -12,11 +13,7 @@ class DashboardScansScreen extends StatefulWidget {
   final VoidCallback? onBackToHome;
   final ScanState? scanState;
 
-  const DashboardScansScreen({
-    super.key,
-    this.onBackToHome,
-    this.scanState,
-  });
+  const DashboardScansScreen({super.key, this.onBackToHome, this.scanState});
 
   @override
   State<DashboardScansScreen> createState() => _DashboardScansScreenState();
@@ -56,7 +53,9 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
       builder: (dialogCtx) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text(
             'Xóa phiên scan',
             style: GoogleFonts.plusJakartaSans(
@@ -93,11 +92,16 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                       content: Text(
                         success
                             ? 'Đã xóa phiên scan "${scan.name}".'
-                            : (_state.errorMessage ?? 'Không thể xóa phiên scan.'),
+                            : (_state.errorMessage ??
+                                  'Không thể xóa phiên scan.'),
                       ),
-                      backgroundColor: success ? const Color(0xFF4B5563) : AppColors.error,
+                      backgroundColor: success
+                          ? const Color(0xFF4B5563)
+                          : AppColors.error,
                       behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   );
                 }
@@ -105,7 +109,9 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: Text(
                 'Xóa',
@@ -132,7 +138,9 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
             color: AppColors.primary,
             onRefresh: () => state.loadScans(refresh: true),
             child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
               slivers: [
                 // 1. Top App Header
                 SliverToBoxAdapter(
@@ -181,7 +189,10 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                                 backgroundColor: AppColors.primary,
                                 foregroundColor: Colors.white,
                                 elevation: 0,
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 10,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -208,10 +219,18 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                                 fontSize: 13,
                                 color: const Color(0xFF9CA3AF),
                               ),
-                              prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF9CA3AF), size: 20),
+                              prefixIcon: const Icon(
+                                Icons.search_rounded,
+                                color: Color(0xFF9CA3AF),
+                                size: 20,
+                              ),
                               suffixIcon: _searchController.text.isNotEmpty
                                   ? IconButton(
-                                      icon: const Icon(Icons.clear_rounded, size: 18, color: Color(0xFF9CA3AF)),
+                                      icon: const Icon(
+                                        Icons.clear_rounded,
+                                        size: 18,
+                                        color: Color(0xFF9CA3AF),
+                                      ),
                                       onPressed: () {
                                         _searchController.clear();
                                         state.setSearchQuery('');
@@ -219,7 +238,9 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                                     )
                                   : null,
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
                             ),
                           ),
                         ),
@@ -232,7 +253,12 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                           physics: const BouncingScrollPhysics(),
                           child: Row(
                             children: [
-                              _buildFilterChip('all', 'Tất cả', state.selectedFilter, state.scans.length),
+                              _buildFilterChip(
+                                'all',
+                                'Tất cả',
+                                state.selectedFilter,
+                                state.scans.length,
+                              ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
                                 'draft',
@@ -274,7 +300,9 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                   const SliverFillRemaining(
                     hasScrollBody: false,
                     child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
                     ),
                   )
                 else if (filteredScans.isEmpty)
@@ -286,25 +314,24 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
                     sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final scan = filteredScans[index];
-                          return ScanCard(
-                            scan: scan,
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Phiên scan: ${scan.name} (Trạng thái: ${scan.statusTextVi})'),
-                                  duration: const Duration(seconds: 2),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final scan = filteredScans[index];
+                        return ScanCard(
+                          scan: scan,
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Phiên scan: ${scan.name} (Trạng thái: ${scan.statusTextVi})',
                                 ),
-                              );
-                            },
-                            onEdit: () => _openEditDialog(scan),
-                            onDelete: () => _confirmDelete(scan),
-                          );
-                        },
-                        childCount: filteredScans.length,
-                      ),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                          onEdit: () => _openEditDialog(scan),
+                          onDelete: () => _confirmDelete(scan),
+                        );
+                      }, childCount: filteredScans.length),
                     ),
                   ),
               ],
@@ -315,7 +342,12 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
     );
   }
 
-  Widget _buildFilterChip(String key, String label, String currentSelected, int count) {
+  Widget _buildFilterChip(
+    String key,
+    String label,
+    String currentSelected,
+    int count,
+  ) {
     final isSelected = currentSelected == key;
     return InkWell(
       key: Key('filter_chip_$key'),
@@ -354,9 +386,14 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
             if (count > 0) ...[
               const SizedBox(width: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 6,
+                  vertical: 1.5,
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.white.withValues(alpha: 0.25) : const Color(0xFFF3F4F6),
+                  color: isSelected
+                      ? Colors.white.withValues(alpha: 0.25)
+                      : const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -376,7 +413,8 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
   }
 
   Widget _buildEmptyState(String currentFilter) {
-    final hasFilter = currentFilter != 'all' || _searchController.text.isNotEmpty;
+    final hasFilter =
+        currentFilter != 'all' || _searchController.text.isNotEmpty;
 
     return Center(
       child: Padding(
@@ -399,7 +437,9 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
             ),
             const SizedBox(height: 18),
             Text(
-              hasFilter ? 'Không tìm thấy phiên scan phù hợp' : 'Chưa có phiên scan nào',
+              hasFilter
+                  ? 'Không tìm thấy phiên scan phù hợp'
+                  : 'Chưa có phiên scan nào',
               textAlign: TextAlign.center,
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 17,
@@ -433,7 +473,10 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),

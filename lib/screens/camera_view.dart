@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import 'capture_wizard.dart';
+import 'capture_mode.dart';
+import 'capture_mode_switcher.dart';
+import 'capture_bottom_navigation.dart';
+import 'video_capture_controls.dart';
+import 'video_recording.dart';
 
 const _purple = Color(0xFF6B4FE8);
 const _lavender = Color(0xFFF2EEFF);
 const _ink = Color(0xFF29243D);
 const _cardRadius = 24.0;
-
-// These guide values are visual placeholders, separate from camera state.
-const _mockDistanceCm = 32;
 
 class CameraView extends StatelessWidget {
   const CameraView({
@@ -25,8 +27,32 @@ class CameraView extends StatelessWidget {
     required this.onCapture,
     required this.onRetry,
     required this.onDone,
+    this.scanId,
+    this.mode = CaptureMode.photo,
+    this.onModeChanged,
+    this.previewFrame,
+    this.videoState = VideoRecordingState.idle,
+    this.videoElapsed = Duration.zero,
+    this.hasVideo = false,
+    this.onVideoReview,
+    this.onVideoLibrary,
+    this.onPhotoLibrary,
+    this.onVideoRecord,
+    this.onBack,
   });
 
+  final VideoRecordingState videoState;
+  final Duration videoElapsed;
+  final bool hasVideo;
+  final VoidCallback? onVideoReview;
+  final VoidCallback? onVideoLibrary;
+
+  /// Adds existing photos from the device gallery to the capture session.
+  final VoidCallback? onPhotoLibrary;
+  final VoidCallback? onVideoRecord;
+  final VoidCallback? onBack;
+  final CaptureMode mode;
+  final ValueChanged<CaptureMode>? onModeChanged;
   final CameraController? controller;
   final List<XFile> capturedPhotos;
   final CaptureWizardState wizardState;
@@ -35,6 +61,11 @@ class CameraView extends StatelessWidget {
   final VoidCallback onCapture;
   final VoidCallback onRetry;
   final VoidCallback? onDone;
+  final String? scanId;
+
+  /// Optional presentation frame for development previews. Does not make a
+  /// camera ready for capture or change controller ownership.
+  final Widget? previewFrame;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +75,7 @@ class CameraView extends StatelessWidget {
     final lastPhoto = capturedPhotos.isEmpty ? null : capturedPhotos.last;
     return Scaffold(
       backgroundColor: const Color(0xFFFCFAFF),
+      bottomNavigationBar: const CaptureBottomNavigation(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -54,19 +86,45 @@ class CameraView extends StatelessWidget {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: () => Navigator.maybePop(context),
+                      onPressed: onBack ?? () => Navigator.maybePop(context),
                       icon: const Icon(Icons.arrow_back, color: _ink),
                       tooltip: strings.back,
                     ),
-                    Text(
-                      strings.captureTitle,
-                      style: const TextStyle(
-                        color: _ink,
-                        fontSize: 19,
-                        fontWeight: FontWeight.w700,
+                    Expanded(
+                      child: Text(
+                        strings.captureTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: _ink,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                    const Spacer(),
+                    if (scanId != null) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _lavender,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          scanId!.length > 8
+                              ? scanId!.substring(0, 8)
+                              : scanId!,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: _purple,
+                          ),
+                        ),
+                      ),
+                    ],
                     IconButton(
                       onPressed: () {},
                       icon: const Icon(Icons.more_vert, color: _ink),
@@ -99,46 +157,65 @@ class CameraView extends StatelessWidget {
                       children: [
                         ColoredBox(
                           color: const Color(0xFFDDD5E5),
-                          child: ready
-                              ? _LivePreview(controller: controller!)
-                              : Center(
-                                  child: cameraFailed
-                                      ? Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(strings.cameraError),
-                                            TextButton(
-                                              onPressed: onRetry,
-                                              child: Text(strings.retry),
-                                            ),
-                                          ],
-                                        )
-                                      : const CircularProgressIndicator(),
-                                ),
+                          child:
+                              previewFrame ??
+                              (ready
+                                  ? _LivePreview(controller: controller!)
+                                  : Center(
+                                      child: cameraFailed
+                                          ? Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(strings.cameraError),
+                                                TextButton(
+                                                  onPressed: onRetry,
+                                                  child: Text(strings.retry),
+                                                ),
+                                              ],
+                                            )
+                                          : const CircularProgressIndicator(),
+                                    )),
                         ),
-                        if (ready) ...[
-                          // Orbit, distance, balance, and lighting are mock UI.
+                        if (ready || previewFrame != null) ...[
+                          // Capture guidance; no distance or balance measurements
+                          // are claimed without a real measurement source.
                           Positioned(
                             top: 14,
                             left: 26,
                             right: 26,
                             child: _InstructionCard(
                               strings: strings,
-                              state: wizardState,
+                              state:
+                                  mode == CaptureMode.video &&
+                                      wizardState ==
+                                          CaptureWizardState
+                                              .capturedSuccessfully
+                                  ? CaptureWizardState.ready
+                                  : wizardState,
                             ),
                           ),
                           Positioned(
                             top: 94,
                             left: 30,
                             right: 30,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 8,
+                              runSpacing: 4,
                               children: [
-                                _Pill(
-                                  text: strings.capturedPhotos(captureCount),
-                                  color: _purple,
-                                ),
-                                const SizedBox(width: 8),
+                                if (mode == CaptureMode.video &&
+                                    videoState == VideoRecordingState.recording)
+                                  _Pill(
+                                    text:
+                                        '\u25cf REC ${videoElapsed.inMinutes.toString().padLeft(2, '0')}:${(videoElapsed.inSeconds % 60).toString().padLeft(2, '0')}',
+                                    color: Colors.red,
+                                  ),
+                                if (mode == CaptureMode.photo) ...[
+                                  _Pill(
+                                    text: strings.capturedPhotos(captureCount),
+                                    color: _purple,
+                                  ),
+                                ],
                                 _Pill(
                                   text: strings.orbitLabel,
                                   color: const Color(0xFF258A5B),
@@ -152,14 +229,7 @@ class CameraView extends StatelessWidget {
                               width: 250,
                               height: 210,
                               child: Stack(
-                                children: [
-                                  const Center(child: _OrbitGuide()),
-                                  Positioned(
-                                    right: 0,
-                                    top: 44,
-                                    child: _DistanceCard(strings: strings),
-                                  ),
-                                ],
+                                children: [const Center(child: _OrbitGuide())],
                               ),
                             ),
                           ),
@@ -167,14 +237,17 @@ class CameraView extends StatelessWidget {
                             bottom: 14,
                             left: 14,
                             right: 14,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              spacing: 8,
+                              runSpacing: 4,
                               children: [
-                                _Pill(
-                                  text: strings.naturalLight,
-                                  color: _ink,
-                                  icon: Icons.wb_sunny_outlined,
-                                ),
+                                if (mode == CaptureMode.photo)
+                                  _Pill(
+                                    text: strings.naturalLight,
+                                    color: _ink,
+                                    icon: Icons.wb_sunny_outlined,
+                                  ),
                                 Tooltip(
                                   message: strings.grid,
                                   child: const CircleAvatar(
@@ -197,133 +270,176 @@ class CameraView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              Container(
-                height: 38,
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  color: _lavender,
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _ModeLabel(strings.photo, selected: true),
-                    _ModeLabel(strings.video, selected: false),
-                  ],
-                ),
-              ),
+              CaptureModeSwitcher(mode: mode, onChanged: onModeChanged),
               const SizedBox(height: 12),
-              SizedBox(
-                height: 86,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _Thumbnail(
-                      photo: lastPhoto,
-                      count: captureCount,
-                      label: strings.preview,
-                    ),
-                    Semantics(
-                      button: true,
-                      label: strings.capturePhoto,
-                      enabled: ready && !capturing,
-                      child: GestureDetector(
-                        onTap: ready && !capturing ? onCapture : null,
-                        child: Container(
-                          width: 78,
-                          height: 78,
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: _purple.withValues(alpha: 0.18),
-                                blurRadius: 20,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
+              if (mode == CaptureMode.photo)
+                SizedBox(
+                  height:
+                      86 +
+                      90 *
+                          (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(
+                            0,
+                            2,
                           ),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _purple,
-                            ),
-                            child: Center(
-                              child: capturing
-                                  ? const SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
-                                  : Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.white,
-                                          width: 5,
-                                        ),
-                                      ),
-                                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _Thumbnail(
+                                  photo: lastPhoto,
+                                  count: captureCount,
+                                  label: strings.preview,
+                                ),
+                                const SizedBox(width: 4),
+                                IconButton(
+                                  key: const Key('photo-library-button'),
+                                  onPressed: onPhotoLibrary,
+                                  icon: const Icon(
+                                    Icons.photo_library_outlined,
+                                    color: _purple,
+                                  ),
+                                  tooltip: 'Chọn từ thư viện',
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: onDone,
-                          child: Opacity(
-                            opacity: onDone == null ? 0.55 : 1,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _lavender,
-                                border: Border.all(
-                                  color: const Color(0xFFD7CAFF),
+                      Semantics(
+                        button: true,
+                        label: strings.capturePhoto,
+                        enabled: ready && !capturing,
+                        child: GestureDetector(
+                          onTap: ready && !capturing ? onCapture : null,
+                          child: Container(
+                            width: 78,
+                            height: 78,
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: _purple.withValues(alpha: 0.18),
+                                  blurRadius: 20,
+                                  offset: const Offset(0, 6),
                                 ),
-                                borderRadius: BorderRadius.circular(24),
+                              ],
+                            ),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _purple,
                               ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.check,
-                                    color: _purple,
-                                    size: 17,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    strings.done,
-                                    style: const TextStyle(color: _purple),
-                                  ),
-                                ],
+                              child: Center(
+                                child: capturing
+                                    ? const SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 5,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          strings.nextStep,
-                          style: const TextStyle(fontSize: 11, color: _ink),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                key: const Key('photo-done-touch-target'),
+                                behavior: HitTestBehavior.opaque,
+                                onTap: onDone,
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minWidth: 48,
+                                    minHeight: 48,
+                                  ),
+                                  child: Center(
+                                    widthFactor: 1,
+                                    heightFactor: 1,
+                                    child: Opacity(
+                                      opacity: onDone == null ? 0.55 : 1,
+                                      child: Container(
+                                        key: const Key('photo-done-pill'),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 10,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: _lavender,
+                                          border: Border.all(
+                                            color: const Color(0xFFD7CAFF),
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            24,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Icon(
+                                              Icons.check,
+                                              color: _purple,
+                                              size: 17,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Flexible(
+                                              child: Text(
+                                                strings.done,
+                                                style: const TextStyle(
+                                                  color: _purple,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
+                )
+              else
+                VideoCaptureControls(
+                  state: videoState,
+                  hasVideo: hasVideo,
+                  onReview: onVideoReview,
+                  onLibrary: onVideoLibrary,
+                  onRecord: onVideoRecord,
                 ),
-              ),
               const SizedBox(height: 14),
-              _RestorationCard(strings: strings),
-              const SizedBox(height: 12),
             ],
           ),
         ),
@@ -429,12 +545,14 @@ class _Pill extends StatelessWidget {
             Icon(icon, color: color, size: 13),
             const SizedBox(width: 3),
           ],
-          Text(
-            text,
-            style: TextStyle(
-              color: color,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
+          Flexible(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: color,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -493,71 +611,6 @@ class _OrbitPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _DistanceCard extends StatelessWidget {
-  const _DistanceCard({required this.strings});
-  final AppLocalizations strings;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 92,
-      padding: const EdgeInsets.all(9),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-      ),
-      child: Column(
-        children: [
-          Text(
-            '$_mockDistanceCm cm',
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 11,
-              color: _ink,
-            ),
-          ),
-          const SizedBox(height: 3),
-          Text(
-            strings.distanceGood,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 10, color: _purple),
-          ),
-          Text(
-            strings.balanceGood,
-            style: const TextStyle(fontSize: 10, color: _ink),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ModeLabel extends StatelessWidget {
-  const _ModeLabel(this.label, {required this.selected});
-  final String label;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 72,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: selected ? _purple : Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: selected ? Colors.white : _ink,
-          fontSize: 12,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-        ),
-      ),
-    );
-  }
-}
-
 class _Thumbnail extends StatelessWidget {
   const _Thumbnail({
     required this.photo,
@@ -614,77 +667,6 @@ class _Thumbnail extends StatelessWidget {
         const SizedBox(height: 5),
         Text(label, style: const TextStyle(color: _ink, fontSize: 11)),
       ],
-    );
-  }
-}
-
-class _RestorationCard extends StatelessWidget {
-  const _RestorationCard({required this.strings});
-  final AppLocalizations strings;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 62,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE7DFFF)),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            radius: 18,
-            backgroundColor: _lavender,
-            child: Icon(Icons.auto_fix_high, color: _purple, size: 19),
-          ),
-          const SizedBox(width: 9),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  strings.restorationTitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: _ink,
-                  ),
-                ),
-                Text(
-                  strings.restorationBody,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF716D7B),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE5FFF0),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Text(
-              strings.automatic,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF237A4D),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

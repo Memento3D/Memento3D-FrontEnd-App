@@ -71,10 +71,7 @@ class DashboardStatsBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: color.withValues(alpha: 0.15),
-            width: 1,
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.15), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

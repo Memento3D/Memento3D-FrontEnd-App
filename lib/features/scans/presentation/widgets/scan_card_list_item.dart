@@ -25,10 +25,7 @@ class ScanCardListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xFFF1F0F5),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFFF1F0F5), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.025),
@@ -85,7 +82,10 @@ class ScanCardListItem extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 7,
+                            vertical: 2.5,
+                          ),
                           decoration: BoxDecoration(
                             color: scan.status.backgroundColor,
                             borderRadius: BorderRadius.circular(8),
@@ -113,7 +113,10 @@ class ScanCardListItem extends StatelessWidget {
                         if (scan.qualityScore != null) ...[
                           const SizedBox(width: 6),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFEDE9FE),
                               borderRadius: BorderRadius.circular(6),
@@ -219,7 +222,11 @@ class ScanCardListItem extends StatelessWidget {
                     value: 'details',
                     child: Row(
                       children: [
-                        Icon(Icons.info_outline_rounded, size: 18, color: Color(0xFF4B5563)),
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 18,
+                          color: Color(0xFF4B5563),
+                        ),
                         SizedBox(width: 10),
                         Text('Xem chi tiết', style: TextStyle(fontSize: 13)),
                       ],
@@ -229,9 +236,16 @@ class ScanCardListItem extends StatelessWidget {
                     value: 'rename',
                     child: Row(
                       children: [
-                        Icon(Icons.drive_file_rename_outline_rounded, size: 18, color: Color(0xFF4B5563)),
+                        Icon(
+                          Icons.drive_file_rename_outline_rounded,
+                          size: 18,
+                          color: Color(0xFF4B5563),
+                        ),
                         SizedBox(width: 10),
-                        Text('Đổi tên phiên scan', style: TextStyle(fontSize: 13)),
+                        Text(
+                          'Đổi tên phiên scan',
+                          style: TextStyle(fontSize: 13),
+                        ),
                       ],
                     ),
                   ),
@@ -240,9 +254,19 @@ class ScanCardListItem extends StatelessWidget {
                       value: 'retry',
                       child: Row(
                         children: [
-                          Icon(Icons.refresh_rounded, size: 18, color: Color(0xFFD97706)),
+                          Icon(
+                            Icons.refresh_rounded,
+                            size: 18,
+                            color: Color(0xFFD97706),
+                          ),
                           SizedBox(width: 10),
-                          Text('Thử lại (Retry)', style: TextStyle(fontSize: 13, color: Color(0xFFD97706))),
+                          Text(
+                            'Thử lại (Retry)',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFFD97706),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -251,9 +275,19 @@ class ScanCardListItem extends StatelessWidget {
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(Icons.delete_outline_rounded, size: 18, color: Color(0xFFEF4444)),
+                        Icon(
+                          Icons.delete_outline_rounded,
+                          size: 18,
+                          color: Color(0xFFEF4444),
+                        ),
                         SizedBox(width: 10),
-                        Text('Xóa phiên scan', style: TextStyle(fontSize: 13, color: Color(0xFFEF4444))),
+                        Text(
+                          'Xóa phiên scan',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFFEF4444),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -286,8 +320,8 @@ class ScanCardListItem extends StatelessWidget {
           colors: scan.isFailed
               ? [const Color(0xFFFEE2E2), const Color(0xFFFECACA)]
               : scan.isProcessing
-                  ? [const Color(0xFFFEF3C7), const Color(0xFFFDE68A)]
-                  : [const Color(0xFFEDE9FE), const Color(0xFFE0E7FF)],
+              ? [const Color(0xFFFEF3C7), const Color(0xFFFDE68A)]
+              : [const Color(0xFFEDE9FE), const Color(0xFFE0E7FF)],
         ),
       ),
       child: Center(
@@ -295,14 +329,14 @@ class ScanCardListItem extends StatelessWidget {
           scan.isFailed
               ? Icons.warning_amber_rounded
               : scan.isProcessing
-                  ? Icons.view_in_ar_rounded
-                  : Icons.view_in_ar_outlined,
+              ? Icons.view_in_ar_rounded
+              : Icons.view_in_ar_outlined,
           size: 28,
           color: scan.isFailed
               ? const Color(0xFFEF4444)
               : scan.isProcessing
-                  ? const Color(0xFFD97706)
-                  : AppColors.primary,
+              ? const Color(0xFFD97706)
+              : AppColors.primary,
         ),
       ),
     );

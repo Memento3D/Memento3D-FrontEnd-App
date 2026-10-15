@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import '../utils/error_mapper.dart';
 
 /// Represents an API or network error with standardized ERR-xxx codes
@@ -7,6 +8,8 @@ class ApiException implements Exception {
   final String errorCode;
   final String message;
   final String? path;
+  final String? backendCode;
+  final String? backendMessage;
   final Map<String, String>? validationErrors;
 
   ApiException({
@@ -14,6 +17,8 @@ class ApiException implements Exception {
     this.errorCode = 'ERR-017',
     required this.message,
     this.path,
+    this.backendCode,
+    this.backendMessage,
     this.validationErrors,
   });
 
@@ -34,11 +39,14 @@ class ApiException implements Exception {
           backendErrorCode = json['error_code'].toString();
         } else if (json.containsKey('errorCode') && json['errorCode'] != null) {
           backendErrorCode = json['errorCode'].toString();
+        } else if (json['error'] is String) {
+          backendErrorCode = json['error'] as String;
         }
         if (json.containsKey('path') && json['path'] != null) {
           path = json['path'].toString();
         }
-        if (json.containsKey('validationErrors') && json['validationErrors'] is Map) {
+        if (json.containsKey('validationErrors') &&
+            json['validationErrors'] is Map) {
           validationErrors = (json['validationErrors'] as Map).map(
             (key, value) => MapEntry(key.toString(), value.toString()),
           );
@@ -66,6 +74,8 @@ class ApiException implements Exception {
       errorCode: resolvedErrorCode,
       message: friendlyMessage,
       path: path,
+      backendCode: backendErrorCode,
+      backendMessage: rawMessage,
       validationErrors: validationErrors,
     );
   }

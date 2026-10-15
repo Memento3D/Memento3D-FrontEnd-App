@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/scan_model.dart';
 import '../controllers/scan_state.dart';
@@ -7,10 +8,7 @@ import '../controllers/scan_state.dart';
 class EditScanDialog extends StatefulWidget {
   final ScanModel scan;
 
-  const EditScanDialog({
-    super.key,
-    required this.scan,
-  });
+  const EditScanDialog({super.key, required this.scan});
 
   static Future<bool?> show(BuildContext context, ScanModel scan) {
     return showDialog<bool>(
@@ -36,7 +34,9 @@ class _EditScanDialogState extends State<EditScanDialog> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.scan.name);
-    _descController = TextEditingController(text: widget.scan.description ?? '');
+    _descController = TextEditingController(
+      text: widget.scan.description ?? '',
+    );
     _notesController = TextEditingController(text: widget.scan.notes ?? '');
   }
 
@@ -59,8 +59,12 @@ class _EditScanDialogState extends State<EditScanDialog> {
     final success = await ScanState.instance.updateScan(
       widget.scan.id,
       name: _nameController.text.trim(),
-      description: _descController.text.trim().isNotEmpty ? _descController.text.trim() : null,
-      notes: _notesController.text.trim().isNotEmpty ? _notesController.text.trim() : null,
+      description: _descController.text.trim().isNotEmpty
+          ? _descController.text.trim()
+          : null,
+      notes: _notesController.text.trim().isNotEmpty
+          ? _notesController.text.trim()
+          : null,
     );
 
     if (!mounted) return;
@@ -78,7 +82,8 @@ class _EditScanDialogState extends State<EditScanDialog> {
       );
     } else {
       setState(() {
-        _errorMessage = ScanState.instance.errorMessage ?? 'Không thể cập nhật phiên scan.';
+        _errorMessage =
+            ScanState.instance.errorMessage ?? 'Không thể cập nhật phiên scan.';
       });
     }
   }
@@ -190,11 +195,16 @@ class _EditScanDialogState extends State<EditScanDialog> {
               ? const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
                 )
               : Text(
                   'Lưu thay đổi',
-                  style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700),
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
         ),
       ],

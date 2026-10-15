@@ -20,7 +20,7 @@ class LoginHeader extends StatelessWidget {
                 height: 34,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [AppColors.primaryLight, AppColors.primary],
+                    colors: [Color(0xFF9B8AFB), Color(0xFF7C6CF2)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -35,7 +35,7 @@ class LoginHeader extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Icon(
-                    Icons.view_in_ar_rounded,
+                    Icons.photo_camera_outlined,
                     color: Colors.white,
                     size: 19,
                   ),
@@ -64,9 +64,9 @@ class LoginHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            color: AppColors.badgePurpleBg,
+            color: const Color(0xFFFFF1F3),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFFDDD6FE), width: 1),
+            border: Border.all(color: const Color(0xFFFBC6D0), width: 1),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -74,7 +74,7 @@ class LoginHeader extends StatelessWidget {
               const Icon(
                 Icons.auto_awesome,
                 size: 12,
-                color: AppColors.badgePurpleText,
+                color: Color(0xFFE11D48),
               ),
               const SizedBox(width: 4),
               Text(
@@ -82,7 +82,7 @@ class LoginHeader extends StatelessWidget {
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.badgePurpleText,
+                  color: const Color(0xFFE11D48),
                 ),
               ),
             ],

@@ -22,24 +22,21 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'fullName': fullName,
-      'role': role,
-    };
+    return {'id': id, 'email': email, 'fullName': fullName, 'role': role};
   }
 }
 
 /// Model representing authentication response containing JWT token and user info
 class AuthResponseModel {
   final String accessToken;
+  final String? refreshToken;
   final String tokenType;
   final int expiresIn;
   final UserModel? user;
 
   AuthResponseModel({
     required this.accessToken,
+    this.refreshToken,
     required this.tokenType,
     required this.expiresIn,
     this.user,
@@ -48,6 +45,7 @@ class AuthResponseModel {
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
     return AuthResponseModel(
       accessToken: json['accessToken']?.toString() ?? '',
+      refreshToken: json['refreshToken']?.toString(),
       tokenType: json['tokenType']?.toString() ?? 'Bearer',
       expiresIn: (json['expiresIn'] as num?)?.toInt() ?? 0,
       user: json['user'] != null && json['user'] is Map<String, dynamic>
@@ -59,6 +57,7 @@ class AuthResponseModel {
   Map<String, dynamic> toJson() {
     return {
       'accessToken': accessToken,
+      'refreshToken': refreshToken,
       'tokenType': tokenType,
       'expiresIn': expiresIn,
       'user': user?.toJson(),
@@ -71,10 +70,7 @@ class RegisterResponseModel {
   final String message;
   final UserModel? user;
 
-  RegisterResponseModel({
-    required this.message,
-    this.user,
-  });
+  RegisterResponseModel({required this.message, this.user});
 
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
     return RegisterResponseModel(
@@ -86,9 +82,6 @@ class RegisterResponseModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'message': message,
-      'user': user?.toJson(),
-    };
+    return {'message': message, 'user': user?.toJson()};
   }
 }

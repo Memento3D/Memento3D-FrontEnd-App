@@ -1,0 +1,77 @@
+{
+  "base": "http://localhost:8080",
+  "results": [
+    {
+      "method": "GET",
+      "path": "/v3/api-docs",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/users/me",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scans?page=1&limit=100",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reconstruction-jobs",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/scans",
+      "status": 201,
+      "ok": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scans/962d4f27-859b-4467-bc9e-75cc0981dc21",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/scans/962d4f27-859b-4467-bc9e-75cc0981dc21",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/scans/962d4f27-859b-4467-bc9e-75cc0981dc21",
+      "status": 204,
+      "ok": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": 500,
+      "ok": false
+    }
+  ]
+}

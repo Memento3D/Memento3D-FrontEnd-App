@@ -1,5 +1,80 @@
 {
+  "resetPasswordInvalidTitle": "Link expired",
+  "resetPasswordInvalidBody": "This password reset link cannot be used. Request a new link to continue.",
+  "resetPasswordRequestNewLink": "Request a new link",
+  "resetPasswordBackToLogin": "Back to login",
+  "resetPasswordSuccessTitle": "Password reset successful",
+  "resetPasswordSuccessBody": "Your password has been reset. Log in with your new password.",
+  "resetPasswordHeader": "Reset password",
+  "resetPasswordTitle": "Create a new password",
+  "resetPasswordSupport": "Create a new password for your account.",
+  "resetPasswordNewPassword": "New password",
+  "resetPasswordConfirmPassword": "Confirm password",
+  "resetPasswordShowPassword": "Show password",
+  "resetPasswordHidePassword": "Hide password",
+  "resetPasswordNewRequired": "Please enter a new password.",
+  "resetPasswordConfirmRequired": "Please confirm your password.",
+  "resetPasswordMismatch": "The confirmation password does not match.",
+  "resetPasswordSubmit": "Reset password",
+  "resetPasswordSubmitting": "Resetting password…",
+  "resetPasswordTechnicalFailure": "Unable to reset your password right now. Please try again.",
+  "resetPasswordRetry": "Try again",
+  "resetPasswordCancel": "Cancel",
+  "forgotPasswordSubmitting": "Sending request…",
+  "forgotPasswordSentTitle": "Check your email",
+  "forgotPasswordSentBody": "If the email exists, you will receive instructions to reset your password.",
+  "forgotPasswordSentSupport": "Please check your inbox and follow the link in the email to continue.",
+  "forgotPasswordGuidanceTitle": "No email yet?",
+  "forgotPasswordSpamGuidance": "Check your Spam / Junk folder.",
+  "forgotPasswordDeliveryGuidance": "Delivery may take a few minutes.",
+  "forgotPasswordResend": "Resend instructions",
+  "forgotPasswordResending": "Resending instructions…",
+  "forgotPasswordTechnicalFailure": "Unable to send the request right now. Please try again.",
+  "forgotPasswordRetry": "Try again",
+  "forgotPasswordHeader": "Forgot password",
+  "forgotPasswordTitle": "Forgot password?",
+  "forgotPasswordSubtitle": "Don't worry, we'll help you regain access.",
+  "forgotPasswordEmailLabel": "Email",
+  "forgotPasswordEmailHint": "Enter your email address",
+  "forgotPasswordEmailHelper": "Enter the email you used to create your account.",
+  "forgotPasswordSubmit": "Send reset instructions",
+  "forgotPasswordCancel": "Cancel",
+  "forgotPasswordBackToLogin": "Back to login",
+  "forgotPasswordEmailRequired": "Please enter your email address.",
   "@@locale": "en",
+  "emailVerificationAddressHint": "Check that the email address above is correct.",
+  "emailVerificationDeliveryHint": "Email delivery may take a little time.",
+  "emailVerificationVerifyingHint": "Please wait while your verification link is checked.",
+  "emailVerificationTitle": "Verify email",
+  "emailVerificationHeading": "Check your email",
+  "emailVerificationSentBody": "A verification link has been sent to:",
+  "emailVerificationInstruction": "Open the verification link in your email to confirm your address.",
+  "emailVerificationWaiting": "Waiting for verification…",
+  "emailVerificationWaitingBody": "Follow the email link to verify your address. You can continue once verification is confirmed.",
+  "emailVerificationResendTitle": "Can't find the email?",
+  "emailVerificationSpamHint": "Check your Spam or Junk folder, or request another verification email.",
+  "emailVerificationResend": "Resend verification email",
+  "emailVerificationSending": "Sending…",
+  "emailVerificationResendSuccess": "A new verification email has been sent. Check your inbox.",
+  "emailVerificationResendFailure": "We couldn't send the email. Please try again.",
+  "emailVerificationRetryAfter": "Resend in {seconds} seconds",
+  "emailVerificationVerifying": "Verifying your email…",
+  "emailVerificationVerifyingBody": "Please wait while we check your verification link.",
+  "emailVerificationSuccessTitle": "Email verified!",
+  "emailVerificationSuccessBody": "Your email address has been confirmed. You can continue to the next step.",
+  "emailVerificationContinue": "Continue",
+  "emailVerificationInvalidTitle": "This link is no longer valid",
+  "emailVerificationInvalidBody": "The verification link may have expired or be invalid. Request a new email to try again.",
+  "emailVerificationResendNew": "Send a new verification email",
+  "emailVerificationFailure": "We couldn't check your link. Please try again when your connection is available.",
+  "emailVerificationUnknownEmail": "The email address is unavailable. Return to registration to request another verification email.",
+  "@emailVerificationRetryAfter": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "captureTitle": "Capture",
   "back": "Back",
   "moreOptions": "More options",
@@ -7,7 +82,13 @@
   "moveSlowly": "✨ Move slowly around the object 🌸",
   "keepStill": "Keep the object still and maintain a steady distance.",
   "capturedPhotos": "{count} photos captured",
-  "@capturedPhotos": {"placeholders": {"count": {"type": "int"}}},
+  "@capturedPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "orbitLabel": "360° Orbit",
   "distanceGood": "Distance good",
   "balanceGood": "Balanced",
@@ -18,9 +99,6 @@
   "preview": "Preview",
   "done": "Done",
   "nextStep": "Next step",
-  "restorationTitle": "Wabi-Sabi restoration",
-  "restorationBody": "Preserve every detail of your object's story.",
-  "automatic": "Automatic",
   "cameraUnavailable": "No camera found on this device.",
   "cameraError": "Could not open camera.",
   "captureError": "Could not capture photo.",
@@ -44,14 +122,32 @@
   "sizeCalculating": "Calculating",
   "sizeIncomplete": "Some files unavailable",
   "fileSizeKb": "{value} KB",
-  "@fileSizeKb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeKb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "fileSizeMb": "{value} MB",
-  "@fileSizeMb": {"placeholders": {"value": {"type": "String"}}},
+  "@fileSizeMb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "capturedPhotoSection": "Captured photos",
   "addAngle": "Add angle",
   "addAngleHint": "Capture another view",
   "photoNumber": "Photo {number}",
-  "@photoNumber": {"placeholders": {"number": {"type": "int"}}},
+  "@photoNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "imageUnavailable": "Image unavailable",
   "deletePhoto": "Remove photo",
   "retakePhoto": "Retake",
@@ -69,7 +165,13 @@
   "processingLocal": "Local capture session",
   "processingCloudUnavailable": "Cloud service not connected",
   "processingPhotoCount": "{count} photos captured",
-  "@processingPhotoCount": {"placeholders": {"count": {"type": "int"}}},
+  "@processingPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "processingReadyTitle": "Ready to upload",
   "processingReadyBody": "Your photos are prepared locally. Processing will be available when a service is connected.",
   "processingWaiting": "Waiting for processing service",
@@ -95,5 +197,530 @@
   "processingCloudConnected": "Processing service connected",
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
-  "processingFailedBody": "The processing service reported a problem."
+  "processingFailedBody": "The processing service reported a problem.",
+  "captureLibrary": "Library",
+  "captureCollection": "Collection",
+  "capturePrints": "Prints",
+  "captureStudio": "Creation Studio",
+  "captureSettings": "Settings",
+  "captureCamera": "Camera",
+  "recordVideo": "Record video",
+  "stopVideo": "Stop recording",
+  "videoStartError": "Video recording could not start. Try again.",
+  "videoFinalizeError": "Video could not be finalized. Try recording again.",
+  "recordedVideo": "Recorded video",
+  "videoUnavailable": "Video unavailable",
+  "videoFileChanged": "File has changed since recording. Size shown is from finalization.",
+  "videoPreviewTitle": "Video preview",
+  "videoFinalizedSize": "Size at capture",
+  "videoNotSelected": "No video selected",
+  "videoLoading": "Loading video...",
+  "videoPlay": "Play",
+  "videoPause": "Pause",
+  "videoDuration": "Duration: {duration}",
+  "videoTooShort": "Video must be at least {seconds} seconds long.",
+  "videoDurationSatisfied": "Minimum duration met.",
+  "videoPlaybackError": "This video couldn’t be played. Try recording another video.",
+  "@videoDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "@videoTooShort": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "importedVideo": "Imported video",
+  "videoReplaceFromLibrary": "Replace from library",
+  "videoImportFormatError": "Select an MP4, MOV, or AVI video.",
+  "videoImportSizeError": "The selected video exceeds the 2 GB limit.",
+  "videoImportValidationError": "Unable to validate the selected video size.",
+  "videoImportError": "Unable to select a video from the library. Please try again.",
+  "videoImportStorageError": "Unable to prepare the selected video. Please try again.",
+  "restorationTitle": "Wabi-Sabi restoration",
+  "restorationBody": "Preserve every detail of your object's story.",
+  "automatic": "Automatic",
+  "uploadTitle": "Uploading photos",
+  "uploadPreparing": "Preparing upload",
+  "uploadUploading": "Uploading",
+  "uploadWaiting": "Waiting for connection",
+  "uploadReconciling": "Restoring upload",
+  "uploadRetryNeeded": "Retry needed",
+  "uploadCompleted": "Photo upload complete",
+  "uploadMainTitle": "Uploading your photos",
+  "uploadNetworkBanner": "Waiting to reconnect",
+  "uploadNetworkBody": "Confirmed progress is unchanged. Uploading will continue when the connection returns.",
+  "uploadReconcilingTitle": "Restoring your upload session",
+  "uploadReconcilingBody": "Checking the last confirmed position before continuing. Your progress stays unchanged while we check.",
+  "uploadCompletionBody": "Moving to quality check...",
+  "uploadFailureBody": "Your confirmed progress is unchanged. Try again to continue from the last confirmed position.",
+  "uploadSourceFailureBody": "Upload updates are unavailable. Your confirmed progress is unchanged; try again to reconnect.",
+  "uploadLocalPhotos": "Local photos",
+  "uploadSavedTitle": "Progress is saved automatically",
+  "uploadSavedBody": "You can return to this upload after an interruption. It will continue from the last confirmed position.",
+  "uploadSessionOnlyTitle": "Keep this session open",
+  "uploadSessionOnlyBody": "Confirmed progress remains visible in this session. Recovery after closing the app is not available yet.",
+  "uploadPhotoCount": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@uploadPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadPercent": "{value}%",
+  "@uploadPercent": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadSummaryProgress": "{value}% uploaded",
+  "@uploadSummaryProgress": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadUnitCount": "{confirmed} / {total}",
+  "@uploadUnitCount": {
+    "placeholders": {
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadConfirmedParts": "{confirmed} / {total} parts uploaded",
+  "@uploadConfirmedParts": {
+    "placeholders": {
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadProgressLabel": "Confirmed upload progress",
+  "uploadSpeed": "Speed",
+  "uploadSpeedValue": "{value} MB/s",
+  "@uploadSpeedValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadRemaining": "Remaining",
+  "uploadEtaValue": "~{minutes}m {seconds}s",
+  "@uploadEtaValue": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadEtaWaiting": "Waiting",
+  "uploadUnknownMetric": "—",
+  "uploadConfirmed": "Uploaded",
+  "uploadPhotosTitle": "Photos in this upload",
+  "uploadPhotoCompleted": "Uploaded",
+  "uploadPhotoCurrent": "Uploading",
+  "uploadPhotoPending": "Pending",
+  "uploadPhotoPaused": "Paused",
+  "uploadPhotoDescription": "{photo}. {status}",
+  "@uploadPhotoDescription": {
+    "placeholders": {
+      "photo": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadNextSteps": "Next steps",
+  "uploadCloudStep": "Upload to the cloud",
+  "uploadStepProgress": "{status} ({confirmed}/{total} parts)",
+  "@uploadStepProgress": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadQualityStep": "Quality check & preparation",
+  "uploadQualityNextBody": "The next step after upload",
+  "uploadNext": "Next",
+  "photoUploadComplete": "All photos have confirmed upload results. You can return to capture.",
+  "photoUploadRetrying": "Retrying the photo that was not submitted",
+  "photoUploadConfirm": "Upload photos",
+  "photoUploadStopped": "Upload stopped",
+  "photoUploadAmbiguous": "The upload result for the current photo could not be confirmed. It may already exist on the server. Upload stopped; this photo will not be sent again.",
+  "photoUploadRejected": "The server rejected this photo. Upload stopped. Previously confirmed photos are retained.",
+  "photoUploadNotSubmitted": "This photo was not submitted. Check the local file, then retry explicitly.",
+  "photoUploadConfirmed": "{confirmed} / {total} photos confirmed",
+  "@photoUploadConfirmed": {
+    "placeholders": {
+      "confirmed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportTitle": "Quality Report",
+  "qualityReportScanQuality": "Scan quality",
+  "qualityReportScore": "Score: {score} out of 100",
+  "qualityReportCategoryGreen": "Good",
+  "qualityReportCategoryAmber": "Warning",
+  "qualityReportCategoryRed": "Poor",
+  "qualityReportEligible": "Eligible",
+  "qualityReportPhotosChecked": "{count} photos checked",
+  "qualityReportPass": "Pass",
+  "qualityReportWarn": "Warning",
+  "qualityReportFail": "Fail",
+  "qualityReportSuggestionTitle": "Suggestions for improvement",
+  "@qualityReportScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "@qualityReportPhotosChecked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportPhotoQuality": "Photo quality",
+  "qualityReportAttentionPhotos": "Photos needing attention",
+  "qualityReportAttentionPhotoCount": "{count, plural, one{1 photo} other{{count} photos}}",
+  "qualityReportViewAllPhotos": "{count, plural, one{View all 1 photo} other{View all {count} photos}}",
+  "qualityReportCollapsePhotos": "Collapse",
+  "@qualityReportAttentionPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@qualityReportViewAllPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityReportAllPhotos": "All photos",
+  "qualityReportStartReconstruction": "Start reconstruction",
+  "qualityReportRecoverPhotos": "Retake / Remove problem photos",
+  "qualityReportViewDetails": "View details",
+  "qualityReportViewWarningDetails": "View warning details",
+  "qualityReportViewErrorDetails": "View error details",
+  "qualityReportDetailsTitle": "Quality details",
+  "qualityRiskTitle": "Confirm risks",
+  "qualityNeedsConfirmation": "CONFIRMATION NEEDED",
+  "qualityHeroTitle": "Image quality is not fully optimal",
+  "qualityHeroBody": "Reconstruction is still possible, but some images may affect the accuracy of your 3D model.",
+  "qualitySummaryTitle": "Image quality summary",
+  "qualityQualified": "Qualified",
+  "qualityNeedsAttention": "Needs attention",
+  "qualityOverallScore": "Overall quality",
+  "qualityPercentage": "{value}%",
+  "@qualityPercentage": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "qualityReviewImages": "{count, plural, =0{Review quality warnings} =1{1 image needs review} other{{count} images need review}}",
+  "@qualityReviewImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityViewDetails": "View warnings and potential impact",
+  "qualityRiskDetailsTitle": "Check before continuing",
+  "qualityRiskDetailsSubtitle": "{count, plural, =0{Review the quality warnings before deciding.} =1{Review the possible impact of 1 image before deciding.} other{Review the possible impact of {count} images before deciding.}}",
+  "@qualityRiskDetailsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityAffectedImages": "Images needing attention",
+  "qualityAdditionalAffectedImages": "{count} additional images need attention",
+  "@qualityAdditionalAffectedImages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qualityNoAffectedImages": "No affected images to preview.",
+  "qualityImpactTitle": "What could this affect?",
+  "qualitySurfaceRisk": "Surface details may be less sharp in some areas.",
+  "qualityGeometryRisk": "Geometry may be slightly less accurate in poorly captured areas.",
+  "qualityReassurance": "You can continue with these images, or go back to improve the capture for potentially better results.",
+  "qualityAcknowledgement": "I understand the risks and still want to continue",
+  "qualityAcknowledgementHint": "Quality warnings may affect the final 3D result. Confirm only when you are ready to accept these risks.",
+  "qualityCloseDetails": "Close risk details",
+  "qualityContextChanged": "The quality report changed. Close this sheet and review the current report.",
+  "qualityContinue": "Confirm and continue",
+  "qualitySubmitting": "Confirming…",
+  "qualityBackToImages": "Go back to review images",
+  "qualityBackToReport": "Go back to the quality report",
+  "qualityBlockedStatus": "UNABLE TO CONTINUE",
+  "qualityRejectedTitle": "Cannot continue with these images",
+  "qualityRejectedBody": "The current image quality is not suitable for continuing. Please go back to review your images.",
+  "qualityIneligibleStatus": "REVIEW REQUIRED",
+  "qualityIneligibleTitle": "Please return to the quality report",
+  "qualityIneligibleBody": "Risk confirmation is not available for this report. Go back to review the current image quality.",
+  "qualityRecoverableFailure": "We could not confirm your request. Your acknowledgement is saved; please try again.",
+  "qualityRetry": "Try confirmation again",
+  "qualityConfirmedStatus": "CONFIRMED",
+  "qualityConfirmedTitle": "Risks confirmed",
+  "qualityConfirmedBody": "Your confirmation has been accepted.",
+  "reconstructionConfirmationTitle": "Confirm reconstruction",
+  "reconstructionConfirmationHero": "Ready to create your 3D model? ✨",
+  "reconstructionConfirmationSubtitle": "Review the details before starting reconstruction.",
+  "reconstructionQualifiedCount": "{count}",
+  "@reconstructionQualifiedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reconstructionQualifiedImages": "Qualified images",
+  "reconstructionQualityScore": "{score}%",
+  "@reconstructionQualityScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "reconstructionQualityLabel": "Overall quality",
+  "reconstructionQualityGreen": "Good",
+  "reconstructionQualityAmber": "Some limitations",
+  "reconstructionEstimatedMinutes": "~{minutes} min",
+  "@reconstructionEstimatedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "reconstructionEstimatedTime": "Estimated processing time",
+  "reconstructionProcessTitle": "What happens next?",
+  "reconstructionProcessImages": "Selected images",
+  "reconstructionProcessCloud": "Cloud processing",
+  "reconstructionProcessModel": "3D model",
+  "reconstructionProcessBody": "Your qualified images will be used to create the 3D model.",
+  "reconstructionResourceTitle": "Before you start",
+  "reconstructionResourceBody": "3D reconstruction uses processing resources and may take several minutes. Once started, it cannot be easily cancelled. Now is the easiest time to go back and check your images.",
+  "reconstructionAmberReminderTitle": "Previously acknowledged warning",
+  "reconstructionAmberReminderBody": "You have already acknowledged the quality warning. This image set still has some limitations, so the model may lose some detail.",
+  "reconstructionStart": "Start reconstruction",
+  "reconstructionBackToReview": "Back to image review",
+  "reconstructionSubmitting": "Submitting…",
+  "reconstructionSubmitted": "Submitted",
+  "reconstructionSubmissionError": "Could not submit. Please try starting reconstruction again.",
+  "modelConfirmationTitle": "Create 3D Model from Photos",
+  "modelConfirmationAiTooltip": "3D Forge AI assistant",
+  "modelConfirmationOriginalPhoto": "Original photo",
+  "modelConfirmationKeepsakePhoto": "Keepsake doll",
+  "modelConfirmationConsentBadge": "100% consented",
+  "modelConfirmationAllPhotos": "All captured photos",
+  "modelConfirmationHeader": "Create a 3D model from photos ✨",
+  "modelConfirmationSubtitle": "We received {count} photos to create a vivid 3D image.",
+  "@modelConfirmationSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modelConfirmationInfo": "Automatically convert photos into a complete 3D model in just a few taps",
+  "modelConfirmationUploadedTitle": "Uploaded photos",
+  "modelConfirmationUploadedValue": "{count, plural, =0{No sharp photos yet} other{{count} sharp photos}}",
+  "@modelConfirmationUploadedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "modelConfirmationGeneratedTitle": "3D model output",
+  "modelConfirmationGeneratedValue": "Sharp 3D model",
+  "modelConfirmationGenerating": "Processing",
+  "modelConfirmationFormatTitle": "File format",
+  "modelConfirmationFormatValue": ".GLB / 3D ready (.STL)",
+  "modelConfirmationFormatBadge": "3D standard",
+  "modelConfirmationWarning": "No photos are ready yet. Go back and capture at least one photo before creating the 3D model.",
+  "modelConfirmationCta": "Create 3D Model now",
+  "modelConfirmationSubmitting": "Creating model...",
+  "modelConfirmationEstimate": "Estimated time: 1–2 minutes",
+  "modelConfirmationError": "Could not create the 3D model. Please try again.",
+  "processingSimulated": "Simulated progress — demo only",
+  "processingTakesTime": "Reconstruction may take some time. The current stage is shown below.",
+  "processingDemoCompleted": "Simulation completed",
+  "processingDemoCompleteBody": "This demo has finished. No 3D model was created.",
+  "processingDemoFailure": "The simulation stopped while generating details. You can retry the demo.",
+  "processingSourceFailure": "Progress updates could not be received.",
+  "processingStoppedHere": "Stopped at this stage",
+  "processingReturn": "Return",
+  "processingObservationAuth": "Your session has ended. Sign in again to check progress.",
+  "processingObservationUnavailable": "This reconstruction job is unavailable.",
+  "processingObservationContract": "Progress could not be read. Please try again.",
+  "processingObservationTransient": "Progress is temporarily unavailable. Retrying automatically.",
+  "processingObservationExhausted": "Progress updates have stopped after repeated connection problems. Retry to check again.",
+  "processingObservationLoading": "Retrieving reconstruction status",
+  "processingObservationLoadingBody": "Please wait while we check the reconstruction job.",
+  "processingQueued": "Queued",
+  "processingQueuedBody": "Waiting for reconstruction.",
+  "processingCancelled": "Cancelled",
+  "processingCancelledBody": "Reconstruction was cancelled.",
+  "processingBackendReal": "Backend processing",
+  "processingProvenanceUnknown": "Processing mode not yet known",
+  "processingBackendDownloading": "Downloading reconstruction input",
+  "processingBackendPreprocessing": "Preprocessing reconstruction input",
+  "processingBackendShapeGeneration": "Generating shape",
+  "processingBackendTexturing": "Applying textures",
+  "processingBackendValidating": "Validating reconstruction",
+  "processingBackendExporting": "Exporting reconstruction",
+  "processingBackendUploading": "Uploading reconstruction output",
+  "processingProgressTitle": "Creating 3D model...",
+  "processingProgressSubtitle": "AI is analyzing angles and details to build a vivid 3D model.",
+  "processingProgressLabel": "PROGRESS",
+  "processingHistoryTitle": "PROCESSING LOG",
+  "processingTipTitle": "Tip from Memento3D",
+  "processingTipBody": "Capture extra angles to make the 3D model more accurate.",
+  "processingRunInBackground": "Run in background & Get notified",
+  "processingBackgroundAck": "You will be notified when processing completes.",
+  "processingReconnecting": "Reconnecting...",
+  "processingEtaUnknown": "Estimating remaining time...",
+  "processingEtaShort": "almost done",
+  "processingEtaMinutes": "about {minutes} minutes left",
+  "@processingEtaMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "jobStageQueued": "Queued",
+  "jobStageDownloading": "Downloading input image",
+  "jobStagePreprocessing": "Preprocessing",
+  "jobStageShapeGeneration": "Generating 3D shape",
+  "jobStageTexturing": "Texturing",
+  "jobStageValidating": "Validating",
+  "jobStageExporting": "Exporting",
+  "jobStageUploading": "Uploading model",
+  "jobStageDone": "Done",
+  "processingPhaseStep": "Step {step}/{total}: {label}",
+  "@processingPhaseStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "processingPhaseAnalyzing": "Analyzing input image",
+  "processingPhaseModeling": "Building shape & mesh",
+  "processingPhaseFinishing": "Texturing & finalizing model",
+  "jobFailedHeaderTitle": "Create 3D Model",
+  "jobFailedStatusBadge": "Status: Failed",
+  "jobFailedTitle": "Couldn't create the 3D model",
+  "jobFailedSubtitle": "Some reconstruction steps encountered an issue. Don't worry, your captures are safe.",
+  "jobFailedCardTitle": "What happened?",
+  "jobRetry": "Retry 3D generation",
+  "jobRetrying": "Retrying...",
+  "jobDashboard": "Back to Dashboard",
+  "jobRetryLimit": "You have exceeded the allowed retry attempts. Please contact support or create a new scan.",
+  "jobRetryFailedHint": "Retry is unavailable right now. Check your connection and try again.",
+  "jobFailedIllustrationTag": "3D AI Engine",
+  "modelViewerTitle": "3D model",
+  "modelViewerModelReady": "Model ready",
+  "modelViewerReadyExplanation": "Your model is ready to explore. Rotate it to see it from every angle.",
+  "modelViewerPendingExplanation": "Your model is being prepared. You can explore it when it is ready.",
+  "modelViewerUnavailableExplanation": "A model is not available for this item yet.",
+  "modelViewerReference": "Reference · {code}",
+  "@modelViewerReference": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "modelViewerFormat": "Format",
+  "modelViewerFormatGlb": "GLB",
+  "modelViewerStatus": "Status",
+  "modelViewerDetail": "Detail",
+  "modelViewerDetailHigh": "High",
+  "modelViewerPercentage": "{value}%",
+  "@modelViewerPercentage": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "modelViewerContinue": "Continue",
+  "modelViewerPreviewName": "Little robot · Development preview",
+  "modelViewerPreviewAction": "Preview only — no next screen is connected.",
+  "modelViewerPreviewTitle": "3D viewer preview",
+  "modelViewerInitializing": "Starting 3D viewer…",
+  "modelViewerReady": "3D viewer ready",
+  "modelViewerShaded": "Shaded",
+  "modelViewerWireframe": "Wireframe",
+  "modelViewerGrid": "Grid",
+  "modelViewerReset": "Reset View",
+  "modelViewerInteractionHint": "Rotate • Zoom • Pan",
+  "modelViewerLoading": "Loading 3D model…",
+  "modelViewerLoaded": "3D model loaded",
+  "modelViewerLoadError": "The 3D model could not be loaded.",
+  "modelViewerInitializationError": "The 3D viewer could not start. Close this view and try again.",
+  "modelViewerScreenTitle": "3D Model Viewer",
+  "modelViewerFetchingOutputs": "Fetching model information…",
+  "modelViewerDownloading": "Downloading 3D model…",
+  "modelViewerNoPrimaryGlb": "No primary GLB model is available for this scan.",
+  "modelViewerRetry": "Retry",
+  "checkPrintabilityCta": "Check Printability",
+  "rateAndShareCta": "Rate & Share",
+  "orderPhysicalPrintCta": "Order a physical print"
 }
