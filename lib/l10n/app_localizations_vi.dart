@@ -439,4 +439,51 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get paymentHome => 'Về trang chủ';
+
+  @override
+  String get cartTitle => 'Giỏ hàng';
+
+  @override
+  String get cartEmptyTitle => 'Giỏ hàng của bạn đang trống';
+
+  @override
+  String get cartEmptyBody => 'Các sản phẩm bạn thêm sẽ xuất hiện ở đây.';
+
+  @override
+  String get cartCheckout => 'Tiến hành thanh toán';
+
+  @override
+  String cartQuantity(int count) {
+    return 'Số lượng: $count';
+  }
+
+  @override
+  String cartUnitPrice(String amount) {
+    return 'Đơn giá: $amount';
+  }
+
+  @override
+  String cartSubtotal(String amount) {
+    return 'Tạm tính: $amount';
+  }
+
+  @override
+  String cartTotal(String amount) {
+    return 'Tổng cộng: $amount';
+  }
+
+  @override
+  String cartIncrease(String name) {
+    return 'Tăng số lượng $name';
+  }
+
+  @override
+  String cartDecrease(String name) {
+    return 'Giảm số lượng $name';
+  }
+
+  @override
+  String cartRemove(String name) {
+    return 'Xóa $name';
+  }
 }

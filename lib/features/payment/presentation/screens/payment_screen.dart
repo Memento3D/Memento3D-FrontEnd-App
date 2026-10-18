@@ -160,56 +160,66 @@ class PaymentScreen extends StatelessWidget {
       style: const TextStyle(color: AppColors.textSecondary),
     ),
     _card([
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: _tint,
-              borderRadius: BorderRadius.circular(20),
+      if (controller.summary.items.isEmpty)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _tint,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.view_in_ar,
+                color: AppColors.primary,
+                size: 28,
+              ),
             ),
-            child: const Icon(
-              Icons.view_in_ar,
-              color: AppColors.primary,
-              size: 28,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.paymentProduct,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _tint,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l.paymentProductType,
+                      style: const TextStyle(fontSize: 11),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l.paymentProduct,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _tint,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    l.paymentProductType,
-                    style: const TextStyle(fontSize: 11),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      for (final item in controller.summary.items) ...[
+        Text(
+          item.name,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+        ),
+        if (item.description != null) Text(item.description!),
+        _row(l.cartQuantity(item.quantity), _money(l, item.unitPrice)),
+      ],
       const SizedBox(height: 10),
       _row(l.paymentSubtotal, _money(l, controller.summary.subtotal)),
-      _row(l.paymentFee, _money(l, controller.summary.serviceFee)),
+      if (controller.summary.serviceFee.vnd != 0)
+        _row(l.paymentFee, _money(l, controller.summary.serviceFee)),
       const Divider(color: _tint, height: 28),
       _row(
         l.paymentTotal,
@@ -428,7 +438,8 @@ class PaymentScreen extends StatelessWidget {
         style: const TextStyle(color: AppColors.textSecondary),
       ),
       _card([
-        if (success) _row(l.paymentReference, controller.summary.reference),
+        if (success && controller.summary.reference != null)
+          _row(l.paymentReference, controller.summary.reference!),
         if (processing) _row(l.paymentAmount, amount, prominent: true),
         _row(
           status == PaymentStatus.cancelled

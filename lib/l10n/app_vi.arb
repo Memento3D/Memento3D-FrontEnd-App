@@ -154,5 +154,65 @@
   "paymentSelectedMethod": "Phương thức đã chọn",
   "paymentCancelTime": "Thời gian hủy",
   "paymentContinue": "Tiếp tục thanh toán",
-  "paymentHome": "Về trang chủ"
+  "paymentHome": "Về trang chủ",
+  "cartTitle": "Giỏ hàng",
+  "cartEmptyTitle": "Giỏ hàng của bạn đang trống",
+  "cartEmptyBody": "Các sản phẩm bạn thêm sẽ xuất hiện ở đây.",
+  "cartCheckout": "Tiến hành thanh toán",
+  "cartQuantity": "Số lượng: {count}",
+  "@cartQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cartUnitPrice": "Đơn giá: {amount}",
+  "@cartUnitPrice": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartSubtotal": "Tạm tính: {amount}",
+  "@cartSubtotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartTotal": "Tổng cộng: {amount}",
+  "@cartTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartIncrease": "Tăng số lượng {name}",
+  "@cartIncrease": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cartDecrease": "Giảm số lượng {name}",
+  "@cartDecrease": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cartRemove": "Xóa {name}",
+  "@cartRemove": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

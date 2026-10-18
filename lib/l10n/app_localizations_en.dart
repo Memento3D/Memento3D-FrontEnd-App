@@ -439,4 +439,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentHome => 'Go home';
+
+  @override
+  String get cartTitle => 'Shopping cart';
+
+  @override
+  String get cartEmptyTitle => 'Your cart is empty';
+
+  @override
+  String get cartEmptyBody => 'Items you add will appear here.';
+
+  @override
+  String get cartCheckout => 'Checkout';
+
+  @override
+  String cartQuantity(int count) {
+    return 'Quantity: $count';
+  }
+
+  @override
+  String cartUnitPrice(String amount) {
+    return 'Unit price: $amount';
+  }
+
+  @override
+  String cartSubtotal(String amount) {
+    return 'Subtotal: $amount';
+  }
+
+  @override
+  String cartTotal(String amount) {
+    return 'Total: $amount';
+  }
+
+  @override
+  String cartIncrease(String name) {
+    return 'Increase quantity of $name';
+  }
+
+  @override
+  String cartDecrease(String name) {
+    return 'Decrease quantity of $name';
+  }
+
+  @override
+  String cartRemove(String name) {
+    return 'Remove $name';
+  }
 }

@@ -10,7 +10,8 @@ class Money {
 
 class CheckoutSummary {
   const CheckoutSummary({
-    required this.reference,
+    this.reference,
+    this.items = const [],
     required this.subtotal,
     required this.serviceFee,
   });
@@ -22,8 +23,23 @@ class CheckoutSummary {
     serviceFee: Money(0),
   );
 
-  final String reference;
+  final String? reference;
+  final List<CheckoutLine> items;
   final Money subtotal;
   final Money serviceFee;
   Money get total => Money(subtotal.vnd + serviceFee.vnd);
+}
+
+/// Immutable frontend checkout line, without backend product assumptions.
+class CheckoutLine {
+  const CheckoutLine({
+    required this.name,
+    this.description,
+    required this.quantity,
+    required this.unitPrice,
+  });
+  final String name;
+  final String? description;
+  final int quantity;
+  final Money unitPrice;
 }

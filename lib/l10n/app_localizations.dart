@@ -895,6 +895,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go home'**
   String get paymentHome;
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping cart'**
+  String get cartTitle;
+
+  /// No description provided for @cartEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get cartEmptyTitle;
+
+  /// No description provided for @cartEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Items you add will appear here.'**
+  String get cartEmptyBody;
+
+  /// No description provided for @cartCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get cartCheckout;
+
+  /// No description provided for @cartQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity: {count}'**
+  String cartQuantity(int count);
+
+  /// No description provided for @cartUnitPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit price: {amount}'**
+  String cartUnitPrice(String amount);
+
+  /// No description provided for @cartSubtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal: {amount}'**
+  String cartSubtotal(String amount);
+
+  /// No description provided for @cartTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {amount}'**
+  String cartTotal(String amount);
+
+  /// No description provided for @cartIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase quantity of {name}'**
+  String cartIncrease(String name);
+
+  /// No description provided for @cartDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease quantity of {name}'**
+  String cartDecrease(String name);
+
+  /// No description provided for @cartRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}'**
+  String cartRemove(String name);
 }
 
 class _AppLocalizationsDelegate

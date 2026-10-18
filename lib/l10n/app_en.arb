@@ -154,5 +154,65 @@
   "paymentSelectedMethod": "Selected method",
   "paymentCancelTime": "Cancellation time",
   "paymentContinue": "Continue payment",
-  "paymentHome": "Go home"
+  "paymentHome": "Go home",
+  "cartTitle": "Shopping cart",
+  "cartEmptyTitle": "Your cart is empty",
+  "cartEmptyBody": "Items you add will appear here.",
+  "cartCheckout": "Checkout",
+  "cartQuantity": "Quantity: {count}",
+  "@cartQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cartUnitPrice": "Unit price: {amount}",
+  "@cartUnitPrice": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartSubtotal": "Subtotal: {amount}",
+  "@cartSubtotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartTotal": "Total: {amount}",
+  "@cartTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cartIncrease": "Increase quantity of {name}",
+  "@cartIncrease": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cartDecrease": "Decrease quantity of {name}",
+  "@cartDecrease": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cartRemove": "Remove {name}",
+  "@cartRemove": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
