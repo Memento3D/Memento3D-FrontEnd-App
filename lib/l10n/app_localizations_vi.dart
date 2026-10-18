@@ -302,4 +302,141 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processingFailedBody => 'Dịch vụ xử lý đã báo lỗi.';
+
+  @override
+  String get paymentTitle => 'Thanh toán';
+
+  @override
+  String get paymentHeading => 'Hoàn tất đơn hàng';
+
+  @override
+  String get paymentSubtitle =>
+      'Kiểm tra đơn hàng và chọn phương thức thanh toán';
+
+  @override
+  String get paymentProduct => 'Mô hình 3D cá nhân hóa';
+
+  @override
+  String get paymentProductType => 'Mô hình 3D kỹ thuật số';
+
+  @override
+  String get paymentSubtotal => 'Tạm tính';
+
+  @override
+  String get paymentFee => 'Phí dịch vụ';
+
+  @override
+  String get paymentTotal => 'Tổng thanh toán';
+
+  @override
+  String get paymentMethods => 'Phương thức thanh toán';
+
+  @override
+  String get paymentSandbox => 'Sandbox';
+
+  @override
+  String get paymentMomoDescription => 'Thanh toán qua ví MoMo';
+
+  @override
+  String get paymentZalopayDescription => 'Thanh toán nhanh qua ZaloPay';
+
+  @override
+  String get paymentVnpayDescription => 'VNPAY QR hoặc ứng dụng ngân hàng';
+
+  @override
+  String get paymentSecurity =>
+      'Thanh toán được xử lý an toàn bởi đối tác thanh toán';
+
+  @override
+  String paymentPay(String provider, String amount) {
+    return 'Thanh toán qua $provider • $amount';
+  }
+
+  @override
+  String paymentConnecting(String provider) {
+    return 'Đang kết nối với $provider';
+  }
+
+  @override
+  String get paymentProcessingBody =>
+      'Vui lòng không đóng ứng dụng trong khi giao dịch đang được xử lý.';
+
+  @override
+  String get paymentAmount => 'Số tiền';
+
+  @override
+  String get paymentMethod => 'Phương thức';
+
+  @override
+  String get paymentStatus => 'Trạng thái';
+
+  @override
+  String get paymentProcessing => 'Đang xử lý...';
+
+  @override
+  String get paymentCancel => 'Hủy giao dịch';
+
+  @override
+  String get paymentSuccessTitle => 'Thanh toán thành công!';
+
+  @override
+  String get paymentSuccessBody =>
+      'Đơn hàng mô hình 3D của bạn đã hoàn tất thanh toán.';
+
+  @override
+  String get paymentReference => 'Mã đơn hàng';
+
+  @override
+  String get paymentTime => 'Thời gian';
+
+  @override
+  String get paymentJustNow => 'Vừa xong';
+
+  @override
+  String get paymentSuccess => 'Thành công';
+
+  @override
+  String get paymentViewOrder => 'Xem đơn hàng';
+
+  @override
+  String get paymentBack => 'Về trang thanh toán';
+
+  @override
+  String get paymentFailedTitle => 'Thanh toán chưa thành công';
+
+  @override
+  String get paymentFailedBody =>
+      'Giao dịch không thể hoàn tất. Bạn chưa bị tính phí.';
+
+  @override
+  String get paymentFailed => 'Thất bại';
+
+  @override
+  String get paymentFailureNote =>
+      'Vui lòng thử lại hoặc chọn phương thức thanh toán khác.';
+
+  @override
+  String get paymentRetry => 'Thử lại';
+
+  @override
+  String get paymentChooseOther => 'Chọn phương thức khác';
+
+  @override
+  String get paymentCancelledTitle => 'Đã hủy thanh toán';
+
+  @override
+  String get paymentCancelledBody =>
+      'Giao dịch đã được hủy theo yêu cầu. Bạn chưa bị tính phí.';
+
+  @override
+  String get paymentSelectedMethod => 'Phương thức đã chọn';
+
+  @override
+  String get paymentCancelTime => 'Thời gian hủy';
+
+  @override
+  String get paymentContinue => 'Tiếp tục thanh toán';
+
+  @override
+  String get paymentHome => 'Về trang chủ';
 }

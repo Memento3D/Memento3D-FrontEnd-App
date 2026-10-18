@@ -303,4 +303,140 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get processingFailedBody =>
       'The processing service reported a problem.';
+
+  @override
+  String get paymentTitle => 'Payment';
+
+  @override
+  String get paymentHeading => 'Complete your order';
+
+  @override
+  String get paymentSubtitle => 'Review your order and choose a payment method';
+
+  @override
+  String get paymentProduct => 'Personalized 3D model';
+
+  @override
+  String get paymentProductType => 'Digital 3D model';
+
+  @override
+  String get paymentSubtotal => 'Subtotal';
+
+  @override
+  String get paymentFee => 'Service fee';
+
+  @override
+  String get paymentTotal => 'Total payment';
+
+  @override
+  String get paymentMethods => 'Payment methods';
+
+  @override
+  String get paymentSandbox => 'Sandbox';
+
+  @override
+  String get paymentMomoDescription => 'Pay with MoMo wallet';
+
+  @override
+  String get paymentZalopayDescription => 'Pay quickly with ZaloPay';
+
+  @override
+  String get paymentVnpayDescription => 'VNPAY QR or banking app';
+
+  @override
+  String get paymentSecurity =>
+      'Payments are securely processed by payment partners';
+
+  @override
+  String paymentPay(String provider, String amount) {
+    return 'Pay with $provider • $amount';
+  }
+
+  @override
+  String paymentConnecting(String provider) {
+    return 'Connecting to $provider';
+  }
+
+  @override
+  String get paymentProcessingBody =>
+      'Please keep the app open while the transaction is processing.';
+
+  @override
+  String get paymentAmount => 'Amount';
+
+  @override
+  String get paymentMethod => 'Method';
+
+  @override
+  String get paymentStatus => 'Status';
+
+  @override
+  String get paymentProcessing => 'Processing...';
+
+  @override
+  String get paymentCancel => 'Cancel transaction';
+
+  @override
+  String get paymentSuccessTitle => 'Payment successful!';
+
+  @override
+  String get paymentSuccessBody =>
+      'Payment for your 3D model order is complete.';
+
+  @override
+  String get paymentReference => 'Order reference';
+
+  @override
+  String get paymentTime => 'Time';
+
+  @override
+  String get paymentJustNow => 'Just now';
+
+  @override
+  String get paymentSuccess => 'Success';
+
+  @override
+  String get paymentViewOrder => 'View order';
+
+  @override
+  String get paymentBack => 'Back to payment';
+
+  @override
+  String get paymentFailedTitle => 'Payment unsuccessful';
+
+  @override
+  String get paymentFailedBody =>
+      'The transaction could not be completed. You have not been charged.';
+
+  @override
+  String get paymentFailed => 'Failed';
+
+  @override
+  String get paymentFailureNote =>
+      'Please retry or choose another payment method.';
+
+  @override
+  String get paymentRetry => 'Try again';
+
+  @override
+  String get paymentChooseOther => 'Choose another method';
+
+  @override
+  String get paymentCancelledTitle => 'Payment cancelled';
+
+  @override
+  String get paymentCancelledBody =>
+      'The transaction was cancelled at your request. You have not been charged.';
+
+  @override
+  String get paymentSelectedMethod => 'Selected method';
+
+  @override
+  String get paymentCancelTime => 'Cancellation time';
+
+  @override
+  String get paymentContinue => 'Continue payment';
+
+  @override
+  String get paymentHome => 'Go home';
 }

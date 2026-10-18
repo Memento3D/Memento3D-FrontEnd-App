@@ -95,5 +95,64 @@
   "processingCloudConnected": "Processing service connected",
   "processingInProgressBody": "Progress is based on service updates.",
   "processingCompleteBody": "The processing service reports completion.",
-  "processingFailedBody": "The processing service reported a problem."
+  "processingFailedBody": "The processing service reported a problem.",
+  "paymentTitle": "Payment",
+  "paymentHeading": "Complete your order",
+  "paymentSubtitle": "Review your order and choose a payment method",
+  "paymentProduct": "Personalized 3D model",
+  "paymentProductType": "Digital 3D model",
+  "paymentSubtotal": "Subtotal",
+  "paymentFee": "Service fee",
+  "paymentTotal": "Total payment",
+  "paymentMethods": "Payment methods",
+  "paymentSandbox": "Sandbox",
+  "paymentMomoDescription": "Pay with MoMo wallet",
+  "paymentZalopayDescription": "Pay quickly with ZaloPay",
+  "paymentVnpayDescription": "VNPAY QR or banking app",
+  "paymentSecurity": "Payments are securely processed by payment partners",
+  "paymentPay": "Pay with {provider} \u2022 {amount}",
+  "@paymentPay": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentConnecting": "Connecting to {provider}",
+  "@paymentConnecting": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingBody": "Please keep the app open while the transaction is processing.",
+  "paymentAmount": "Amount",
+  "paymentMethod": "Method",
+  "paymentStatus": "Status",
+  "paymentProcessing": "Processing...",
+  "paymentCancel": "Cancel transaction",
+  "paymentSuccessTitle": "Payment successful!",
+  "paymentSuccessBody": "Payment for your 3D model order is complete.",
+  "paymentReference": "Order reference",
+  "paymentTime": "Time",
+  "paymentJustNow": "Just now",
+  "paymentSuccess": "Success",
+  "paymentViewOrder": "View order",
+  "paymentBack": "Back to payment",
+  "paymentFailedTitle": "Payment unsuccessful",
+  "paymentFailedBody": "The transaction could not be completed. You have not been charged.",
+  "paymentFailed": "Failed",
+  "paymentFailureNote": "Please retry or choose another payment method.",
+  "paymentRetry": "Try again",
+  "paymentChooseOther": "Choose another method",
+  "paymentCancelledTitle": "Payment cancelled",
+  "paymentCancelledBody": "The transaction was cancelled at your request. You have not been charged.",
+  "paymentSelectedMethod": "Selected method",
+  "paymentCancelTime": "Cancellation time",
+  "paymentContinue": "Continue payment",
+  "paymentHome": "Go home"
 }

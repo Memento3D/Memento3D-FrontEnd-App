@@ -643,6 +643,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The processing service reported a problem.'**
   String get processingFailedBody;
+
+  /// No description provided for @paymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get paymentTitle;
+
+  /// No description provided for @paymentHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your order'**
+  String get paymentHeading;
+
+  /// No description provided for @paymentSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your order and choose a payment method'**
+  String get paymentSubtitle;
+
+  /// No description provided for @paymentProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalized 3D model'**
+  String get paymentProduct;
+
+  /// No description provided for @paymentProductType.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital 3D model'**
+  String get paymentProductType;
+
+  /// No description provided for @paymentSubtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get paymentSubtotal;
+
+  /// No description provided for @paymentFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Service fee'**
+  String get paymentFee;
+
+  /// No description provided for @paymentTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total payment'**
+  String get paymentTotal;
+
+  /// No description provided for @paymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment methods'**
+  String get paymentMethods;
+
+  /// No description provided for @paymentSandbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Sandbox'**
+  String get paymentSandbox;
+
+  /// No description provided for @paymentMomoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with MoMo wallet'**
+  String get paymentMomoDescription;
+
+  /// No description provided for @paymentZalopayDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay quickly with ZaloPay'**
+  String get paymentZalopayDescription;
+
+  /// No description provided for @paymentVnpayDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'VNPAY QR or banking app'**
+  String get paymentVnpayDescription;
+
+  /// No description provided for @paymentSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments are securely processed by payment partners'**
+  String get paymentSecurity;
+
+  /// No description provided for @paymentPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with {provider} • {amount}'**
+  String paymentPay(String provider, String amount);
+
+  /// No description provided for @paymentConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to {provider}'**
+  String paymentConnecting(String provider);
+
+  /// No description provided for @paymentProcessingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please keep the app open while the transaction is processing.'**
+  String get paymentProcessingBody;
+
+  /// No description provided for @paymentAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get paymentAmount;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Method'**
+  String get paymentMethod;
+
+  /// No description provided for @paymentStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get paymentStatus;
+
+  /// No description provided for @paymentProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get paymentProcessing;
+
+  /// No description provided for @paymentCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel transaction'**
+  String get paymentCancel;
+
+  /// No description provided for @paymentSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment successful!'**
+  String get paymentSuccessTitle;
+
+  /// No description provided for @paymentSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment for your 3D model order is complete.'**
+  String get paymentSuccessBody;
+
+  /// No description provided for @paymentReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Order reference'**
+  String get paymentReference;
+
+  /// No description provided for @paymentTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get paymentTime;
+
+  /// No description provided for @paymentJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get paymentJustNow;
+
+  /// No description provided for @paymentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get paymentSuccess;
+
+  /// No description provided for @paymentViewOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'View order'**
+  String get paymentViewOrder;
+
+  /// No description provided for @paymentBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to payment'**
+  String get paymentBack;
+
+  /// No description provided for @paymentFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment unsuccessful'**
+  String get paymentFailedTitle;
+
+  /// No description provided for @paymentFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The transaction could not be completed. You have not been charged.'**
+  String get paymentFailedBody;
+
+  /// No description provided for @paymentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get paymentFailed;
+
+  /// No description provided for @paymentFailureNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Please retry or choose another payment method.'**
+  String get paymentFailureNote;
+
+  /// No description provided for @paymentRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get paymentRetry;
+
+  /// No description provided for @paymentChooseOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another method'**
+  String get paymentChooseOther;
+
+  /// No description provided for @paymentCancelledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled'**
+  String get paymentCancelledTitle;
+
+  /// No description provided for @paymentCancelledBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The transaction was cancelled at your request. You have not been charged.'**
+  String get paymentCancelledBody;
+
+  /// No description provided for @paymentSelectedMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected method'**
+  String get paymentSelectedMethod;
+
+  /// No description provided for @paymentCancelTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation time'**
+  String get paymentCancelTime;
+
+  /// No description provided for @paymentContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue payment'**
+  String get paymentContinue;
+
+  /// No description provided for @paymentHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Go home'**
+  String get paymentHome;
 }
 
 class _AppLocalizationsDelegate
