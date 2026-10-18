@@ -95,5 +95,64 @@
   "processingCloudConnected": "Đã kết nối dịch vụ xử lý",
   "processingInProgressBody": "Tiến độ dựa trên cập nhật từ dịch vụ.",
   "processingCompleteBody": "Dịch vụ thông báo đã xử lý xong.",
-  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi."
+  "processingFailedBody": "Dịch vụ xử lý đã báo lỗi.",
+  "paymentTitle": "Thanh toán",
+  "paymentHeading": "Hoàn tất đơn hàng",
+  "paymentSubtitle": "Kiểm tra đơn hàng và chọn phương thức thanh toán",
+  "paymentProduct": "Mô hình 3D cá nhân hóa",
+  "paymentProductType": "Mô hình 3D kỹ thuật số",
+  "paymentSubtotal": "Tạm tính",
+  "paymentFee": "Phí dịch vụ",
+  "paymentTotal": "Tổng thanh toán",
+  "paymentMethods": "Phương thức thanh toán",
+  "paymentSandbox": "Sandbox",
+  "paymentMomoDescription": "Thanh toán qua ví MoMo",
+  "paymentZalopayDescription": "Thanh toán nhanh qua ZaloPay",
+  "paymentVnpayDescription": "VNPAY QR hoặc ứng dụng ngân hàng",
+  "paymentSecurity": "Thanh toán được xử lý an toàn bởi đối tác thanh toán",
+  "paymentPay": "Thanh toán qua {provider} • {amount}",
+  "@paymentPay": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentConnecting": "Đang kết nối với {provider}",
+  "@paymentConnecting": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentProcessingBody": "Vui lòng không đóng ứng dụng trong khi giao dịch đang được xử lý.",
+  "paymentAmount": "Số tiền",
+  "paymentMethod": "Phương thức",
+  "paymentStatus": "Trạng thái",
+  "paymentProcessing": "Đang xử lý...",
+  "paymentCancel": "Hủy giao dịch",
+  "paymentSuccessTitle": "Thanh toán thành công!",
+  "paymentSuccessBody": "Đơn hàng mô hình 3D của bạn đã hoàn tất thanh toán.",
+  "paymentReference": "Mã đơn hàng",
+  "paymentTime": "Thời gian",
+  "paymentJustNow": "Vừa xong",
+  "paymentSuccess": "Thành công",
+  "paymentViewOrder": "Xem đơn hàng",
+  "paymentBack": "Về trang thanh toán",
+  "paymentFailedTitle": "Thanh toán chưa thành công",
+  "paymentFailedBody": "Giao dịch không thể hoàn tất. Bạn chưa bị tính phí.",
+  "paymentFailed": "Thất bại",
+  "paymentFailureNote": "Vui lòng thử lại hoặc chọn phương thức thanh toán khác.",
+  "paymentRetry": "Thử lại",
+  "paymentChooseOther": "Chọn phương thức khác",
+  "paymentCancelledTitle": "Đã hủy thanh toán",
+  "paymentCancelledBody": "Giao dịch đã được hủy theo yêu cầu. Bạn chưa bị tính phí.",
+  "paymentSelectedMethod": "Phương thức đã chọn",
+  "paymentCancelTime": "Thời gian hủy",
+  "paymentContinue": "Tiếp tục thanh toán",
+  "paymentHome": "Về trang chủ"
 }
