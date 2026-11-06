@@ -15,10 +15,14 @@ class ModelViewerWebView extends StatefulWidget {
     super.key,
     required this.controller,
     required this.modelUrl,
+    this.customization,
+    this.selection,
   });
 
   final ModelViewerController controller;
   final String? modelUrl;
+  final Map<String, dynamic>? customization;
+  final Map<String, String?>? selection;
 
   @override
   State<ModelViewerWebView> createState() => _ModelViewerWebViewState();
@@ -47,17 +51,46 @@ class _ModelViewerWebViewState extends State<ModelViewerWebView> {
   @override
   void didUpdateWidget(covariant ModelViewerWebView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.modelUrl != widget.modelUrl && _ready) {
+    if ((oldWidget.modelUrl != widget.modelUrl ||
+            oldWidget.customization != widget.customization ||
+            oldWidget.selection != widget.selection) &&
+        _ready) {
       unawaited(_sendModel());
     }
   }
 
   Future<void> _sendModel() async {
-    final message = widget.controller.loadModel(widget.modelUrl);
+    final message = widget.customization != null
+        ? widget.controller.loadCustomization(
+            widget.customization!,
+            widget.selection!,
+          )
+        : widget.controller.loadModel(widget.modelUrl);
     if (message == null || !mounted) return;
     final command = jsonDecode(message) as Map<String, dynamic>;
     final id = command['requestId'] as String;
     try {
+      if (widget.customization != null) {
+        final scene =
+            jsonDecode(jsonEncode(command['scene'])) as Map<String, dynamic>;
+        final base = scene['baseModel'] as Map<String, dynamic>;
+        base['url'] = _server.resolveModelUrl(
+          base['url'] as String,
+          'custom-base',
+          retainExisting: true,
+        );
+        for (final item in scene['assets'] as List) {
+          final asset = item as Map<String, dynamic>;
+          if (widget.selection!.containsValue(asset['assetVersionId'])) {
+            asset['url'] = _server.resolveModelUrl(
+              asset['url'] as String,
+              'custom-${asset['assetVersionId']}',
+              retainExisting: true,
+            );
+          }
+        }
+        command['scene'] = scene;
+      }
       if (widget.modelUrl != null) {
         command['modelUrl'] = _server.resolveModelUrl(widget.modelUrl!, id);
       }
@@ -65,6 +98,7 @@ class _ModelViewerWebViewState extends State<ModelViewerWebView> {
       // Invalidate the old JS load even when the replacement URL is rejected.
       command['modelUrl'] = null;
       widget.controller.failLoad(id, 'unsupportedUrl');
+      if (widget.customization != null) return;
     }
     try {
       await _webView!.runJavaScript(

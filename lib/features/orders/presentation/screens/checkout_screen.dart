@@ -21,6 +21,7 @@ class CheckoutScreen extends StatefulWidget {
     this.quote,
     this.bespokeTitle,
     this.bespokeSummary,
+    this.bespokeNote,
   });
 
   final ApiClient? client;
@@ -34,6 +35,9 @@ class CheckoutScreen extends StatefulWidget {
   final Map<String, dynamic>? quote;
   final String? bespokeTitle;
   final String? bespokeSummary;
+
+  /// Chosen size / material / engraving, sent to the workshop in the order note.
+  final String? bespokeNote;
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -142,7 +146,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         shippingAddress: formatAddress(address),
         phone: address['phone']?.toString() ?? '',
         paymentMethod: _paymentMethod,
-        note: _note.text.trim(),
+        note: [
+          if (_isBespoke && (widget.bespokeNote ?? '').isNotEmpty)
+            'Cấu hình: ${widget.bespokeNote}',
+          _note.text.trim(),
+        ].where((part) => part.isNotEmpty).join('\n'),
         scanId: widget.scanId,
         quoteId: widget.quote?['id'] as String?,
         totalPrice: widget.quote?['totalAmount'] as num?,
@@ -582,17 +590,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       children: _isBespoke
           ? [
               OrderInfoRow(
-                label: 'Giá chế tác cơ bản',
+                label: 'Kỷ vật 3D trọn gói',
                 value: formatVnd(widget.quote?['baseAmount']),
               ),
-              OrderInfoRow(
-                label: 'Phí cá nhân hóa',
-                value: formatVnd(widget.quote?['customizationAmount']),
-              ),
-              OrderInfoRow(
-                label: 'Phí giao hàng',
-                value: formatVnd(widget.quote?['shippingAmount']),
-              ),
+              const OrderInfoRow(label: 'Phí giao hàng', value: 'Miễn phí'),
               const Divider(height: 20, color: AppColors.cardBorder),
               OrderInfoRow(
                 label: 'Tổng cộng',

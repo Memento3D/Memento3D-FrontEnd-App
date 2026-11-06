@@ -6,9 +6,11 @@ import { ModelLoads, disposeScenes } from './model_runtime.js';
 import { ViewerInteraction } from './viewer_interaction.js';
 import { ViewerPresentation, routeViewerCommand } from './viewer_presentation.js';
 import { ViewerDiagnostics, routeDiagnosticsCommand } from './viewer_diagnostics.js';
+import { CustomizationLoads } from './customization_runtime.js';
 
 let renderer, scene, camera, observer, loads, placeholder, currentModel, homeView, interaction, presentation;
 let stopped = false;
+let customLoads, customMode = false;
 const diagnostics = new ViewerDiagnostics({
   emit: event => window.ModelViewerBridge.postMessage(JSON.stringify(event)),
 });
@@ -22,7 +24,7 @@ function clearModel() {
   diagnostics.stop();
   interaction?.suspend();
   presentation?.clearModel();
-  if (currentModel) disposeScenes(currentModel.scenes);
+  if (currentModel && !customMode) disposeScenes(currentModel.scenes);
   currentModel = null;
   homeView = null;
 }
@@ -34,6 +36,7 @@ function dispose() {
   renderer?.setAnimationLoop(null);
   interaction?.dispose();
   loads?.dispose();
+  customLoads?.dispose();
   presentation?.dispose();
   if (placeholder) disposeScenes([placeholder]);
   placeholder = null;
@@ -108,9 +111,25 @@ try {
       currentModel = result;
     },
   });
+  customLoads = new CustomizationLoads({ load, clear: clearModel,
+    emit: event => window.ModelViewerBridge.postMessage(JSON.stringify(event)),
+    show: (result, first) => {
+      if (first) { scene.add(result.scene);homeView=interaction.fit(result.scene); }
+      presentation.setModel(result.scene);
+      if (placeholder) { disposeScenes([placeholder]);placeholder=null; }
+      currentModel=result;render();
+    },
+  });
   window.receiveModelViewerCommand = command => {
-    if (routeDiagnosticsCommand(command, loads, diagnostics, currentModel?.scene)) return;
-    routeViewerCommand(command, loads, presentation, interaction);
+    if (command?.type === 'loadCustomization') {
+      if (!customMode) { clearModel();customMode=true; }
+      if (placeholder) { disposeScenes([placeholder]);placeholder=null; }
+      void customLoads.receive(command);return;
+    }
+    if (command?.type === 'loadModel' && customMode) { customLoads.reset();customMode=false; }
+    const active=customMode?customLoads:loads;
+    if (routeDiagnosticsCommand(command, active, diagnostics, currentModel?.scene)) return;
+    routeViewerCommand(command, active, presentation, interaction);
   };
   window.disposeModelViewer = dispose;
   observer = new ResizeObserver(resize);

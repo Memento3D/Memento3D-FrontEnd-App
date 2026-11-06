@@ -31,6 +31,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is needed to photograph objects for 3D scanning.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Choose your face photos to create a personalized 3D keepsake.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion data helps guide steady object photography.</string>
 	<key>LSRequiresIPhoneOS</key>

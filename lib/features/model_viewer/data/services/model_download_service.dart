@@ -13,6 +13,8 @@ class ModelDownloadService {
 
   final http.Client _httpClient;
 
+  void dispose() => _httpClient.close();
+
   Future<File> downloadGlb({
     required String url,
     required void Function(int loadedBytes, int? totalBytes) onProgress,
@@ -36,6 +38,8 @@ class ModelDownloadService {
       }
     }
     final request = http.Request('GET', uri)..headers.addAll(headers);
+    // A signed storage URL is already the destination; do not forward auth.
+    request.followRedirects = false;
     late http.StreamedResponse response;
     try {
       response = await _httpClient.send(request).timeout(ApiConfig.timeout);
@@ -47,6 +51,7 @@ class ModelDownloadService {
       );
     }
     if (response.statusCode < 200 || response.statusCode >= 300) {
+      await response.stream.drain<void>();
       throw ApiException(
         statusCode: response.statusCode,
         errorCode: 'ERR-017',
@@ -62,15 +67,41 @@ class ModelDownloadService {
     final file = File('${directory.path}/model.glb');
     final sink = file.openWrite();
     var loaded = 0;
+    var complete = false;
     try {
-      await for (final chunk in response.stream) {
+      await for (final chunk in response.stream.timeout(
+        const Duration(seconds: 30),
+      )) {
         sink.add(chunk);
         loaded += chunk.length;
         onProgress(loaded, total);
       }
       await sink.flush();
+      if (total != null && loaded != total) {
+        throw const FormatException('Incomplete GLB download');
+      }
+      final reader = await file.open();
+      try {
+        final header = await reader.read(12);
+        if (header.length != 12 ||
+            header[0] != 0x67 ||
+            header[1] != 0x6c ||
+            header[2] != 0x54 ||
+            header[3] != 0x46) {
+          throw const FormatException('The downloaded file is not a GLB model');
+        }
+      } finally {
+        await reader.close();
+      }
+      complete = true;
     } finally {
       await sink.close();
+      if (!complete) {
+        try {
+          await file.delete();
+          await directory.delete();
+        } catch (_) {}
+      }
     }
     return file;
   }

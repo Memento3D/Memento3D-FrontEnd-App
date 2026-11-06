@@ -4,8 +4,7 @@ import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
 import 'package:memento3d_frontend_app/features/model_viewer/presentation/screens/model_viewer_screen.dart';
 import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
 
-import '../../../../screens/capture_session.dart';
-import '../../../../screens/processing_screen.dart';
+import '../../../customization/presentation/create_model_screen.dart';
 import '../../../../app/photo_capture_flow.dart';
 
 class ScanDetailsSheet extends StatelessWidget {
@@ -296,9 +295,7 @@ class ScanDetailsSheet extends StatelessWidget {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => ProcessingScreen(
-                          session: CaptureSession(scanId: scan.id),
-                        ),
+                        builder: (_) => ModelProgressScreen(scanId: scan.id),
                       ),
                     );
                   },

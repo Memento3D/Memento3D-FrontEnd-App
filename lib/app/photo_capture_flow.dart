@@ -1,3 +1,5 @@
+import '../features/customization/presentation/create_model_screen.dart';
+
 import 'dart:async';
 import 'dart:math';
 
@@ -11,9 +13,7 @@ import '../features/reconstruction/domain/repositories/reconstruction_job_start_
 import '../features/scans/data/models/scan_model.dart';
 import '../features/scans/data/models/scan_item.dart';
 import '../features/scans/presentation/screens/scan_wizard_screen.dart';
-import '../features/uploads/data/api/photo_upload_api.dart';
 import '../features/uploads/data/local/local_photo_file.dart';
-import '../features/uploads/data/photo_upload_repository_impl.dart';
 import '../features/uploads/domain/models/photo_upload_manifest.dart';
 import '../features/uploads/domain/models/upload_progress_snapshot.dart';
 import '../features/uploads/domain/repositories/photo_upload_repository.dart';
@@ -53,6 +53,14 @@ Future<void> openCreatedScanFlow(
   ValueChanged<PhotoUploadResult>? onUploaded,
   PhotoUploadRepository? repository,
 }) async {
+  if (repository == null) {
+    await navigator.push<void>(
+      MaterialPageRoute(
+        builder: (_) => CreateModelScreen(scanId: scan.id, scanName: scan.name),
+      ),
+    );
+    return;
+  }
   final scanId = await navigator.push<String>(
     MaterialPageRoute<String>(
       builder: (_) => ScanWizardScreen(scanId: scan.id, scan: scan),
@@ -61,8 +69,7 @@ Future<void> openCreatedScanFlow(
   if (!navigator.mounted || scanId != scan.id || scan.inputMode != 'image') {
     return;
   }
-  final uploads =
-      repository ?? PhotoUploadRepositoryImpl(PhotoUploadApi(ApiClient()));
+  final uploads = repository;
   final session = CaptureSession(scanId: scanId);
   await navigator.push<void>(
     MaterialPageRoute<void>(

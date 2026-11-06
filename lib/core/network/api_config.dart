@@ -2,7 +2,7 @@
 class ApiConfig {
   static const String baseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'https://memento3d-backend.onrender.com',
+    defaultValue: 'https://lively-diffusion-duvet.ngrok-free.dev',
   );
 
   // Endpoints

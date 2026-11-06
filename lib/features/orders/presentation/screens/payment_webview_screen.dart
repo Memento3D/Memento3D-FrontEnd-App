@@ -7,9 +7,10 @@ import '../../../../core/constants/app_colors.dart';
 /// backend through the gateway callback, so this screen only shows the page and
 /// lets the customer come back to the order.
 class PaymentWebViewScreen extends StatefulWidget {
-  const PaymentWebViewScreen({super.key, required this.url});
+  const PaymentWebViewScreen({super.key, required this.url, this.returnUri});
 
   final String url;
+  final Uri? returnUri;
 
   @override
   State<PaymentWebViewScreen> createState() => _PaymentWebViewScreenState();
@@ -26,8 +27,20 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageFinished: (_) {
+          onPageFinished: (url) {
             if (mounted) setState(() => _loading = false);
+            final actual = Uri.tryParse(url), expected = widget.returnUri;
+            if (mounted &&
+                actual != null &&
+                expected != null &&
+                actual.scheme == expected.scheme &&
+                actual.host == expected.host &&
+                actual.port == expected.port &&
+                actual.path == expected.path) {
+              // Return page has reached BE verification. The parent re-fetches order
+              // status; the URL itself is never treated as payment confirmation.
+              Navigator.of(context).pop();
+            }
           },
         ),
       )

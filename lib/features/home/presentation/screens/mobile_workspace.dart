@@ -9,7 +9,7 @@ import '../../../scans/data/repositories/scan_repository.dart';
 import '../../../scans/data/services/job_service.dart';
 import '../../../scans/presentation/widgets/rename_scan_dialog.dart';
 import '../../../scans/presentation/widgets/scan_details_sheet.dart';
-import '../../../../screens/processing_screen.dart';
+import '../../../customization/presentation/create_model_screen.dart';
 
 /// A compact version of the studio workspace for phones.
 class MobileWorkspace extends StatefulWidget {
@@ -134,7 +134,7 @@ class _MobileWorkspaceState extends State<MobileWorkspace> {
       await service.retryJob(job.id);
       if (!mounted) return;
       await Navigator.of(context).push<void>(
-        MaterialPageRoute(builder: (_) => ProcessingScreen(scanId: scan.id)),
+        MaterialPageRoute(builder: (_) => ModelProgressScreen(scanId: scan.id)),
       );
       if (mounted) await _load();
     } catch (error) {

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/scan_model.dart';
 import '../controllers/scan_state.dart';
-import '../widgets/create_scan_dialog.dart';
+import '../../../customization/presentation/create_model_screen.dart';
 import '../widgets/edit_scan_dialog.dart';
 import '../widgets/scan_card.dart';
 
@@ -39,8 +39,11 @@ class _DashboardScansScreenState extends State<DashboardScansScreen> {
     super.dispose();
   }
 
-  void _openCreateScanSheet() {
-    CreateScanBottomSheet.show(context);
+  Future<void> _openCreateScanSheet() async {
+    await Navigator.of(
+      context,
+    ).push<void>(MaterialPageRoute(builder: (_) => const CreateModelScreen()));
+    if (mounted) await _state.loadScans();
   }
 
   void _openEditDialog(ScanModel scan) {

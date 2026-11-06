@@ -35,7 +35,11 @@ class ViewerAssetServer {
 
   /// Public modelUrl accepts HTTPS, asset:///assets/...glb, or a downloaded
   /// file:// GLB inside the system temp directory.
-  String resolveModelUrl(String modelUrl, String requestId) {
+  String resolveModelUrl(
+    String modelUrl,
+    String requestId, {
+    bool retainExisting = false,
+  }) {
     final uri = Uri.tryParse(modelUrl);
     if (uri == null) throw const FormatException('Invalid model URL');
     if (uri.scheme == 'https' && uri.host.isNotEmpty && uri.userInfo.isEmpty) {
@@ -47,10 +51,11 @@ class ViewerAssetServer {
       if (!path.startsWith(tempRoot) || !path.endsWith('.glb')) {
         throw const FormatException('Unsupported model URL');
       }
-      _models.clear();
-      _localFiles
-        ..clear()
-        ..['model-$requestId.glb'] = path;
+      if (!retainExisting) {
+        _models.clear();
+        _localFiles.clear();
+      }
+      _localFiles['model-$requestId.glb'] = path;
       return page.resolve('model-$requestId.glb').toString();
     }
     if (uri.scheme != 'asset' ||
@@ -87,7 +92,7 @@ class ViewerAssetServer {
       final runtimeType = _runtime[name];
       final localPath = _localFiles[name];
       if (localPath != null) {
-        final bytes = await File(localPath).readAsBytes();
+        final file = File(localPath);
         request.response.headers.set(
           HttpHeaders.contentTypeHeader,
           'model/gltf-binary',
@@ -97,8 +102,8 @@ class ViewerAssetServer {
           'no-store',
         );
         request.response.headers.set('X-Content-Type-Options', 'nosniff');
-        request.response.contentLength = bytes.length;
-        request.response.add(bytes);
+        request.response.contentLength = await file.length();
+        await request.response.addStream(file.openRead());
         return;
       }
       final key = runtimeType != null

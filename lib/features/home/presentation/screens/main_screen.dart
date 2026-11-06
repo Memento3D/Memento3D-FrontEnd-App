@@ -1,6 +1,7 @@
+import '../../../customization/presentation/create_model_screen.dart';
+
 import 'package:flutter/material.dart';
 
-import '../../../../app/photo_capture_flow.dart';
 import '../../../auth/presentation/screens/change_password_screen.dart';
 import '../../../orders/presentation/screens/orders_screen.dart';
 import 'notifications_screen.dart';
@@ -17,9 +18,6 @@ import 'package:memento3d_frontend_app/core/constants/app_colors.dart';
 import 'package:memento3d_frontend_app/core/network/api_exception.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/controllers/auth_state.dart';
 import 'package:memento3d_frontend_app/features/auth/presentation/screens/login_screen.dart';
-import 'package:memento3d_frontend_app/features/scans/data/models/scan_item.dart';
-import 'package:memento3d_frontend_app/features/scans/data/repositories/scan_repository.dart';
-import 'package:memento3d_frontend_app/features/scans/presentation/widgets/create_scan_dialog.dart';
 
 class MainScreen extends StatefulWidget {
   final String userName;
@@ -38,6 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   bool _creationOpen = false;
+  int _modelListRevision = 0;
 
   Future<void> _editProfile() async {
     final controller = TextEditingController(
@@ -116,67 +115,12 @@ class _MainScreenState extends State<MainScreen> {
     if (_creationOpen) return;
     _creationOpen = true;
     try {
-      final created = await CreateScanDialog.show(
-        context,
-        onSubmit:
-            ({
-              required String name,
-              required ScanInputMode inputMode,
-              String? description,
-              String? notes,
-            }) async {
-              try {
-                final created = await ScanRepository.instance.createScanAsync(
-                  name: name,
-                  inputMode: inputMode,
-                  description: description,
-                  notes: notes,
-                );
-                if (mounted) {
-                  setState(
-                    () => _currentTabIndex = 0,
-                  ); // Switch to Dashboard to view new scan
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Đã tạo phiên scan "$name" thành công! ✨'),
-                      backgroundColor: AppColors.primary,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-                return created;
-              } on ApiException catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(e.message),
-                      backgroundColor: AppColors.error,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-                rethrow;
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Không thể tạo phiên scan: ${e.toString()}',
-                      ),
-                      backgroundColor: AppColors.error,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-                rethrow;
-              }
-            },
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute(builder: (_) => const CreateModelScreen()),
       );
-      if (mounted && created != null) {
-        await openCreatedPhotoScanFlow(Navigator.of(context), created);
-      }
     } finally {
       _creationOpen = false;
+      if (mounted) setState(() => _modelListRevision++);
     }
   }
 
@@ -184,6 +128,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     if (MediaQuery.sizeOf(context).width >= 1100) {
       return DesktopWorkspace(
+        key: ValueKey(_modelListRevision),
         onCreate: _openCreateScanDialog,
         onDashboard: () => Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -226,6 +171,7 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           // Tab 0: Studio — tạo scan mới & bản tạo gần đây
           MobileWorkspace(
+            key: ValueKey(_modelListRevision),
             onCreate: _openCreateScanDialog,
             onNotifications: () => Navigator.of(context).push(
               MaterialPageRoute<void>(

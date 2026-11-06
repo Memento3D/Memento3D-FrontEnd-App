@@ -33,6 +33,17 @@ function setup(t) {
 }
 function settle(interaction) { for (let i = 0; i < 300; i++) interaction.update(); }
 
+test('face framing changes camera only and full-body reset restores original home',t=>{
+  const {camera,interaction,model}=setup(t);
+  const home=interaction.fit(model);
+  const before=model.matrix.clone();
+  interaction.focusFace();
+  assert.ok(camera.position.distanceTo(home.position)>0.1);
+  assert.ok(model.matrix.equals(before));
+  interaction.resetView(1000);interaction.update(1500);
+  assert.ok(camera.position.distanceTo(home.position)<1e-8);
+});
+
 test('450ms reset interpolates camera and target, then reaches canonical fit', t => {
   const { camera, interaction, model } = setup(t);
   const home = interaction.fit(model);

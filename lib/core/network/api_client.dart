@@ -166,6 +166,38 @@ class ApiClient {
   }
 
   /// PATCH request
+  Future<dynamic> put(
+    String endpoint, {
+    dynamic body,
+    String? token,
+    Map<String, String>? headers,
+  }) async {
+    final uri = Uri.parse('${ApiConfig.baseUrl}$endpoint');
+    final resolved = await _buildHeaders(
+      token: token,
+      additionalHeaders: headers,
+    );
+    try {
+      final response = await _httpClient
+          .put(uri, headers: resolved, body: jsonEncode(body))
+          .timeout(ApiConfig.timeout);
+      return _handleResponse(response);
+    } on ApiException {
+      rethrow;
+    } on TimeoutException {
+      throw ApiException(
+        statusCode: 408,
+        message: 'Chưa nhận được kết quả lưu. Lựa chọn vẫn được giữ; bạn có thể thử lại.',
+      );
+    } on SocketException {
+      throw ApiException(
+        statusCode: 0,
+        message: 'Không kết nối được máy chủ để lưu thiết kế.',
+      );
+    }
+  }
+
+  /// PATCH request
   Future<dynamic> patch(
     String endpoint, {
     dynamic body,
@@ -260,6 +292,7 @@ class ApiClient {
     final headers = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
     };
 
     final effectiveToken = token ?? await AuthStorage.getToken();

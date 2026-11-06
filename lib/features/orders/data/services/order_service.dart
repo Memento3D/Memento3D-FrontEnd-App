@@ -1,4 +1,5 @@
 import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_config.dart';
 
 /// One page of orders returned by `GET /api/v1/orders/me`.
 class OrderPage {
@@ -176,6 +177,13 @@ class OrderService {
     return _order(response);
   }
 
+  Future<Map<String, dynamic>> acceptWorkshopQuote(String orderId) async =>
+      _order(
+        await _client.post(
+          '$_orders/${Uri.encodeComponent(orderId)}/accept-quote',
+        ),
+      );
+
   Future<Map<String, dynamic>> cancelOrder(String orderId) async {
     final response = await _client.post(
       '$_orders/${Uri.encodeComponent(orderId)}/cancel',
@@ -188,6 +196,19 @@ class OrderService {
     required String orderId,
     required String paymentMethod,
   }) async {
+    if (paymentMethod == 'VNPAY') {
+      final response = await _client.post(
+        '/api/v1/payments/vnpay/create',
+        body: {
+          'orderId': orderId,
+          'returnUrl': Uri.parse(ApiConfig.baseUrl)
+              .resolve('/api/v1/payments/vnpay/return')
+              .toString(),
+        },
+      );
+      if (response is! Map) throw const FormatException('Invalid payment');
+      return Map<String, dynamic>.from(response);
+    }
     final response = await _client.post(
       '$_orders/${Uri.encodeComponent(orderId)}/payments',
       body: {'paymentMethod': paymentMethod},

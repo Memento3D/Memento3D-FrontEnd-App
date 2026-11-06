@@ -98,6 +98,7 @@ class ModelViewerController extends ChangeNotifier {
   }
 
   void resetView() => _command('resetView');
+  void focusFace() => _command('focusFace');
 
   void failCommand(String requestId) {
     if (!controlsEnabled || requestId != state.requestId) return;
@@ -133,6 +134,21 @@ class ModelViewerController extends ChangeNotifier {
       'type': 'loadModel',
       'requestId': id,
       'modelUrl': modelUrl,
+    });
+  }
+
+  String? loadCustomization(
+    Map<String, dynamic> scene,
+    Map<String, String?> selection,
+  ) {
+    if (_disposed || !_ready) return null;
+    final id = '${++_sequence}';
+    _set(ModelViewerState(ModelViewerStatus.loading, requestId: id));
+    return jsonEncode({
+      'type': 'loadCustomization',
+      'requestId': id,
+      'scene': scene,
+      'selection': selection,
     });
   }
 

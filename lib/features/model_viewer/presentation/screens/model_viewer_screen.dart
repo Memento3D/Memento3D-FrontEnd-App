@@ -1,3 +1,7 @@
+import '../../../customization/data/customization_api.dart';
+import '../../../customization/presentation/customization_screen.dart';
+import '../../../../core/network/api_exception.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -30,6 +34,7 @@ class ModelViewerScreen extends StatefulWidget {
     this.onOrderPrint,
     this.modelOutputService,
     this.modelDownloadService,
+    this.customizationApi,
   }) : assert(
          scanId != null || (modelUrl != null && data != null),
          'Provide either scanId (real data flow) or modelUrl/data.',
@@ -53,6 +58,7 @@ class ModelViewerScreen extends StatefulWidget {
   final VoidCallback? onOrderPrint;
   final ModelOutputService? modelOutputService;
   final ModelDownloadService? modelDownloadService;
+  final CustomizationApi? customizationApi;
 
   @override
   State<ModelViewerScreen> createState() => _ModelViewerScreenState();
@@ -71,6 +77,7 @@ class _ModelViewerScreenState extends State<ModelViewerScreen> {
   int? _totalBytes;
   String? _modelUrl;
   ModelViewerData? _data;
+  DesignScene? _customScene;
 
   @override
   void initState() {
@@ -92,6 +99,21 @@ class _ModelViewerScreenState extends State<ModelViewerScreen> {
       if (output == null || output.downloadUrl == null) {
         setState(() => _phase = _FlowPhase.unavailable);
         return;
+      }
+      try {
+        final custom = await (widget.customizationApi ?? CustomizationApi())
+            .scene(output.id);
+        if (!mounted) return;
+        setState(() {
+          _customScene = custom;
+          _phase = _FlowPhase.ready;
+        });
+        return;
+      } on ApiException catch (error) {
+        if (error.statusCode != 409 ||
+            error.backendCode != 'CUSTOMIZATION_NOT_AVAILABLE') {
+          rethrow;
+        }
       }
       setState(() => _phase = _FlowPhase.downloading);
       final file = await _downloads.downloadGlb(
@@ -154,6 +176,13 @@ class _ModelViewerScreenState extends State<ModelViewerScreen> {
         builder: (context) {
           if (widget.scanId != null && _phase != _FlowPhase.ready) {
             return _buildFlowScreen(context);
+          }
+          if (_customScene != null) {
+            return CustomizationScreen(
+              outputId: _customScene!.outputId,
+              initialScene: _customScene,
+              api: widget.customizationApi,
+            );
           }
           return _buildScreen(
             context,

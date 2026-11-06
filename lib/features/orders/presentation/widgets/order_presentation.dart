@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 
+/// Flat price of a bespoke 3D keepsake print (shipping included).
+const kBespokePrintPrice = 500000;
+
 /// Formats a backend money value (`250000.00`) as `250.000 ₫`.
 String formatVnd(Object? amount) {
   final value = amount is num

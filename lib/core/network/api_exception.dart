@@ -39,6 +39,8 @@ class ApiException implements Exception {
           backendErrorCode = json['error_code'].toString();
         } else if (json.containsKey('errorCode') && json['errorCode'] != null) {
           backendErrorCode = json['errorCode'].toString();
+        } else if (json['code'] is String) {
+          backendErrorCode = json['code'] as String;
         } else if (json['error'] is String) {
           backendErrorCode = json['error'] as String;
         }

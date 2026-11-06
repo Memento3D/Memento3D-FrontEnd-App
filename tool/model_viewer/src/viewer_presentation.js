@@ -80,5 +80,6 @@ export function routeViewerCommand(command, loads, presentation, interaction) {
     case 'setDisplayMode': presentation.setDisplayMode(command.mode); break;
     case 'setGridVisible': presentation.setGridVisible(command.visible); break;
     case 'resetView': interaction.resetView(); break;
+    case 'focusFace': interaction.focusFace?.(); break;
   }
 }

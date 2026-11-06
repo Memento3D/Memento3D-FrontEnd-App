@@ -1,4 +1,4 @@
-import { MOUSE, TOUCH, Quaternion } from 'three';
+import { MOUSE, TOUCH, Quaternion, Box3, Vector3 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { fitCamera } from './model_runtime.js';
 
@@ -27,6 +27,7 @@ export class ViewerInteraction {
   fit(root) {
     if (this.disposed) return null;
     this.cancelReset();
+    this.root = root;
     const controls = this.controls;
     // Flush old damping deltas through the public API before replacing the pose.
     controls.enableDamping = false;
@@ -50,6 +51,23 @@ export class ViewerInteraction {
       target: controls.target.clone(), zoom: this.camera.zoom,
       near: this.camera.near, far: this.camera.far };
     return this.home;
+  }
+
+  focusFace() {
+    if (this.disposed || !this.root || !this.controls.enabled) return;
+    this.cancelReset();
+    const head=this.root.getObjectByName('Personalized_Complete_Head');
+    const bounds=new Box3().setFromObject(head ?? this.root);
+    const size=bounds.getSize(new Vector3()),center=bounds.getCenter(new Vector3());
+    if(bounds.isEmpty()||size.y<=0)return;
+    if(!head){center.y=bounds.max.y-size.y*0.12;size.multiplyScalar(0.25);}
+    const target=center;
+    const distance=Math.max(size.y,size.x/this.camera.aspect)/(2*Math.tan(this.camera.fov*Math.PI/360))*1.35;
+    this.controls.enableDamping=false;this.controls.update();
+    this.controls.minDistance=size.y*0.06;
+    this.controls.target.copy(target);
+    this.camera.position.copy(target).add(new Vector3(0,0,distance));
+    this.controls.update();this.controls.enableDamping=true;
   }
 
   resetView(now = performance.now()) {

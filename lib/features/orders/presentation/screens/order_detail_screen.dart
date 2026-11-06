@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+
+import '../../../customization/presentation/frozen_order_design_panel.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/m3_ui.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_config.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../data/services/order_service.dart';
 import '../widgets/order_presentation.dart';
@@ -26,17 +31,21 @@ class OrderDetailScreen extends StatefulWidget {
   State<OrderDetailScreen> createState() => _OrderDetailScreenState();
 }
 
-class _OrderDetailScreenState extends State<OrderDetailScreen> {
+class _OrderDetailScreenState extends State<OrderDetailScreen>
+    with WidgetsBindingObserver {
   late final OrderService _service =
       widget.service ?? OrderService(client: widget.client);
 
   Map<String, dynamic>? _order;
   bool _busy = true;
   String? _error;
+  Timer? _pollTimer;
+  bool _loadingOrder = false, _paused = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _load();
   }
 
@@ -44,6 +53,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       error is ApiException ? error.message : fallback;
 
   Future<void> _load() async {
+    if (_loadingOrder) return;
+    _loadingOrder = true;
+    _pollTimer?.cancel();
     setState(() {
       _busy = true;
       _error = null;
@@ -58,6 +70,53 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             error,
             'Không thể tải chi tiết đơn hàng. Vui lòng thử lại.',
           ),
+        );
+      }
+    } finally {
+      _loadingOrder = false;
+      if (mounted) setState(() => _busy = false);
+      if (mounted &&
+          !_paused &&
+          _order != null &&
+          isCustomPrintOrder(_order!) &&
+          ![
+            'CANCELLED',
+            'COMPLETED',
+            'DELIVERED',
+            'REFUNDED',
+          ].contains(_order!['status'])) {
+        _pollTimer = Timer(const Duration(seconds: 8), _load);
+      }
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _paused = state != AppLifecycleState.resumed;
+    if (_paused) {
+      _pollTimer?.cancel();
+    } else {
+      _load();
+    }
+  }
+
+  @override
+  void dispose() {
+    _pollTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Future<void> _acceptQuote() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await _service.acceptWorkshopQuote(widget.orderId);
+      await _load();
+    } catch (error) {
+      if (mounted) {
+        setState(
+          () => _error = _message(error, 'Chưa chấp thuận được báo giá.'),
         );
       }
     } finally {
@@ -103,7 +162,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Future<void> _payAgain() async {
-    final method = _order?['paymentMethod']?.toString() ?? 'MOMO';
+    final method = _order!=null&&isCustomPrintOrder(_order!)?'VNPAY':_order?['paymentMethod']?.toString() ?? 'MOMO';
     setState(() {
       _busy = true;
       _error = null;
@@ -121,7 +180,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         return;
       }
       await Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => PaymentWebViewScreen(url: url)),
+        MaterialPageRoute<void>(builder: (_) => PaymentWebViewScreen(url: url,returnUri:method=='VNPAY'?Uri.parse(ApiConfig.baseUrl).resolve('/api/v1/payments/vnpay/return'):null)),
       );
       if (mounted) await _load();
     } catch (error) {
@@ -149,6 +208,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         (paymentStatus == 'PENDING' || paymentStatus == 'FAILED') &&
         status != 'CANCELLED' &&
         status != 'REFUNDED';
+    final custom = order != null && isCustomPrintOrder(order);
+    final customCanPay =
+        !custom ||
+        (order['feasibilityStatus'] == 'ACCEPTED' &&
+            ((order['totalAmount'] ?? order['totalPrice']) as num? ?? 0) > 0);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -176,6 +240,44 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       padding: const EdgeInsets.all(16),
                       children: [
                         _statusSection(order),
+                        if (custom)
+                          FrozenOrderDesignPanel(
+                            key: ValueKey(widget.orderId),
+                            orderId: widget.orderId,
+                            client: widget.client,
+                          ),
+                        if (custom &&
+                            order['feasibilityStatus'] == 'PENDING_REVIEW')
+                          const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Text(
+                              'Đang chờ xưởng kiểm tra và báo giá. Chưa đến bước thanh toán.',
+                            ),
+                          ),
+                        if (custom && order['feasibilityStatus'] == 'FEASIBLE')
+                          Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Báo giá từ xưởng: ${formatVnd(order['totalAmount'] ?? order['totalPrice'])}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Dự kiến ${order['estimatedProductionDays'] ?? '—'} ngày. ${order['feasibilityNotes'] ?? ''}',
+                                  ),
+                                  FilledButton(
+                                    onPressed: _busy ? null : _acceptQuote,
+                                    child: const Text('Đồng ý báo giá'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         _itemsSection(order['items'] as List? ?? const []),
                         _shippingSection(order),
                         _paymentSection(order),
@@ -184,7 +286,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
                   ),
           ),
-          if (canPay || canCancel)
+          if ((canPay && customCanPay) || canCancel)
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -205,8 +307,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           child: const Text('Hủy đơn hàng'),
                         ),
                       ),
-                    if (canCancel && canPay) const SizedBox(width: 12),
-                    if (canPay)
+                    if (canCancel && canPay && customCanPay)
+                      const SizedBox(width: 12),
+                    if (canPay && customCanPay)
                       Expanded(
                         child: FilledButton(
                           onPressed: _payAgain,

@@ -9,6 +9,7 @@ import 'package:http/testing.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/widgets/m3_ui.dart';
+import 'features/customization/presentation/create_model_screen.dart';
 import 'features/home/presentation/screens/keepsakes_screen.dart';
 import 'features/orders/presentation/screens/cart_screen.dart';
 import 'features/orders/presentation/screens/orders_screen.dart';
@@ -98,6 +99,12 @@ final _orders = [
 Future<http.Response> _handler(http.Request request) async {
   final path = request.url.path;
   switch (path) {
+    case '/api/v1/reconstruction/capabilities':
+      return _json({
+        'supportedFormats': ['image/jpeg', 'image/png', 'image/webp'],
+        'maxFileSizeMb': 10,
+        'maxImages': 4,
+      });
     case '/api/v1/notifications/unread-count':
       return _json({'unreadCount': 3});
     case '/api/v1/notifications':
@@ -208,6 +215,7 @@ final _screens = <(String, String, Widget Function())>[
   ('cart', 'Tab Giỏ hàng', () => _tab(3, const CartScreen(embedded: true))),
   ('detail', 'Chi tiết đơn hàng', () => const OrderDetailScreen(orderId: 'o1')),
   ('config', 'Cấu hình đơn in 3D', () => const PrintOrderConfigScreen(scanId: 's-20261029-7', scanName: 'Chân dung bà Hoa')),
+  ('create', 'Import ảnh (Tạo kỷ vật 3D)', () => const CreateModelScreen()),
   ('checkout', 'Xác nhận đơn hàng (Checkout)', () => const CheckoutScreen()),
   ('pay', 'Thanh toán MoMo', () => PaymentGatewayScreen(
         order: _orders.first,
