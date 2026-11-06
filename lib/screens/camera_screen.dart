@@ -64,6 +64,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? _controller;
+  CameraLensDirection _lensDirection = CameraLensDirection.back;
   final VideoRecordingCoordinator _video = VideoRecordingCoordinator();
   late final VideoImportCoordinator _import;
   Future<void> _cameraRelease = Future.value();
@@ -325,7 +326,7 @@ class _CameraScreenState extends State<CameraScreen>
         final cameras = await availableCameras();
         if (cameras.isEmpty) throw StateError('No camera found');
         final camera = cameras.firstWhere(
-          (camera) => camera.lensDirection == CameraLensDirection.back,
+          (camera) => camera.lensDirection == _lensDirection,
           orElse: () => cameras.first,
         );
         // Some devices (incl. emulators) cannot bind preview + photo + video
@@ -366,6 +367,38 @@ class _CameraScreenState extends State<CameraScreen>
         setState(() => _cameraFailed = true);
       }
     }
+  }
+
+  Future<void> _switchCamera() async {
+    if (_capturing ||
+        _video.busy ||
+        _import.busy ||
+        _pickingPhotos ||
+        _reviewOpen ||
+        _exiting ||
+        !_foreground ||
+        _controller == null) {
+      return;
+    }
+    final cameras = await availableCameras();
+    if (!mounted ||
+        _exiting ||
+        !_foreground ||
+        _capturing ||
+        _video.busy ||
+        _import.busy ||
+        _pickingPhotos ||
+        _reviewOpen ||
+        _controller == null) {
+      return;
+    }
+    final target =
+        _controller?.description.lensDirection == CameraLensDirection.front
+        ? CameraLensDirection.back
+        : CameraLensDirection.front;
+    if (!cameras.any((camera) => camera.lensDirection == target)) return;
+    _lensDirection = target;
+    await _openCamera();
   }
 
   @override
@@ -491,6 +524,17 @@ class _CameraScreenState extends State<CameraScreen>
       },
       child: CameraView(
         onBack: () => unawaited(_exit()),
+        onSwitchCamera:
+            !_capturing &&
+                !_video.busy &&
+                !_import.busy &&
+                !_pickingPhotos &&
+                !_reviewOpen &&
+                !_exiting &&
+                _foreground &&
+                (_controller?.value.isInitialized ?? false)
+            ? () => unawaited(_switchCamera())
+            : null,
         videoState: _video.state,
         videoElapsed: _video.elapsed,
         hasVideo: _video.videoSession.hasVideo,

@@ -12,12 +12,14 @@ class VideoCaptureControls extends StatelessWidget {
     this.hasVideo = false,
     this.onReview,
     this.onLibrary,
+    this.showLibrary = true,
   });
   final VideoRecordingState state;
   final VoidCallback? onRecord;
   final bool hasVideo;
   final VoidCallback? onReview;
   final VoidCallback? onLibrary;
+  final bool showLibrary;
 
   @override
   Widget build(BuildContext context) {
@@ -30,45 +32,56 @@ class VideoCaptureControls extends StatelessWidget {
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
-              child: _DisabledControl(
-                controlKey: Key(!hasVideo ? 'video-library' : 'video-preview'),
-                onTap:
-                    (state == VideoRecordingState.idle ||
-                        state == VideoRecordingState.error)
-                    ? (hasVideo ? onReview : onLibrary)
-                    : null,
-                label: !hasVideo ? strings.captureLibrary : strings.preview,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF2EEFF),
-                            border: hasVideo
-                                ? Border.all(color: Colors.white, width: 3)
-                                : null,
-                            borderRadius: BorderRadius.circular(14),
+              child: hasVideo || showLibrary
+                  ? _DisabledControl(
+                      controlKey: Key(
+                        !hasVideo ? 'video-library' : 'video-preview',
+                      ),
+                      onTap:
+                          (state == VideoRecordingState.idle ||
+                              state == VideoRecordingState.error)
+                          ? (hasVideo ? onReview : onLibrary)
+                          : null,
+                      label: !hasVideo
+                          ? strings.captureLibrary
+                          : strings.preview,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF2EEFF),
+                                  border: hasVideo
+                                      ? Border.all(
+                                          color: Colors.white,
+                                          width: 3,
+                                        )
+                                      : null,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: const Icon(
+                                  Icons.video_library_outlined,
+                                  color: Color(0xFF6B4FE8),
+                                ),
+                              ),
+                            ],
                           ),
-                          child: const Icon(
-                            Icons.video_library_outlined,
-                            color: Color(0xFF6B4FE8),
+                          const SizedBox(height: 5),
+                          Text(
+                            !hasVideo
+                                ? strings.captureLibrary
+                                : strings.preview,
+                            style: const TextStyle(fontSize: 11),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      !hasVideo ? strings.captureLibrary : strings.preview,
-                      style: const TextStyle(fontSize: 11),
-                    ),
-                  ],
-                ),
-              ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
           _DisabledControl(

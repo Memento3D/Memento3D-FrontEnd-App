@@ -7,7 +7,6 @@ import '../l10n/app_localizations.dart';
 import 'capture_wizard.dart';
 import 'capture_mode.dart';
 import 'capture_mode_switcher.dart';
-import 'capture_bottom_navigation.dart';
 import 'video_capture_controls.dart';
 import 'video_recording.dart';
 
@@ -39,6 +38,7 @@ class CameraView extends StatelessWidget {
     this.onPhotoLibrary,
     this.onVideoRecord,
     this.onBack,
+    this.onSwitchCamera,
   });
 
   final VideoRecordingState videoState;
@@ -51,6 +51,7 @@ class CameraView extends StatelessWidget {
   final VoidCallback? onPhotoLibrary;
   final VoidCallback? onVideoRecord;
   final VoidCallback? onBack;
+  final VoidCallback? onSwitchCamera;
   final CaptureMode mode;
   final ValueChanged<CaptureMode>? onModeChanged;
   final CameraController? controller;
@@ -75,7 +76,21 @@ class CameraView extends StatelessWidget {
     final lastPhoto = capturedPhotos.isEmpty ? null : capturedPhotos.last;
     return Scaffold(
       backgroundColor: const Color(0xFFFCFAFF),
-      bottomNavigationBar: const CaptureBottomNavigation(),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          heightFactor: 1,
+          child: TextButton.icon(
+            key: const Key('capture-import'),
+            onPressed: mode == CaptureMode.photo
+                ? onPhotoLibrary
+                : onVideoLibrary,
+            icon: const Icon(Icons.collections_outlined),
+            label: Text(strings.captureLibrary),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -125,24 +140,6 @@ class CameraView extends StatelessWidget {
                         ),
                       ),
                     ],
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_vert, color: _ink),
-                      tooltip: strings.moreOptions,
-                    ),
-                    const SizedBox(width: 8),
-                    Tooltip(
-                      message: strings.profile,
-                      child: const CircleAvatar(
-                        radius: 18,
-                        backgroundColor: _purple,
-                        child: Icon(
-                          Icons.person_outline,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -248,18 +245,6 @@ class CameraView extends StatelessWidget {
                                     color: _ink,
                                     icon: Icons.wb_sunny_outlined,
                                   ),
-                                Tooltip(
-                                  message: strings.grid,
-                                  child: const CircleAvatar(
-                                    radius: 17,
-                                    backgroundColor: Colors.white,
-                                    child: Icon(
-                                      Icons.grid_on,
-                                      color: _purple,
-                                      size: 18,
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -270,7 +255,24 @@ class CameraView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              CaptureModeSwitcher(mode: mode, onChanged: onModeChanged),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CaptureModeSwitcher(mode: mode, onChanged: onModeChanged),
+                    IconButton(
+                      key: const Key('switch-camera-button'),
+                      onPressed: onSwitchCamera,
+                      icon: const Icon(
+                        Icons.flip_camera_android_outlined,
+                        color: _purple,
+                      ),
+                      tooltip: 'Đổi camera',
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 12),
               if (mode == CaptureMode.photo)
                 SizedBox(
@@ -296,16 +298,6 @@ class CameraView extends StatelessWidget {
                                   photo: lastPhoto,
                                   count: captureCount,
                                   label: strings.preview,
-                                ),
-                                const SizedBox(width: 4),
-                                IconButton(
-                                  key: const Key('photo-library-button'),
-                                  onPressed: onPhotoLibrary,
-                                  icon: const Icon(
-                                    Icons.photo_library_outlined,
-                                    color: _purple,
-                                  ),
-                                  tooltip: 'Chọn từ thư viện',
                                 ),
                               ],
                             ),
@@ -433,6 +425,7 @@ class CameraView extends StatelessWidget {
                 )
               else
                 VideoCaptureControls(
+                  showLibrary: false,
                   state: videoState,
                   hasVideo: hasVideo,
                   onReview: onVideoReview,

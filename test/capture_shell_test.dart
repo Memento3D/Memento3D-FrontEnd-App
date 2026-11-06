@@ -114,7 +114,9 @@ void main() {
   testWidgets(
     'CameraScreen owns Photo default and switches in the same screen',
     (tester) async {
-      await tester.pumpWidget(app(CameraScreen(session: CaptureSession(scanId: 'test-scan'))));
+      await tester.pumpWidget(
+        app(CameraScreen(session: CaptureSession(scanId: 'test-scan'))),
+      );
       await tester.pump(const Duration(milliseconds: 100));
       final original = tester.state(find.byType(CameraScreen));
       expect(
@@ -183,7 +185,7 @@ void main() {
       tester.getCenter(find.byKey(const Key('video-record'))),
       shutterPosition,
     );
-    for (final key in ['video-library', 'video-record', 'video-next']) {
+    for (final key in ['video-record', 'video-next']) {
       final finder = find.byKey(Key(key));
       expect(tester.widget<Semantics>(finder).properties.enabled, isFalse);
       await tester.tap(finder);
@@ -283,7 +285,7 @@ void main() {
           .selected,
       isFalse,
     );
-    for (final key in ['video-library', 'video-record', 'video-next']) {
+    for (final key in ['video-record', 'video-next']) {
       expect(
         tester.getSemantics(find.byKey(Key(key))),
         matchesSemantics(

@@ -445,7 +445,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('capture-mode-video')));
       await tester.pump();
-      expect(find.byKey(const Key('video-library')), findsOneWidget);
+      expect(find.byKey(const Key('capture-import')), findsOneWidget);
       expect(find.byKey(const Key('video-count-badge')), findsNothing);
       final initialView = tester.widget<CameraView>(find.byType(CameraView));
       initialView.onVideoLibrary!();
@@ -496,7 +496,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('capture-mode-video')));
     await tester.pump();
-    await tester.tap(find.byKey(const Key('video-library')));
+    await tester.tap(find.byKey(const Key('capture-import')));
     await tester.pump();
     await tester.pumpWidget(const SizedBox());
     picker.gate!.complete(picker.candidate);
